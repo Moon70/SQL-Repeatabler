@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>lunartools</groupId>
+	<artifactId>sql-repeatenabler</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>SQL-Repeatenabler</name>
+	<description>Modifies a SQL-Script (MS flavour) so that it can run more than once, without generating errors like 'table already exists'.</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<version_lunartools>1.2.0</version_lunartools>
+		<version_slf4j>1.7.30</version_slf4j>
+	</properties>
+	<build>
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>project.properties</include>
+					<include>About_SQL-Repeatabler.html</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>project.properties</exclude>
+					<exclude>About_SQL-Repeatabler.html</exclude>
+				</excludes>
+			</resource>
+		</resources>
+	</build>
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>${version_slf4j}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-log4j12</artifactId>
+		    <version>${version_slf4j}</version>
+		    <scope>provided</scope>
+		</dependency>
+		<!-- https://github.com/Moon70/LunarTools/packages -->
+		<dependency>
+			<groupId>lunartools</groupId>
+			<artifactId>lunartools</artifactId>
+ 			<version>${version_lunartools}</version>
+		</dependency>
+	</dependencies>
+</project>

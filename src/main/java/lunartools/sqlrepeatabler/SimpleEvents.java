@@ -1,0 +1,9 @@
+package lunartools.sqlrepeatabler;
+
+public enum SimpleEvents {
+	EXIT,
+	MODEL_FRAMESIZECHANGED,
+	MODEL_SQLINPUTFILESCHANGED,
+	MODEL_CONVERTEDSQLSCRIPTCHANGED,
+	MODEL_RESET;
+}
