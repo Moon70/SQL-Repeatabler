@@ -10,7 +10,9 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<version_lunartools>1.2.0</version_lunartools>
-		<version_slf4j>1.7.30</version_slf4j>
+		<version_slf4j-api>1.7.32</version_slf4j-api>
+		<version_logback-classic>1.2.10</version_logback-classic>
+		<version_logback-core>1.2.10</version_logback-core>
 	</properties>
 	<build>
 		<resources>
@@ -31,20 +33,51 @@
 				</excludes>
 			</resource>
 		</resources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>lunartools.sqlrepeatabler.MainSqlRepeatabler</mainClass>
+						</manifest>
+					</archive>
+					<appendAssemblyId>false</appendAssemblyId>
+					<attach>false</attach>
+					<finalName>SQL-Repeatabler-${project.version}</finalName>  
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 		<dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-api</artifactId>
-		    <version>${version_slf4j}</version>
+		    <version>${version_slf4j-api}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-log4j12</artifactId>
-		    <version>${version_slf4j}</version>
-		    <scope>provided</scope>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+		    <version>${version_logback-core}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
+		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-core</artifactId>
+		    <version>${version_logback-core}</version>
 		</dependency>
 		<!-- https://github.com/Moon70/LunarTools/packages -->
 		<dependency>

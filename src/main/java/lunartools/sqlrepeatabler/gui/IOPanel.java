@@ -26,7 +26,7 @@ public class IOPanel extends JPanel implements Observer{
 	private static Logger logger = LoggerFactory.getLogger(IOPanel.class);
 	JTextArea inputTextarea;
 	private JTextArea outputTextarea;
-	private SqlRepeatablerModel model;
+	private final SqlRepeatablerModel model;
 	
 	public IOPanel(SqlRepeatablerModel model) {
 		this.model=model;
@@ -60,7 +60,7 @@ public class IOPanel extends JPanel implements Observer{
 						}
 					}
 					if(arraylistAcceptedFiles.size()>0) {
-						model.addSqlInputFiles(arraylistAcceptedFiles);
+						IOPanel.this.model.addSqlInputFiles(arraylistAcceptedFiles);
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
