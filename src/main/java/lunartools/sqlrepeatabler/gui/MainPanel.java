@@ -7,7 +7,6 @@ import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
 public class MainPanel extends JPanel {
 	private IOPanel ioPanel;
-	private LogPanel logPanel;
 
 	public MainPanel(SqlRepeatablerModel model) {
 		JSplitPane jSplitPaneVertical=new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -15,7 +14,10 @@ public class MainPanel extends JPanel {
 		ioPanel=new IOPanel(model);
 		jSplitPaneVertical.setTopComponent(ioPanel);
 
-		logPanel=new LogPanel(model);
+//		LogPanelTextarea logPanel=new LogPanelTextarea(model);
+//		jSplitPaneVertical.setBottomComponent(logPanel);
+
+		LogPanelEditorpane logPanel=new LogPanelEditorpane(model);
 		jSplitPaneVertical.setBottomComponent(logPanel);
 
 		add(jSplitPaneVertical);

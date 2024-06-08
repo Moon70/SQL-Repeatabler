@@ -14,10 +14,10 @@ import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.ThrowableProxyUtil;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
-public class LogPanel extends JPanel implements Observer{
+public class LogPanelTextarea extends JPanel implements Observer{
 	private JTextArea logTextarea;
 
-	public LogPanel(SqlRepeatablerModel model) {
+	public LogPanelTextarea(SqlRepeatablerModel model) {
 		Font font=new Font("Courier New", Font.PLAIN,12);
 		logTextarea=new JTextArea(20,200);
 		logTextarea.setEditable(false);
