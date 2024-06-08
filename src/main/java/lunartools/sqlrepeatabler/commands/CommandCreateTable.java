@@ -29,9 +29,8 @@ public class CommandCreateTable extends Command{
 		
 		while(true) {
 			line=bufferesReader.readLine();
-//			writer.println(": "+line);
 			if(line==null) {
-				throw new Exception("Unexpected emd of file while processing CREATE TABLE");
+				throw new Exception("Unexpected end of file while processing CREATE TABLE");
 			}
 			
 			matcher=patternEndOfCreateTable.matcher(line);

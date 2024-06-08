@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import lunartools.sqlrepeatabler.SqlRepeatablerController;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.commands.Command;
+import lunartools.sqlrepeatabler.commands.CommandAlterTable;
 import lunartools.sqlrepeatabler.commands.CommandComment;
 import lunartools.sqlrepeatabler.commands.CommandCreateTable;
 import lunartools.sqlrepeatabler.commands.CommandEmptyLine;
@@ -24,7 +25,8 @@ public class ConverterService {
 	
 	public void parseFile(File file) throws Exception{
 		ArrayList<Command> commands=new ArrayList<>();
-		commands.add(new CommandCreateTable());
+        commands.add(new CommandAlterTable());
+        commands.add(new CommandCreateTable());
 		commands.add(new CommandInsertData());
 		commands.add(new CommandComment());
 		commands.add(new CommandEmptyLine());
@@ -45,6 +47,7 @@ public class ConverterService {
 		
 		try(BufferedReader bufferedReader=new BufferedReader(new FileReader((file)))){
 			StringWriterLn stringWriterLn=new StringWriterLn();
+			mainloop:
 			while(true) {
 				String line=bufferedReader.readLine();
 				if(line==null) {
@@ -53,9 +56,10 @@ public class ConverterService {
 				
 				for(Command command:commands) {
 					if(command.acceptLine(line, bufferedReader,stringWriterLn)) {
-						break;
+						continue mainloop;
 					}
 				}
+				throw new Exception("unexpected line: "+line);
 				
 			}
 			model.addConvertedSqlScript(stringWriterLn.toString());

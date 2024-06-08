@@ -29,7 +29,7 @@ public class CommandInsertData extends Command{
 			line=bufferesReader.readLine();
 //			writer.println(": "+line);
 			if(line==null) {
-				throw new Exception("Unexpected emd of file while processing INSERT");
+				throw new Exception("Unexpected end of file while processing INSERT");
 			}
 			
 			matcher=patternInsert.matcher(line);
