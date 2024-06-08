@@ -2,7 +2,6 @@ package lunartools.sqlrepeatabler.worker;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.swing.SwingWorker;
 
@@ -29,7 +28,7 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, Void> {
 		//controller.setBusy(true);
 		try {
 			model.clearConvertedSqlScript();
-			controller.clearInputData();
+			model.clearInputPanel();
 			model.addConvertedSqlScript("-- "+SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.determineProgramVersion()+System.lineSeparator());
 			model.addConvertedSqlScript(System.lineSeparator());
 			ArrayList<File> files=model.getSqlInputFiles();

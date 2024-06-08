@@ -30,8 +30,8 @@ public class SqlRepeatablerView extends ObservableJFrame implements Observer{
 	private SqlRepeatablerModel model;
 	private SqlRepeatablerController controller;
 	private MenubarController menubarController;
-	private IOPanel ioPanel;
-	
+	private MainPanel mainPanel;
+
 	public SqlRepeatablerView(SqlRepeatablerModel model, SqlRepeatablerController controller) {
 		super.setTitle(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.determineProgramVersion());
 		setBounds(model.getFrameBounds());
@@ -40,14 +40,14 @@ public class SqlRepeatablerView extends ObservableJFrame implements Observer{
 		this.model=model;
 		this.model.addObserver(this);
 		this.controller=controller;
-//		this.setLayout(null);
+		//		this.setLayout(null);
 
 		addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent event){
 				sendMessage(SimpleEvents.EXIT);
 			}
 		});
-		
+
 		this.menubarController=new MenubarController(this.model,this.controller,this);
 		setMenuBar(this.menubarController.createMenubar());
 
@@ -66,12 +66,12 @@ public class SqlRepeatablerView extends ObservableJFrame implements Observer{
 			e.printStackTrace();
 		}
 
-		ioPanel=new IOPanel(model);
-		add(ioPanel);
-		
+		mainPanel=new MainPanel(model);
+		add(mainPanel);
+
 		pack();
 	}
-	
+
 	@Override
 	public void update(Observable observable, Object object) {
 		if(logger.isTraceEnabled()) {
@@ -96,15 +96,8 @@ public class SqlRepeatablerView extends ObservableJFrame implements Observer{
 	}
 
 	public void showMessageboxAbout() {
+		logger.info("about");
 		About.showAboutDialog(this);
 	}
-	
-	public void addInputData(String s) {
-		ioPanel.inputTextarea.append(s);
-	}
 
-	public void clearInputData() {
-		ioPanel.inputTextarea.setText("");
-	}
-	
 }

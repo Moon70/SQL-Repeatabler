@@ -14,6 +14,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.spi.ILoggingEvent;
+
 public class SqlRepeatablerModel extends Observable{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerModel.class);
 	public static final String PROGRAMNAME = "SQL-Repeatabler";
@@ -23,7 +25,7 @@ public class SqlRepeatablerModel extends Observable{
 	public static final int DEFAULT_FRAME_WIDTH=1290;
 	public static final int DEFAULT_FRAME_HEIGHT=(int)(DEFAULT_FRAME_WIDTH/SECTIOAUREA);
 	private Rectangle frameBounds=new Rectangle(0,0,DEFAULT_FRAME_WIDTH,DEFAULT_FRAME_HEIGHT);
-	
+
 	private ArrayList<File> sqlInputFiles=new ArrayList<>();
 	private StringBuffer sbConvertedSqlScript=new StringBuffer();
 
@@ -84,16 +86,16 @@ public class SqlRepeatablerModel extends Observable{
 		sbConvertedSqlScript.append(s);
 		sendMessage(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
-	
+
 	public void clearConvertedSqlScript() {
 		sbConvertedSqlScript=new StringBuffer();
 		sendMessage(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
-	
+
 	public StringBuffer getConvertedSqlScript() {
 		return sbConvertedSqlScript;
 	}
-	
+
 	public static Rectangle getDefaultFrameBounds() {
 		GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();  
 		GraphicsDevice defaultGraphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
@@ -115,12 +117,24 @@ public class SqlRepeatablerModel extends Observable{
 	public Rectangle getFrameBounds() {
 		return frameBounds;
 	}
-	
+
 	public void reset() {
 		sqlInputFiles=new ArrayList<>();
 		sbConvertedSqlScript=new StringBuffer();
 		sendMessage(SimpleEvents.MODEL_RESET);
 		sendMessage(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
-	
+
+	public void fireLogEvent(ILoggingEvent loggingEvent) {
+		sendMessage(loggingEvent);
+	}
+
+	public void clearInputPanel() {
+		sendMessage(SimpleEvents.MODEL_CLEARINPUTPANEL);
+	}
+
+	public void addInputData(String s) {
+		sendMessage(new AddInputDataEvent(s));
+	}
+
 }

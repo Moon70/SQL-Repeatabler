@@ -6,9 +6,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Observable;
 import java.util.Observer;
@@ -31,11 +29,19 @@ public class SqlRepeatablerController implements Observer{
 	public SqlRepeatablerController() {
 		Settings settings=SqlRepeatablerSettings.getSettings();
 		model=new SqlRepeatablerModel();
+		configureLogger();
 		model.addObserver(this);
 		Rectangle frameBounds=fixScreenBounds(settings.getRectangle(SqlRepeatablerSettings.VIEW_BOUNDS, SqlRepeatablerModel.getDefaultFrameBounds()),SqlRepeatablerModel.getDefaultFrameSize());
 		model.setFrameBounds(frameBounds);
 		view=new SqlRepeatablerView(model,this);
 		view.addObserver(this);
+	}
+
+	private void configureLogger() {
+		TexttareaAppender textareaAppender = new TexttareaAppender(model);
+		ch.qos.logback.classic.Logger logbackLogger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		logbackLogger.addAppender(textareaAppender);
+		textareaAppender.start();
 	}
 
 	private Rectangle fixScreenBounds(Rectangle screenBounds, Dimension defaultFrameSize) {
@@ -48,23 +54,24 @@ public class SqlRepeatablerController implements Observer{
 			GraphicsDevice graphicsDevice=graphicsDevices[i];
 			Rectangle graphicsDeviceBounds = graphicsDevice.getDefaultConfiguration().getBounds();
 			if(
-				centerX>=graphicsDeviceBounds.x &&
-				centerY>=graphicsDeviceBounds.y &&
-				centerX<=graphicsDeviceBounds.x+graphicsDeviceBounds.width &&
-				centerY<=graphicsDeviceBounds.y+graphicsDeviceBounds.height
-				) {
-					return screenBounds;
+					centerX>=graphicsDeviceBounds.x &&
+					centerY>=graphicsDeviceBounds.y &&
+					centerX<=graphicsDeviceBounds.x+graphicsDeviceBounds.width &&
+					centerY<=graphicsDeviceBounds.y+graphicsDeviceBounds.height
+					) {
+				return screenBounds;
 			}
 		}
 		GraphicsDevice graphicsDevice=graphicsDevices[0];
 		Rectangle graphicsDeviceBounds = graphicsDevice.getDefaultConfiguration().getBounds();
 		int marginX=(graphicsDeviceBounds.width-defaultFrameSize.width)>>1;
-		int marginY=(graphicsDeviceBounds.height-defaultFrameSize.height)>>1;
-		return new Rectangle(graphicsDeviceBounds.x+marginX,graphicsDeviceBounds.y+marginY,defaultFrameSize.width,defaultFrameSize.height);
+					int marginY=(graphicsDeviceBounds.height-defaultFrameSize.height)>>1;
+					return new Rectangle(graphicsDeviceBounds.x+marginX,graphicsDeviceBounds.y+marginY,defaultFrameSize.width,defaultFrameSize.height);
 	}
-	
+
 	public void openGUI() {
 		view.setVisible(true);
+		logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.determineProgramVersion());
 	}
 
 	@Override
@@ -91,7 +98,7 @@ public class SqlRepeatablerController implements Observer{
 		view.setVisible(false);
 		view.dispose();
 	}
-	
+
 	public void action_FileOpen() {
 		final JFileChooser fileChooser= new JFileChooser() {
 			public void updateUI() {
@@ -127,7 +134,7 @@ public class SqlRepeatablerController implements Observer{
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new TextFileFilter());
-//		File file=model.getFile();
+		//		File file=model.getFile();
 		File file=null;
 		if(file!=null) {
 			fileChooser.setCurrentDirectory(file.getParentFile());
@@ -150,12 +157,12 @@ public class SqlRepeatablerController implements Observer{
 			if(file.exists() && userCanceledFileExistsDialogue(file)) {
 				return;
 			}
-//			model.setFile(file);
+			//			model.setFile(file);
 			SqlRepeatablerSettings.getSettings().setString(SqlRepeatablerSettings.FILE_SAVEFOLDER, file.getParent());
 			action_SaveProjectFile(file);
 		}
 	}
-	
+
 	private void action_SaveProjectFile(File file) {
 		try {
 			try(FileOutputStream fileOutputStream=new FileOutputStream(file)){
@@ -165,7 +172,7 @@ public class SqlRepeatablerController implements Observer{
 			logger.error("Error saving SQL file",e);
 		}
 	}
-	
+
 	public void action_Reset() {
 		model.reset();
 	}
@@ -181,12 +188,4 @@ public class SqlRepeatablerController implements Observer{
 				)!=JOptionPane.OK_OPTION;
 	}
 
-	public void addInputData(String s) {
-		view.addInputData(s);
-	}
-
-	public void clearInputData() {
-		view.clearInputData();
-	}
-	
 }
