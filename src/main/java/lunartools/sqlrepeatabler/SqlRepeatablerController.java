@@ -41,7 +41,7 @@ public class SqlRepeatablerController implements Observer{
 
 	private void configureLogger() {
 		ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		TexttareaAppender textareaAppender = new TexttareaAppender(model);
+		TextareaAppender textareaAppender = new TextareaAppender(model);
         ThresholdFilter filter = new ThresholdFilter();
         filter.setLevel(Level.INFO.levelStr);
         filter.setContext(rootLogger.getLoggerContext());
