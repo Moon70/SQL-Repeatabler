@@ -93,7 +93,7 @@ public class SqlRepeatablerController implements Observer{
 		if(object==SimpleEvents.EXIT) {
 			exit();
 		}else if(object==SimpleEvents.MODEL_SQLINPUTFILESCHANGED) {
-			ConvertSqlFileWorker worker=new ConvertSqlFileWorker(model,this);
+			ConvertSqlFileWorker worker=new ConvertSqlFileWorker(model);
 			worker.execute();
 		}
 	}

@@ -8,24 +8,19 @@ import javax.swing.SwingWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.SqlRepeatablerController;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.services.ConverterService;
 
 public class ConvertSqlFileWorker extends SwingWorker<Void, Void> {
 	private static Logger logger = LoggerFactory.getLogger(ConvertSqlFileWorker.class);
 	private SqlRepeatablerModel model;
-	private SqlRepeatablerController controller;
 
-	public ConvertSqlFileWorker(SqlRepeatablerModel model,SqlRepeatablerController controller) {
+	public ConvertSqlFileWorker(SqlRepeatablerModel model) {
 		this.model=model;
-		this.controller=controller;
 	}
 
 	@Override
 	public Void doInBackground() {
-		logger.debug("converting sql files...");
-		//controller.setBusy(true);
 		try {
 			model.clearConvertedSqlScript();
 			model.clearInputPanel();
@@ -34,12 +29,12 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, Void> {
 			ArrayList<File> files=model.getSqlInputFiles();
 			for(int i=0;i<files.size();i++) {
 				File file=files.get(i);
-				logger.debug("converting: "+file);
+				logger.info("converting: "+file);
 				if(i>0) {
 					model.addConvertedSqlScript(System.lineSeparator());
 				}
 				model.addConvertedSqlScript("-- converting file: "+file.getName()+System.lineSeparator());
-				new ConverterService(model,controller).parseFile(file);
+				new ConverterService(model).parseFile(file);
 			}
 		} catch (Exception e) {
 			logger.error("converting sql files",e);
