@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.filter.ThresholdFilter;
 import lunartools.Settings;
 import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
 import lunartools.sqlrepeatabler.worker.ConvertSqlFileWorker;
@@ -38,9 +40,14 @@ public class SqlRepeatablerController implements Observer{
 	}
 
 	private void configureLogger() {
+		ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 		TexttareaAppender textareaAppender = new TexttareaAppender(model);
-		ch.qos.logback.classic.Logger logbackLogger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		logbackLogger.addAppender(textareaAppender);
+        ThresholdFilter filter = new ThresholdFilter();
+        filter.setLevel(Level.INFO.levelStr);
+        filter.setContext(rootLogger.getLoggerContext());
+        filter.start();
+		textareaAppender.addFilter(filter);
+		rootLogger.addAppender(textareaAppender);
 		textareaAppender.start();
 	}
 
@@ -72,6 +79,10 @@ public class SqlRepeatablerController implements Observer{
 	public void openGUI() {
 		view.setVisible(true);
 		logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.determineProgramVersion());
+		logger.debug("test debug message");
+		logger.info("test info message");
+		logger.warn("test warn message");
+		logger.error("test error message");
 	}
 
 	@Override
