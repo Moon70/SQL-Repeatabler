@@ -23,7 +23,6 @@ public class CommandAlterTable extends Command{
 		
 		while(true) {
 			line=bufferesReader.readLine();
-			System.out.println(": "+line);
 			if(line==null) {
 			    break;
 			}
@@ -37,8 +36,6 @@ public class CommandAlterTable extends Command{
             if(matcher.matches()) {
                 String fieldName=matcher.group(1);
                 String fieldType=matcher.group(2);
-                System.out.println("fieldName: "+fieldName);
-                System.out.println("fieldType: "+fieldType);
                 writer.writeln("IF COL_LENGTH ('"+withoutBrackets(tablename)+"','"+withoutBrackets(fieldName)+"') IS NULL");
                 writer.writeln("BEGIN");
                 writer.writeln("  ALTER TABLE "+tablename);
@@ -51,8 +48,6 @@ public class CommandAlterTable extends Command{
             if(matcher.matches()) {
                 String fieldName=matcher.group(1);
                 String fieldType=matcher.group(2);
-                System.out.println("fieldName: "+fieldName);
-                System.out.println("fieldType: "+fieldType);
                 writer.writeln("  ALTER TABLE "+tablename);
                 writer.writeln("    ALTER COLUMN "+fieldName+" "+fieldType+";");
                 continue;

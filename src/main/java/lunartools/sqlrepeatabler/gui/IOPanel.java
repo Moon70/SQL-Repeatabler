@@ -53,7 +53,6 @@ public class IOPanel extends JPanel implements Observer{
 					List<File> droppedFiles = (List<File>)evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
 					ArrayList<File> arraylistAcceptedFiles=new ArrayList<>();
 					for (File file : droppedFiles) {
-						System.out.println("process: "+file);
 						if(file.getName().toLowerCase().endsWith(".sql")) {
 							arraylistAcceptedFiles.add(file);
 						}else {

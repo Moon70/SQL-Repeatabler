@@ -83,7 +83,6 @@ public class CommandImplementationFactory {
 		File[] files = directory.listFiles();
 		for (File file : files) {
 			if (file.getName().endsWith(suffixClass)) {
-				System.out.println("file: "+file);
 				classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - suffixClass.length())));
 			}
 		}

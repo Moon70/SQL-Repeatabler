@@ -28,9 +28,7 @@ class CommandInsertDataTest {
         InputStream inputStream=this.getClass().getResourceAsStream("/InsertData/InsertData.txt");
         BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
         String line=reader.readLine();
-        System.out.println(line);
         assertTrue(command.acceptLine(line, reader, writer));
-        System.out.println(writer.toString());
         
         InputStream inputStreamExpected=this.getClass().getResourceAsStream("/InsertData/InsertData_Expected.txt");
         assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
