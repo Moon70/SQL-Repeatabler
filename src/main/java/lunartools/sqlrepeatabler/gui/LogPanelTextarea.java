@@ -22,7 +22,7 @@ public class LogPanelTextarea extends JPanel implements Observer{
 
 	public LogPanelTextarea(SqlRepeatablerModel model) {
 		Font font=new Font("Courier New", Font.PLAIN,12);
-		logTextarea=new JTextArea(20,200);
+		logTextarea=new JTextArea(15,200);
 		logTextarea.setEditable(false);
 		logTextarea.setFont(font);
 

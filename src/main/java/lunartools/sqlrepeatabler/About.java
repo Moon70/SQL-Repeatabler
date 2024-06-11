@@ -19,7 +19,7 @@ public class About {
 	public static void showAboutDialog(JFrame jframe) {
 		try {
 			InputStream inputStream = About.class.getResourceAsStream("/About_"+SqlRepeatablerModel.PROGRAMNAME+".html");
-			StringBuffer html=FileTools.getStringBufferFromInputStream(inputStream, "iso-8859-1");
+			StringBuffer html=FileTools.getStringBufferFromInputStream(inputStream, "UTF-8");
 			JEditorPane editorPane = new JEditorPane("text/html", html.toString());
 
 			editorPane.addHyperlinkListener(new HyperlinkListener(){

@@ -96,7 +96,7 @@ public class SqlRepeatablerView extends ObservableJFrame implements Observer{
 	}
 
 	public void showMessageboxAbout() {
-		logger.info("about");
+		logger.debug("opening about dialogue...");
 		About.showAboutDialog(this);
 	}
 
