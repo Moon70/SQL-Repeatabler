@@ -27,7 +27,6 @@ public class CommandInsertData extends Command{
 		
 		while(true) {
 			line=bufferesReader.readLine();
-//			writer.println(": "+line);
 			if(line==null) {
 				throw new Exception("Unexpected end of file while processing INSERT");
 			}
@@ -58,9 +57,7 @@ public class CommandInsertData extends Command{
 
 		for(int i=0;i<daten.size();i++) {
 			String data=daten.get(i);
-//			System.out.println(data);
 			String number=data.substring(1,data.indexOf(","));
-//			System.out.println(number);
 			
 			writer.writeln("if (select COUNT(*) from "+tablename+" where ID="+number+")=0");
 			writer.writeln("Begin");
@@ -71,9 +68,7 @@ public class CommandInsertData extends Command{
 			writer.writeln("End");
 			
 		}
-
-
-		return false;
+		return true;
 	}
 
 }

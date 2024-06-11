@@ -79,10 +79,13 @@ public class SqlRepeatablerController implements Observer{
 	public void openGUI() {
 		view.setVisible(true);
 		logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.determineProgramVersion());
-		logger.debug("test debug message");
-		logger.info("test info message");
-		logger.warn("test warn message");
-		logger.error("test error message");
+//		logger.debug("test debug message");
+//		logger.info("test info message");
+//		logger.warn("test warn message");
+//		logger.error("test error message");
+//		for(int i=0;i<50;i++) {
+//	        logger.info("log test "+i);
+//		}
 	}
 
 	@Override

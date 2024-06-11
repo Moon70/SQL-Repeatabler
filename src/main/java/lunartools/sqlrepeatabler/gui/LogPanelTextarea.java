@@ -5,8 +5,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -16,6 +18,7 @@ import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
 public class LogPanelTextarea extends JPanel implements Observer{
 	private JTextArea logTextarea;
+	private JScrollPane scrollPane;
 
 	public LogPanelTextarea(SqlRepeatablerModel model) {
 		Font font=new Font("Courier New", Font.PLAIN,12);
@@ -23,7 +26,8 @@ public class LogPanelTextarea extends JPanel implements Observer{
 		logTextarea.setEditable(false);
 		logTextarea.setFont(font);
 
-		add(new JScrollPane(logTextarea));
+		scrollPane=new JScrollPane(logTextarea);
+		add(scrollPane);
 
 		model.addObserver(this);
 	}
@@ -41,6 +45,14 @@ public class LogPanelTextarea extends JPanel implements Observer{
 				IThrowableProxy throwableProxy=loggingEvent.getThrowableProxy();
 				logTextarea.append(ThrowableProxyUtil.asString(throwableProxy));
 				logTextarea.append(System.lineSeparator());
+
+	            SwingUtilities.invokeLater(new Runnable() {
+	                public void run() {
+	                    scrollPane.revalidate();
+	                    JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
+	                    verticalBar.setValue(verticalBar.getMaximum());
+	                }
+	            });
 			}
 		}
 	}

@@ -14,11 +14,11 @@ public class MainPanel extends JPanel {
 		ioPanel=new IOPanel(model);
 		jSplitPaneVertical.setTopComponent(ioPanel);
 
-//		LogPanelTextarea logPanel=new LogPanelTextarea(model);
-//		jSplitPaneVertical.setBottomComponent(logPanel);
-
-		LogPanelEditorpane logPanel=new LogPanelEditorpane(model);
+		LogPanelTextarea logPanel=new LogPanelTextarea(model);
 		jSplitPaneVertical.setBottomComponent(logPanel);
+
+//		LogPanelEditorpane logPanel=new LogPanelEditorpane(model);
+//		jSplitPaneVertical.setBottomComponent(logPanel);
 
 		add(jSplitPaneVertical);
 	}

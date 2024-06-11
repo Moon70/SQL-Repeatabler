@@ -1,7 +1,6 @@
 package lunartools.sqlrepeatabler.commands;
 
 import java.io.BufferedReader;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,30 +14,22 @@ public class CommandAlterTable extends Command{
 
 	public boolean acceptLine(String line,BufferedReader bufferesReader, StringWriterLn writer) throws Exception {
 		String tablename=null;
-		//ArrayList<String> alterTableLines=new ArrayList<>();
 		
 		Matcher matcher=patternStart.matcher(line);
 		if(!matcher.matches()) {
 			return false;
 		}
 		tablename=matcher.group(1);
-//		if(!tablename.toLowerCase().startsWith("[dbo].")) {
-//			String newtablename="[dbo]."+tablename;
-//			line=line.replace(tablename, newtablename);
-//			tablename=newtablename;
-//		}
-		//alterTableLines.add(line);
 		
 		while(true) {
 			line=bufferesReader.readLine();
 			System.out.println(": "+line);
 			if(line==null) {
-				throw new Exception("Unexpected end of file while processing ALTER TABLE");
+			    break;
 			}
 			
 			matcher=patternEndOfAlterTable.matcher(line);
 			if(matcher.matches()) {
-				//createTableLines.add(line);
 				break;
 			}
 
@@ -53,7 +44,7 @@ public class CommandAlterTable extends Command{
                 writer.writeln("  ALTER TABLE "+tablename);
                 writer.writeln("    ADD "+fieldName+" "+fieldType+";");
                 writer.writeln("END;");
-                break;
+                continue;
             }
 
             matcher=patternModify.matcher(line);
@@ -62,16 +53,12 @@ public class CommandAlterTable extends Command{
                 String fieldType=matcher.group(2);
                 System.out.println("fieldName: "+fieldName);
                 System.out.println("fieldType: "+fieldType);
-//                writer.writeln("IF COL_LENGTH ('"+withoutBrackets(tablename)+"','"+withoutBrackets(fieldName)+"') IS NULL");
-                writer.writeln("BEGIN");
                 writer.writeln("  ALTER TABLE "+tablename);
                 writer.writeln("    ALTER COLUMN "+fieldName+" "+fieldType+";");
-//                writer.writeln("END;");
-                break;
+                continue;
             }
 
 		}
-
 		return true;
 	}
 	
