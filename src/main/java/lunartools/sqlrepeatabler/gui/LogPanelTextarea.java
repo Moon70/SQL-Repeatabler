@@ -14,6 +14,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.ThrowableProxyUtil;
+import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
 public class LogPanelTextarea extends JPanel implements Observer{
@@ -46,14 +47,16 @@ public class LogPanelTextarea extends JPanel implements Observer{
 				logTextarea.append(ThrowableProxyUtil.asString(throwableProxy));
 				logTextarea.append(System.lineSeparator());
 
-	            SwingUtilities.invokeLater(new Runnable() {
-	                public void run() {
-	                    scrollPane.revalidate();
-	                    JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
-	                    verticalBar.setValue(verticalBar.getMaximum());
-	                }
-	            });
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						scrollPane.revalidate();
+						JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
+						verticalBar.setValue(verticalBar.getMaximum());
+					}
+				});
 			}
+		}else if(object == SimpleEvents.MODEL_RESET) {
+			logTextarea.setText("");
 		}
 	}
 

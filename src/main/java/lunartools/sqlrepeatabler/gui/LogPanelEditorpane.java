@@ -16,6 +16,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.ThrowableProxyUtil;
+import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
 public class LogPanelEditorpane extends JPanel implements Observer{
@@ -145,7 +146,8 @@ public class LogPanelEditorpane extends JPanel implements Observer{
 					verticalBar.setValue(verticalBar.getMaximum());
 				}
 			});
+		}else if(object == SimpleEvents.MODEL_RESET) {
+			logEditorPane.setText("");
 		}
 	}
-
 }
