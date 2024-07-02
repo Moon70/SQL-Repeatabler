@@ -12,7 +12,7 @@ import lunartools.sqlrepeatabler.services.StringWriterLn;
 class CommandCommentTest {
     private StringWriterLn writer;
     private Command command;
-    
+
     @BeforeEach
     void init() {
         writer=new StringWriterLn();
@@ -20,9 +20,17 @@ class CommandCommentTest {
     }
 
     @Test
-    void commentLineIsAccepted() throws Exception {
+    void minusMinusCommentLineIsAccepted() throws Exception {
         BufferedReader reader=null;
         String line="-- foo";
+        assertTrue(command.acceptLine(line, reader, writer));
+        assertEquals(line+System.lineSeparator(), writer.toString());
+    }
+
+    @Test
+    void slashAsteriskCommentLineIsAccepted() throws Exception {
+        BufferedReader reader=null;
+        String line="/* wambo */";
         assertTrue(command.acceptLine(line, reader, writer));
         assertEquals(line+System.lineSeparator(), writer.toString());
     }

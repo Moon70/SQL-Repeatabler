@@ -7,30 +7,30 @@ import java.util.regex.Pattern;
 import lunartools.sqlrepeatabler.services.StringWriterLn;
 
 public class CommandAlterTable extends Command{
-	private Pattern patternStart=Pattern.compile(".*alter table (\\[.*\\])\\s*");
-    private Pattern patternEndOfAlterTable=Pattern.compile("\\s*");
-    private Pattern patternAdd=Pattern.compile("\\s*add (\\[.*\\]) (.*);");
-    private Pattern patternModify=Pattern.compile("\\s*modify column (\\[.*\\]) (.*);");
+    private Pattern patternStart=Pattern.compile(".*alter table (\\[.*\\])\\s*",Pattern.CASE_INSENSITIVE);
+    private Pattern patternEndOfAlterTable=Pattern.compile("\\s*",Pattern.CASE_INSENSITIVE);
+    private Pattern patternAdd=Pattern.compile("\\s*add (\\[.*\\]) (.*);",Pattern.CASE_INSENSITIVE);
+    private Pattern patternModify=Pattern.compile("\\s*modify column (\\[.*\\]) (.*);",Pattern.CASE_INSENSITIVE);
 
-	public boolean acceptLine(String line,BufferedReader bufferesReader, StringWriterLn writer) throws Exception {
-		String tablename=null;
-		
-		Matcher matcher=patternStart.matcher(line);
-		if(!matcher.matches()) {
-			return false;
-		}
-		tablename=matcher.group(1);
-		
-		while(true) {
-			line=bufferesReader.readLine();
-			if(line==null) {
-			    break;
-			}
-			
-			matcher=patternEndOfAlterTable.matcher(line);
-			if(matcher.matches()) {
-				break;
-			}
+    public boolean acceptLine(String line,BufferedReader bufferesReader, StringWriterLn writer) throws Exception {
+        String tablename=null;
+
+        Matcher matcher=patternStart.matcher(line);
+        if(!matcher.matches()) {
+            return false;
+        }
+        tablename=matcher.group(1);
+
+        while(true) {
+            line=bufferesReader.readLine();
+            if(line==null) {
+                break;
+            }
+
+            matcher=patternEndOfAlterTable.matcher(line);
+            if(matcher.matches()) {
+                break;
+            }
 
             matcher=patternAdd.matcher(line);
             if(matcher.matches()) {
@@ -53,12 +53,12 @@ public class CommandAlterTable extends Command{
                 continue;
             }
 
-		}
-		return true;
-	}
-	
-	private String withoutBrackets(String s) {
-	    return s.substring(1,s.length()-1);
-	}
-	
+        }
+        return true;
+    }
+
+    private String withoutBrackets(String s) {
+        return s.substring(1,s.length()-1);
+    }
+
 }
