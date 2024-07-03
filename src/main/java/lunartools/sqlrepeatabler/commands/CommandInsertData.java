@@ -91,7 +91,7 @@ public class CommandInsertData extends Command{
             tablename=tablename.substring(p+6);
         }
         if(tablename.startsWith("[")) {
-            tablename=tablename.substring(1,tablename.length()-2);
+            tablename=tablename.substring(1,tablename.length()-1);
         }
         return tablename;
     }
