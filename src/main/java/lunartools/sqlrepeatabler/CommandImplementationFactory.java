@@ -43,6 +43,7 @@ public class CommandImplementationFactory {
 	private static List<Class<?>> getClassesOfPackage(String packageName) throws Exception{
 		List<Class<?>> classesOfPackage = new ArrayList<>();
 		String path = packageName.replace('.', '/');
+		
 
 		ClassLoader contextClassLoader=Thread.currentThread().getContextClassLoader();
 		Enumeration<URL> resources=contextClassLoader.getResources(path);
@@ -50,6 +51,7 @@ public class CommandImplementationFactory {
 			URL resource=resources.nextElement();
 			if(resource.getProtocol().equals("jar")) {
 				String pathJar=resource.getPath().substring(5,resource.getPath().indexOf("!"));
+				pathJar=pathJar.replace("%20"," ");
 				classesOfPackage=findClassesInJar(path,pathJar);
 			} else if(resource.getProtocol().equals("file")) {
 				File directory=new File(resource.getFile());
