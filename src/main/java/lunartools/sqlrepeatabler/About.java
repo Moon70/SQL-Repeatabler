@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
@@ -19,7 +20,7 @@ public class About {
 	public static void showAboutDialog(JFrame jframe) {
 		try {
 			InputStream inputStream = About.class.getResourceAsStream("/About_"+SqlRepeatablerModel.PROGRAMNAME+".html");
-			StringBuffer html=FileTools.getStringBufferFromInputStream(inputStream, "UTF-8");
+			StringBuffer html=FileTools.getStringBufferFromInputStream(inputStream,StandardCharsets.UTF_8.name());
 			JEditorPane editorPane = new JEditorPane("text/html", html.toString());
 
 			editorPane.addHyperlinkListener(new HyperlinkListener(){

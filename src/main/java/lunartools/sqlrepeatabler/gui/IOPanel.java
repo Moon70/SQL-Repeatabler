@@ -34,10 +34,11 @@ public class IOPanel extends JPanel implements Observer{
 		model.addObserver(this);
 
 		Font font=new Font("Courier New", Font.PLAIN,12);
-		inputTextarea=new JTextArea(50,100);
+		inputTextarea=new JBackgroundTextArea(50,100,"/SQL-LeftApe_normal.png","/SQL-LeftApe_bright.png");
 		inputTextarea.setEditable(false);
 		inputTextarea.setFont(font);
-		outputTextarea=new JTextArea(50,100);
+		
+		outputTextarea=new JBackgroundTextArea(50,100,"/SQL-RightApe_normal.png","/SQL-RightApe_bright.png");
 		outputTextarea.setEditable(false);
 		outputTextarea.setFont(font);
 
@@ -67,6 +68,7 @@ public class IOPanel extends JPanel implements Observer{
 				}
 			}
 		});
+		
 	}
 
 	public void setInputText(String s) {

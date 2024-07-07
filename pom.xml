@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>lunartools</groupId>
 	<artifactId>sql-repeatenabler</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<name>SQL-Repeatenabler</name>
 	<description>Modifies a SQL-Script (MS flavour) so that it can run more than once, without generating errors like 'table already exists'.</description>
 	<properties>
@@ -13,6 +13,7 @@
 		<version_slf4j-api>1.7.32</version_slf4j-api>
 		<version_logback-classic>1.2.10</version_logback-classic>
 		<version_logback-core>1.2.10</version_logback-core>
+		<version_org_junit_jupiter>5.10.2</version_org_junit_jupiter>
 	</properties>
 	<build>
 		<resources>
@@ -93,7 +94,7 @@
 		<dependency>
 		    <groupId>org.junit.jupiter</groupId>
 		    <artifactId>junit-jupiter</artifactId>
-		    <version>5.10.2</version>
+		    <version>${version_org_junit_jupiter}</version>
 		    <scope>test</scope>
 		</dependency>
 	</dependencies>
