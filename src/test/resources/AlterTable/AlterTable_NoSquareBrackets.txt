@@ -1,0 +1,3 @@
+    alter table [DB_FOO]
+       add constraint FOO_constraintname unique ([FOO_ID]);
+       

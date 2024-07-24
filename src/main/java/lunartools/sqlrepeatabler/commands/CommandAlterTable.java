@@ -9,7 +9,8 @@ import lunartools.sqlrepeatabler.services.StringWriterLn;
 public class CommandAlterTable extends Command{
     private Pattern patternStart=Pattern.compile(".*alter table (\\[.*\\])\\s*",Pattern.CASE_INSENSITIVE);
     private Pattern patternEndOfAlterTable=Pattern.compile("\\s*",Pattern.CASE_INSENSITIVE);
-    private Pattern patternAdd=Pattern.compile("\\s*add (\\[.*\\]) (.*);",Pattern.CASE_INSENSITIVE);
+    private Pattern patternAddConstraint=Pattern.compile("\\s*add constraint (.*) (.*);",Pattern.CASE_INSENSITIVE);
+    private Pattern patternAddField=Pattern.compile("\\s*add (\\[.*\\]) (.*);",Pattern.CASE_INSENSITIVE);
     private Pattern patternModify=Pattern.compile("\\s*modify column (\\[.*\\]) (.*);",Pattern.CASE_INSENSITIVE);
 
     public boolean acceptLine(String line,BufferedReader bufferesReader, StringWriterLn writer) throws Exception {
@@ -32,7 +33,7 @@ public class CommandAlterTable extends Command{
                 break;
             }
 
-            matcher=patternAdd.matcher(line);
+            matcher=patternAddField.matcher(line);
             if(matcher.matches()) {
                 String fieldName=matcher.group(1);
                 String fieldType=matcher.group(2);
@@ -40,6 +41,18 @@ public class CommandAlterTable extends Command{
                 writer.writeln("BEGIN");
                 writer.writeln("  ALTER TABLE "+tablename);
                 writer.writeln("    ADD "+fieldName+" "+fieldType+";");
+                writer.writeln("END;");
+                continue;
+            }
+
+            matcher=patternAddConstraint.matcher(line);
+            if(matcher.matches()) {
+                String constraintName=matcher.group(1);
+                String fieldType=matcher.group(2);
+                writer.writeln("IF OBJECT_ID ('"+withoutBrackets(tablename)+"','"+withoutBrackets(constraintName)+"') IS NULL");
+                writer.writeln("BEGIN");
+                writer.writeln("  ALTER TABLE "+tablename);
+                writer.writeln("    ADD CONSTRAINT "+constraintName+" "+fieldType+";");
                 writer.writeln("END;");
                 continue;
             }
