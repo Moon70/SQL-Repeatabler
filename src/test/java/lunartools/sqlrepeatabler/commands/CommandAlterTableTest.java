@@ -25,23 +25,45 @@ class CommandAlterTableTest {
 
     @Test
     void alterTableIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable.txt");
+        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddFieldModifyColumn_Testdata.txt");
         BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
         String line=reader.readLine();
         assertTrue(command.acceptLine(line, reader, writer));
         
-        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_Expected.txt");
+        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddFieldModifyColumn_Expected.txt");
         assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
     }
 
     @Test
     void alterTableNoSquareBracketsIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_NoSquareBrackets.txt");
+        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_NoSquareBrackets_Testdata.txt");
         BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
         String line=reader.readLine();
         assertTrue(command.acceptLine(line, reader, writer));
         
         InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_NoSquareBrackets_Expected.txt");
+        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
+    }
+
+    @Test
+    void alterTableAndAddConstraintInOneLineIsAccepted() throws Exception {
+        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddConstraintOneLine_Testdata.txt");
+        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
+        String line=reader.readLine();
+        assertTrue(command.acceptLine(line, reader, writer));
+        
+        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddConstraintOneLine_Expected.txt");
+        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
+    }
+
+    @Test
+    void alterTableAndAddFieldInOneLineIsAccepted() throws Exception {
+        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddFieldOneLine_Testdata.txt");
+        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
+        String line=reader.readLine();
+        assertTrue(command.acceptLine(line, reader, writer));
+        
+        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddFieldOneLine_Expected.txt");
         assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
     }
     
