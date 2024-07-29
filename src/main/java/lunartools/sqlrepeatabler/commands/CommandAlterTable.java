@@ -64,6 +64,7 @@ public class CommandAlterTable extends Command{
                 String fieldType=matcher.group(2);
                 writer.writeln("  ALTER TABLE "+tablename);
                 writer.writeln("    ALTER COLUMN "+fieldName+" "+fieldType+";");
+                writer.writeln("");
                 continue;
             }
 
@@ -79,6 +80,7 @@ public class CommandAlterTable extends Command{
         writer.writeln("  ALTER TABLE "+tablename);
         writer.writeln("    ADD "+fieldName+" "+fieldType+";");
         writer.writeln("END;");
+        writer.writeln("");
     }
 
     private void writeAddConstraint(StringWriterLn writer,Matcher matcher,String tablename) {
@@ -90,6 +92,7 @@ public class CommandAlterTable extends Command{
         writer.writeln("  ALTER TABLE "+tablename);
         writer.writeln("    ADD CONSTRAINT "+constraintName+" "+constraintParameter+" (["+column+"]);");
         writer.writeln("END;");
+        writer.writeln("");
     }
     
     private String withoutBrackets(String s) {

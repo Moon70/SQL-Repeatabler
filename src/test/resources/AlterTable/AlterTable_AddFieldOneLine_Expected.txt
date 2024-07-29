@@ -3,3 +3,4 @@ BEGIN
   ALTER TABLE [DB_FOO]
     ADD [FIELD_1] nvarchar(255);
 END;
+
