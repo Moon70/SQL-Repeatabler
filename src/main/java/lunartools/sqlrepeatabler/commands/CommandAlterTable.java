@@ -13,8 +13,8 @@ public class CommandAlterTable extends Command{
     private Pattern patternEndOfAlterTable=Pattern.compile("\\s*",Pattern.CASE_INSENSITIVE);
     private Pattern patternAddConstraint=Pattern.compile(".*ADD CONSTRAINT\\s+(\\S+)\\s+(.*)\\s+\\(\\[(\\S+)\\]\\);.*",Pattern.CASE_INSENSITIVE);
     
-    private Pattern patternAddField=Pattern.compile(".*ADD (\\[.*\\]) (.*);",Pattern.CASE_INSENSITIVE);
-    private Pattern patternModify=Pattern.compile("\\s*modify column (\\[.*\\]) (.*);",Pattern.CASE_INSENSITIVE);
+    private Pattern patternAddField=Pattern.compile(".*ADD (\\[.*\\]) (.*)[;,]",Pattern.CASE_INSENSITIVE);
+    private Pattern patternModify=Pattern.compile("\\s*(modify|alter) column (\\[.*\\]) (.*)[;,]",Pattern.CASE_INSENSITIVE);
 
     public boolean acceptLine(String line,BufferedReader bufferesReader, StringWriterLn writer) throws Exception {
         String tablename=null;
@@ -60,8 +60,8 @@ public class CommandAlterTable extends Command{
 
             matcher=patternModify.matcher(line);
             if(matcher.matches()) {
-                String fieldName=matcher.group(1);
-                String fieldType=matcher.group(2);
+                String fieldName=matcher.group(2);
+                String fieldType=matcher.group(3);
                 writer.writeln("  ALTER TABLE "+tablename);
                 writer.writeln("    ALTER COLUMN "+fieldName+" "+fieldType+";");
                 writer.writeln("");
