@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lunartools.sqlrepeatabler.services.StringWriterLn;
 
 public class CommandCreateTable extends Command{
+    private static Logger logger = LoggerFactory.getLogger(CommandCreateTable.class);
     private Pattern patternStart=Pattern.compile(".*create table [\\[`](.*)[\\]`] \\(\\s*",Pattern.CASE_INSENSITIVE);
     private Pattern patternEndOfCreateTable=Pattern.compile(".*;\\s*",Pattern.CASE_INSENSITIVE);
 
@@ -34,7 +38,16 @@ public class CommandCreateTable extends Command{
 
             matcher=patternEndOfCreateTable.matcher(line);
             if(matcher.matches()) {
+                if(line.contains("engine")) {
+                    logger.info("ignoring parameter 'engine', which is MySQL specific");
+                }
                 break;
+            }
+            if(line.contains("auto_increment")) {
+                logger.info("replaced 'auto_increment' (MySQL) with 'identity' (MSSQL):");
+                logger.info("--- "+line);
+                line=line.replace("auto_increment","identity");
+                logger.info("+++ "+line);
             }
             line=replaceBackTicksWithSquareBrackets(line);
             createTableLines.add(line);
