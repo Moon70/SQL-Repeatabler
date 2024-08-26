@@ -24,8 +24,19 @@ class CommandCreateTableTest {
     }
 
     @Test
-    void createTableIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/CreateTable/CreateOneTable.txt");
+    void createTableWhenNamesInSquareBracketsIsAccepted() throws Exception {
+        InputStream inputStream=this.getClass().getResourceAsStream("/CreateTable/CreateOneTable_TableNameAndFieldsInSquareBrackets.txt");
+        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
+        String line=reader.readLine();
+        assertTrue(command.acceptLine(line, reader, writer));
+        
+        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/CreateTable/CreateOneTable_Expected.txt");
+        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
+    }
+
+    @Test
+    void createTableWhenNamesInBackTicksIsAccepted() throws Exception {
+        InputStream inputStream=this.getClass().getResourceAsStream("/CreateTable/CreateOneTable_TableNameAndFieldsInBackTicks.txt");
         BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
         String line=reader.readLine();
         assertTrue(command.acceptLine(line, reader, writer));

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import lunartools.sqlrepeatabler.services.StringWriterLn;
 
 public class CommandCreateTable extends Command{
-    private Pattern patternStart=Pattern.compile(".*create table (\\[.*\\]) \\(\\s*",Pattern.CASE_INSENSITIVE);
+    private Pattern patternStart=Pattern.compile(".*create table [\\[`](.*)[\\]`] \\(\\s*",Pattern.CASE_INSENSITIVE);
     private Pattern patternEndOfCreateTable=Pattern.compile(".*;\\s*",Pattern.CASE_INSENSITIVE);
 
     public boolean acceptLine(String line,BufferedReader bufferesReader, StringWriterLn writer) throws Exception {
@@ -19,13 +19,12 @@ public class CommandCreateTable extends Command{
         if(!matcher.matches()) {
             return false;
         }
-        tablename=matcher.group(1);
+        tablename="["+matcher.group(1)+"]";
         if(!tablename.toLowerCase().startsWith("[dbo].")) {
             String newtablename="[dbo]."+tablename;
             line=line.replace(tablename, newtablename);
             tablename=newtablename;
         }
-        createTableLines.add(line);
 
         while(true) {
             line=bufferesReader.readLine();
@@ -35,20 +34,35 @@ public class CommandCreateTable extends Command{
 
             matcher=patternEndOfCreateTable.matcher(line);
             if(matcher.matches()) {
-                createTableLines.add(line);
                 break;
             }
-
+            line=replaceBackTicksWithSquareBrackets(line);
             createTableLines.add(line);
         }
 
         writer.writeln("IF OBJECT_ID(N'"+tablename+"', 'U') IS NULL");
         writer.writeln("BEGIN");
+        writer.writeln("    create table "+tablename+" (");
         for(String lineX:createTableLines) {
             writer.writeln(lineX);
         }
+        writer.writeln("    );");
         writer.writeln("END;");
         return true;
     }
 
+    private String replaceBackTicksWithSquareBrackets(String s) throws Exception {
+        StringBuffer sb=new StringBuffer(s);
+        int p=0;
+        while((p=sb.indexOf("`",p))!=-1) {
+            sb.setCharAt(p,'[');
+            p=sb.indexOf("`",p);
+            if(p==-1) {
+                throw new Exception("number of backticks must be even: "+s);
+            }
+            sb.setCharAt(p,']');
+        }
+        return sb.toString();
+    }
+    
 }

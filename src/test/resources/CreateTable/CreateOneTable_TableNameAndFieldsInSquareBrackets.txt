@@ -1,5 +1,5 @@
     create table [DB_FOO] (
-       [ID] int identity not null,
+        [ID] int identity not null,
         [FIELD_FOO_1] nvarchar(255),
         [FIELD_FOO_2] int,
         [FIELD_FOO_3] datetime,
