@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>lunartools</groupId>
 	<artifactId>sql-repeatenabler</artifactId>
-	<version>1.0.7</version>
+	<version>1.0.8</version>
 	<name>SQL-Repeatenabler</name>
 	<description>Modifies a SQL-Script (MS flavour) so that it can run more than once, without generating errors like 'table already exists'.</description>
 	<properties>

@@ -15,6 +15,7 @@ public class CommandAlterTable extends Command{
     
     private Pattern patternAddField=Pattern.compile(".*ADD (\\[.*\\]) (.*)[;,]",Pattern.CASE_INSENSITIVE);
     private Pattern patternModify=Pattern.compile("\\s*(modify|alter) column (\\[.*\\]) (.*)[;,]",Pattern.CASE_INSENSITIVE);
+    private Pattern patternDropColumn=Pattern.compile("\\s*drop column (\\[.*\\])[;,]",Pattern.CASE_INSENSITIVE);
 
     public boolean acceptLine(String line,BufferedReader bufferesReader, StringWriterLn writer) throws Exception {
         String tablename=null;
@@ -68,6 +69,12 @@ public class CommandAlterTable extends Command{
                 continue;
             }
 
+            matcher=patternDropColumn.matcher(line);
+            if(matcher.matches()) {
+                writeDropColumn(writer,matcher,tablename);
+                continue;
+            }
+
         }
         return true;
     }
@@ -93,6 +100,16 @@ public class CommandAlterTable extends Command{
         writer.writeln("    ADD CONSTRAINT "+constraintName+" "+constraintParameter+" (["+column+"]);");
         writer.writeln("END;");
         writer.writeln("");
+    }
+
+    private void writeDropColumn(StringWriterLn writer,Matcher matcher,String tablename) {
+        String fieldName=matcher.group(1);
+        writer.writeln("IF COL_LENGTH ('"+withoutBrackets(tablename)+"','"+withoutBrackets(fieldName)+"') IS NOT NULL");
+        writer.writeln("BEGIN");
+        writer.writeln("  ALTER TABLE "+tablename);
+        writer.writeln("    DROP COLUMN "+fieldName+";");
+        writer.writeln("END;");
+        //writer.writeln("");
     }
     
     private String withoutBrackets(String s) {
