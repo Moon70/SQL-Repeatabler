@@ -1,5 +1,6 @@
 package lunartools.sqlrepeatabler.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.util.Observable;
 import java.util.Observer;
@@ -22,6 +23,7 @@ public class LogPanelTextarea extends JPanel implements Observer{
 	private JScrollPane scrollPane;
 
 	public LogPanelTextarea(SqlRepeatablerModel model) {
+		setLayout(new BorderLayout());
 		Font font=new Font("Courier New", Font.PLAIN,12);
 		logTextarea=new JTextArea(15,200);
 		logTextarea.setEditable(false);
