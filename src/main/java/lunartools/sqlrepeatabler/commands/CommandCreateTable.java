@@ -50,6 +50,11 @@ public class CommandCreateTable extends Command{
                 logger.info("+++ "+line);
             }
             line=replaceBackTicksWithSquareBrackets(line);
+            if(line.contains("datetime(")) {
+                int p=line.indexOf("datetime(");
+                int p2=line.indexOf(")",p);
+                line=line.substring(0,p+"datetime".length())+line.substring(p2+1);
+            }
             createTableLines.add(line);
         }
 
