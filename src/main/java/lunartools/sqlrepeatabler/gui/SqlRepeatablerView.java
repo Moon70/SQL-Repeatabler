@@ -28,7 +28,7 @@ public class SqlRepeatablerView extends JFrame{
 	private MenuModel menuModel;
 
 	public SqlRepeatablerView(SqlRepeatablerModel model,JTextArea logTextArea) {
-		super.setTitle(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.determineProgramVersion());
+		super.setTitle(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
 		setBounds(model.getFrameBounds());
 		setMinimumSize(new Dimension(WINDOW_MINIMUM_WIDTH,WINDOW_MINIMUM_HEIGHT));
 		setResizable(false);

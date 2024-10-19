@@ -24,7 +24,7 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, Void> {
 		try {
 			model.clearConvertedSqlScript();
 			model.clearInputPanel();
-			model.addConvertedSqlScript("-- "+SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.determineProgramVersion()+System.lineSeparator());
+			model.addConvertedSqlScript("-- "+SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion()+System.lineSeparator());
 			model.addConvertedSqlScript(System.lineSeparator());
 			ArrayList<File> files=model.getSqlInputFiles();
 			for(int i=0;i<files.size();i++) {

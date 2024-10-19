@@ -5,50 +5,28 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import lunartools.SwingTools;
 
 public class SqlRepeatablerModel extends Observable{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerModel.class);
 	public static final String PROGRAMNAME = "SQL-Repeatabler";
-	private static String versionProgram;
+	private static String versionProgram=SwingTools.determineProgramVersion();
 
-	public static final double SECTIOAUREA=1.6180339887;
 	public static final int DEFAULT_FRAME_WIDTH=1290;
-	public static final int DEFAULT_FRAME_HEIGHT=(int)(DEFAULT_FRAME_WIDTH/SECTIOAUREA);
+	public static final int DEFAULT_FRAME_HEIGHT=(int)(DEFAULT_FRAME_WIDTH/SwingTools.SECTIOAUREA);
 	private Rectangle frameBounds=new Rectangle(0,0,DEFAULT_FRAME_WIDTH,DEFAULT_FRAME_HEIGHT);
 
 	private ArrayList<File> sqlInputFiles=new ArrayList<>();
 	private StringBuffer sbConvertedSqlScript=new StringBuffer();
 
-	public static String determineProgramVersion() {
-		if(versionProgram==null) {
-			versionProgram="";
-			Properties properties = new Properties();
-			InputStream inputStream=SqlRepeatablerModel.class.getClassLoader().getResourceAsStream("project.properties");
-			if(inputStream==null) {
-				System.err.println("project.properties not found");
-				return "";
-			}
-			try {
-				properties.load(inputStream);
-				versionProgram=properties.getProperty("version");
-			} catch (IOException e) {
-				System.err.println("error loading project.properties");
-				e.printStackTrace();
-			}
-			if("${project.version}".equals(versionProgram)) {
-				versionProgram="";
-			}
-		}
+	public static String getProgramVersion() {
 		return versionProgram;
 	}
 

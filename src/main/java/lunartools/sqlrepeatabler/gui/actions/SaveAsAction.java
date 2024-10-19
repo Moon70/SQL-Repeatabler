@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.SwingTools;
 import lunartools.sqlrepeatabler.SqlRepeatablerController;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.SqlRepeatablerSettings;
@@ -45,7 +46,7 @@ class SaveAsAction extends AbstractAction {
 			fileChooser.setCurrentDirectory(file.getAbsoluteFile());
 		}
 		fileChooser.setDialogTitle("Select file to save");
-		fileChooser.setPreferredSize(new Dimension(800,(int)(800/SqlRepeatablerModel.SECTIOAUREA)));
+		fileChooser.setPreferredSize(new Dimension(800,(int)(800/SwingTools.SECTIOAUREA)));
 		if(fileChooser.showSaveDialog(controller.getView())==JFileChooser.APPROVE_OPTION) {
 			file=fileChooser.getSelectedFile();
 			String filename=file.getName();

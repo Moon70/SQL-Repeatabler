@@ -11,7 +11,7 @@ public class SqlRepeatablerSettings {
 
 	public static Settings getSettings() {
 		if(settings==null) {
-			settings=new Settings(SqlRepeatablerModel.PROGRAMNAME,SqlRepeatablerModel.determineProgramVersion());
+			settings=new Settings(SqlRepeatablerModel.PROGRAMNAME,SqlRepeatablerModel.getProgramVersion());
 		}
 		return settings;
 	}

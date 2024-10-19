@@ -25,7 +25,7 @@ public class MainSqlRepeatabler {
 				SqlRepeatablerView view=new SqlRepeatablerView(model,jTextAreaLog);
 				new SqlRepeatablerController(model,view);
 				view.setVisible(true);
-				logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.determineProgramVersion());
+				logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
 			}catch(Throwable e){
 				if(logger.isErrorEnabled()) {
 					logger.error("Unexpected error",e);
