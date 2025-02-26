@@ -94,7 +94,7 @@ public class CommandAlterTable extends Command{
         String constraintName=matcher.group(1);
         String constraintParameter=matcher.group(2);
         String column=matcher.group(3);
-        writer.writeln("IF OBJECT_ID ('"+withoutBrackets(tablename)+"','"+withoutBrackets(constraintName)+"') IS NULL");
+        writer.writeln("IF OBJECT_ID('dbo."+withoutBrackets(constraintName)+"','UQ') IS NULL");
         writer.writeln("BEGIN");
         writer.writeln("  ALTER TABLE "+tablename);
         writer.writeln("    ADD CONSTRAINT "+constraintName+" "+constraintParameter+" (["+column+"]);");
