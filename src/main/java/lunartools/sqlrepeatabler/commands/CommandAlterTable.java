@@ -8,8 +8,8 @@ import lunartools.sqlrepeatabler.services.StringWriterLn;
 
 public class CommandAlterTable extends Command{
     //https://regex101.com/
-    //private Pattern patternStart=Pattern.compile(".*ALTER TABLE (\\[.*\\])[\\s+|$].*",Pattern.CASE_INSENSITIVE);
-    private Pattern patternStart=Pattern.compile("ALTER TABLE (\\[[^\\]]+\\])",Pattern.CASE_INSENSITIVE);
+//    private Pattern patternStart=Pattern.compile("ALTER TABLE (\\[[^\\]]+\\])",Pattern.CASE_INSENSITIVE);
+    private Pattern patternStart=Pattern.compile(".*ALTER TABLE (?:\\[dbo\\]\\.)?\\[(\\w+)\\]",Pattern.CASE_INSENSITIVE);
     private Pattern patternEndOfAlterTable=Pattern.compile("\\s*",Pattern.CASE_INSENSITIVE);
     private Pattern patternAddConstraint=Pattern.compile(".*ADD CONSTRAINT\\s+(\\S+)\\s+(.*)\\s+\\(\\[(\\S+)\\]\\);.*",Pattern.CASE_INSENSITIVE);
     
@@ -63,7 +63,7 @@ public class CommandAlterTable extends Command{
             if(matcher.matches()) {
                 String fieldName=matcher.group(2);
                 String fieldType=matcher.group(3);
-                writer.writeln("  ALTER TABLE "+tablename);
+                writer.writeln("  ALTER TABLE ["+tablename+"]");
                 writer.writeln("    ALTER COLUMN "+fieldName+" "+fieldType+";");
                 writer.writeln("");
                 continue;
@@ -84,7 +84,7 @@ public class CommandAlterTable extends Command{
         String fieldType=matcher.group(2);
         writer.writeln("IF COL_LENGTH ('"+withoutBrackets(tablename)+"','"+withoutBrackets(fieldName)+"') IS NULL");
         writer.writeln("BEGIN");
-        writer.writeln("  ALTER TABLE "+tablename);
+        writer.writeln("  ALTER TABLE ["+tablename+"]");
         writer.writeln("    ADD "+fieldName+" "+fieldType+";");
         writer.writeln("END;");
         writer.writeln("");
@@ -96,7 +96,7 @@ public class CommandAlterTable extends Command{
         String column=matcher.group(3);
         writer.writeln("IF OBJECT_ID('dbo."+withoutBrackets(constraintName)+"','UQ') IS NULL");
         writer.writeln("BEGIN");
-        writer.writeln("  ALTER TABLE "+tablename);
+        writer.writeln("  ALTER TABLE ["+tablename+"]");
         writer.writeln("    ADD CONSTRAINT "+constraintName+" "+constraintParameter+" (["+column+"]);");
         writer.writeln("END;");
         writer.writeln("");
@@ -106,7 +106,7 @@ public class CommandAlterTable extends Command{
         String fieldName=matcher.group(1);
         writer.writeln("IF COL_LENGTH ('"+withoutBrackets(tablename)+"','"+withoutBrackets(fieldName)+"') IS NOT NULL");
         writer.writeln("BEGIN");
-        writer.writeln("  ALTER TABLE "+tablename);
+        writer.writeln("  ALTER TABLE ["+tablename+"]");
         writer.writeln("    DROP COLUMN "+fieldName+";");
         writer.writeln("END;");
         //writer.writeln("");

@@ -78,5 +78,16 @@ class CommandAlterTableTest {
         assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
     }
 
+
+    @Test
+    void alterTableAlterColumnIsAccepted() throws Exception {
+        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AlterColumn_Testdata.txt");
+        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
+        String line=reader.readLine();
+        assertTrue(command.acceptLine(line, reader, writer));
+        
+        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AlterColumn_Expected.txt");
+        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
+    }
     
 }
