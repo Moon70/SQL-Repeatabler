@@ -31,6 +31,7 @@ public class ConverterService {
 					if(line==null) {
 						break;
 					}
+					line=line.trim();
 					sb.append(line);
 					sb.append("\n");
 				}

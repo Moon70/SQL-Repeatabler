@@ -1,0 +1,1 @@
+   sp_rename '[RWT_MANDANT].[SUPERVISOR]', [AML], [column];
