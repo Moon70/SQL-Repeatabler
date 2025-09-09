@@ -104,7 +104,9 @@ public class CommandAlterTable extends Command{
 
     private void writeDropColumn(StringWriterLn writer,Matcher matcher,String tablename) {
         String fieldName=matcher.group(1);
-        writer.writeln("IF COL_LENGTH ('"+withoutBrackets(tablename)+"','"+withoutBrackets(fieldName)+"') IS NOT NULL");
+        String tablenameWithoutBrackets=withoutBrackets(tablename);
+        String fieldnameWithoutBrackets=withoutBrackets(fieldName);
+        writer.writeln("IF COL_LENGTH ('"+tablenameWithoutBrackets+"','"+fieldnameWithoutBrackets+"') IS NOT NULL");
         writer.writeln("BEGIN");
         writer.writeln("  ALTER TABLE ["+tablename+"]");
         writer.writeln("    DROP COLUMN "+fieldName+";");
