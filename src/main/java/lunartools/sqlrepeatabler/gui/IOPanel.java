@@ -1,13 +1,10 @@
 package lunartools.sqlrepeatabler.gui;
 
 import java.awt.Font;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -19,7 +16,7 @@ import javax.swing.JTextArea;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.AddInputDataEvent;
+import lunartools.FileTools;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
@@ -28,17 +25,20 @@ public class IOPanel extends JPanel implements Observer{
 	JTextArea inputTextarea;
 	private JTextArea outputTextarea;
 	private final SqlRepeatablerModel model;
+	private final int sqlFileIndex;
 
-	public IOPanel(SqlRepeatablerModel model) {
+	public IOPanel(SqlRepeatablerModel model, int sqlFileIndex) {
 		this.model=model;
+		this.sqlFileIndex=sqlFileIndex;
+		
 		model.addObserver(this);
 
 		Font font=new Font("Courier New", Font.PLAIN,12);
-		inputTextarea=new JBackgroundTextArea(50,100,"/SQL-LeftApe_normal.png","/SQL-LeftApe_bright.png");
+		inputTextarea=new JTextArea(48,110);
 		inputTextarea.setEditable(false);
 		inputTextarea.setFont(font);
 		
-		outputTextarea=new JBackgroundTextArea(50,100,"/SQL-RightApe_normal.png","/SQL-RightApe_bright.png");
+		outputTextarea=new JTextArea(48,110);
 		outputTextarea.setEditable(false);
 		outputTextarea.setFont(font);
 
@@ -47,32 +47,15 @@ public class IOPanel extends JPanel implements Observer{
 		jSplitPaneHorizontal.setRightComponent(new JScrollPane(outputTextarea));
 		add(jSplitPaneHorizontal);
 
-		inputTextarea.setDropTarget(new DropTarget() {
-			public synchronized void drop(DropTargetDropEvent evt) {
-				try {
-					evt.acceptDrop(DnDConstants.ACTION_COPY);
-					List<File> droppedFiles = (List<File>)evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-					ArrayList<File> arraylistAcceptedFiles=new ArrayList<>();
-					for (File file : droppedFiles) {
-						if(file.getName().toLowerCase().endsWith(".sql")) {
-							arraylistAcceptedFiles.add(file);
-						}else {
-							logger.warn("ignoring unsupported file: "+file);
-						}
-					}
-					if(arraylistAcceptedFiles.size()>0) {
-						IOPanel.this.model.addSqlInputFiles(arraylistAcceptedFiles);
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		});
-		
-	}
+		try {
+			ArrayList<File> files=model.getSqlInputFiles();
+			StringBuffer sbContent=FileTools.readFileToStringBuffer(files.get(sqlFileIndex), StandardCharsets.UTF_8.name());
+			inputTextarea.setText(sbContent.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-	public void setInputText(String s) {
-		inputTextarea.setText(s);
 	}
 
 	@Override
@@ -80,15 +63,16 @@ public class IOPanel extends JPanel implements Observer{
 		if(logger.isTraceEnabled()) {
 			logger.trace("update: "+observable+", "+object);
 		}
-		if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
-			outputTextarea.setText(model.getConvertedSqlScript().toString());
-			this.repaint();
+		if(object==SimpleEvents.MODEL_SQLINPUTFILESCHANGED) {
+			
+		}else if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
+			if(model.hasSqlConvertedScripts()) {
+				outputTextarea.setText(model.getSingleConvertedSqlScript(sqlFileIndex).toString());
+				this.repaint();
+			}
 		}else if(object==SimpleEvents.MODEL_RESET) {
 			inputTextarea.setText("");
 			outputTextarea.setText("");
-		}else if(object instanceof AddInputDataEvent) {
-			AddInputDataEvent addInputDataEvent=(AddInputDataEvent)object;
-			inputTextarea.append(addInputDataEvent.getInputdata());
 		}
 	}
 

@@ -24,7 +24,7 @@ public class SqlRepeatablerModel extends Observable{
 	private Rectangle frameBounds=new Rectangle(0,0,DEFAULT_FRAME_WIDTH,DEFAULT_FRAME_HEIGHT);
 
 	private ArrayList<File> sqlInputFiles=new ArrayList<>();
-	private StringBuffer sbConvertedSqlScript=new StringBuffer();
+	private ArrayList<StringBuffer> sqlConvertedScripts=new ArrayList<>();
 
 	public static String getProgramVersion() {
 		return versionProgram;
@@ -60,20 +60,36 @@ public class SqlRepeatablerModel extends Observable{
 		}
 	}
 
-	public void addConvertedSqlScript(String s) {
-		sbConvertedSqlScript.append(s);
-		sendMessage(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
-	}
-
 	public void clearConvertedSqlScript() {
-		sbConvertedSqlScript=new StringBuffer();
+		sqlConvertedScripts=new ArrayList<>();
 		sendMessage(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
 
-	public StringBuffer getConvertedSqlScript() {
-		return sbConvertedSqlScript;
+	public boolean hasSqlConvertedScripts() {
+		return sqlConvertedScripts.size()>0;
 	}
-
+	
+	public StringBuffer getSingleConvertedSqlScript(int index) {
+		return sqlConvertedScripts.get(index);
+	}
+	
+	public void setConvertedSqlScripts(ArrayList<StringBuffer> sqlConvertedScripts) {
+		this.sqlConvertedScripts=sqlConvertedScripts;
+		sendMessage(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
+	}
+	
+	public StringBuffer getConvertedSqlScript() {
+		StringBuffer sbConvertedScripts=new StringBuffer();
+		sbConvertedScripts.append("-- "+SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion()+System.lineSeparator());
+		for(int i=0;i<sqlConvertedScripts.size();i++) {
+			sbConvertedScripts.append(System.lineSeparator());
+			sbConvertedScripts.append("-- Original: "+sqlInputFiles.get(i).getName());
+			sbConvertedScripts.append(System.lineSeparator());
+			sbConvertedScripts.append(sqlConvertedScripts.get(i));
+		}
+		return sbConvertedScripts;
+	}
+	
 	public static Rectangle getDefaultFrameBounds() {
 		GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();  
 		GraphicsDevice defaultGraphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
@@ -98,7 +114,7 @@ public class SqlRepeatablerModel extends Observable{
 
 	public void reset() {
 		sqlInputFiles=new ArrayList<>();
-		sbConvertedSqlScript=new StringBuffer();
+		sqlConvertedScripts=new ArrayList<>();
 		sendMessage(SimpleEvents.MODEL_RESET);
 		sendMessage(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
@@ -109,10 +125,6 @@ public class SqlRepeatablerModel extends Observable{
 
 	public void clearInputPanel() {
 		sendMessage(SimpleEvents.MODEL_CLEARINPUTPANEL);
-	}
-
-	public void addInputData(String s) {
-		sendMessage(new AddInputDataEvent(s));
 	}
 
 }

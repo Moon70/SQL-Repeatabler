@@ -20,7 +20,7 @@ import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
 public class SqlRepeatablerView extends JFrame{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerView.class);
 	public static final double SECTIOAUREA=1.6180339887;
-	public static final int WINDOW_MINIMUM_WIDTH=800;
+	public static final int WINDOW_MINIMUM_WIDTH=1600;
 	public static final int WINDOW_MINIMUM_HEIGHT=(int)(WINDOW_MINIMUM_WIDTH/SECTIOAUREA);
 
 	private SqlRepeatablerModel model;
@@ -31,6 +31,7 @@ public class SqlRepeatablerView extends JFrame{
 		super.setTitle(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
 		setBounds(model.getFrameBounds());
 		setMinimumSize(new Dimension(WINDOW_MINIMUM_WIDTH,WINDOW_MINIMUM_HEIGHT));
+		setSize(new Dimension(WINDOW_MINIMUM_WIDTH,WINDOW_MINIMUM_HEIGHT));
 		setResizable(false);
 		this.model=model;
 
@@ -65,9 +66,9 @@ public class SqlRepeatablerView extends JFrame{
 	}
 
 	public void refreshView() {
-		boolean convertesDataAvailable=model.getConvertedSqlScript().length()>0;
-		menuModel.getMenuFileItemSaveAs().setEnabled(convertesDataAvailable);
-		menuModel.getMenuFileItemReset().setEnabled(convertesDataAvailable);
+		boolean convertedDataAvailable=model.getConvertedSqlScript().length()>0;
+		menuModel.getMenuFileItemSaveAs().setEnabled(convertedDataAvailable);
+		menuModel.getMenuFileItemReset().setEnabled(convertedDataAvailable);
 	}
 
 	public void showMessageboxAbout() {

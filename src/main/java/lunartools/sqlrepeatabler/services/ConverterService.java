@@ -20,7 +20,7 @@ public class ConverterService {
 		this.model=model;
 	}
 
-	public void parseFile(File file) throws Exception{
+	public StringBuffer parseFile(File file) throws Exception{
 		try {
 			ArrayList<Command> commands=CommandImplementationFactory.getCommandImplementations(Command.class.getPackage().getName(),Command.class.getSimpleName());
 
@@ -35,7 +35,6 @@ public class ConverterService {
 					sb.append(line);
 					sb.append("\n");
 				}
-				model.addInputData(sb.toString());
 			}
 
 			try(BufferedReader bufferedReader=new BufferedReader(new FileReader((file)))){
@@ -55,10 +54,11 @@ public class ConverterService {
 						throw new Exception("unexpected line: "+line);
 
 					}
-				model.addConvertedSqlScript(stringWriterLn.toString());
+				return stringWriterLn.getBuffer();
 			}
 		} catch (Exception e) {
 			logger.error("error while parsing file: "+file, e);
+			return new StringBuffer();
 		}
 	}
 

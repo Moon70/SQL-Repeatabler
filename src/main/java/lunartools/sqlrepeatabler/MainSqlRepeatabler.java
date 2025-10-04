@@ -19,7 +19,7 @@ public class MainSqlRepeatabler {
 		SwingUtilities.invokeLater(() -> {
 			try{
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				JTextArea jTextAreaLog=new JTextArea(15,200);
+				JTextArea jTextAreaLog=new JTextArea(14,220);
 				configureLogger(jTextAreaLog);
 				SqlRepeatablerModel model=new SqlRepeatablerModel();
 				SqlRepeatablerView view=new SqlRepeatablerView(model,jTextAreaLog);
