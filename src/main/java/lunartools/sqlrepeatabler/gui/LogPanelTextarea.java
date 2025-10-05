@@ -2,8 +2,6 @@ package lunartools.sqlrepeatabler.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -18,7 +16,7 @@ import ch.qos.logback.classic.spi.ThrowableProxyUtil;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
-public class LogPanelTextarea extends JPanel implements Observer{
+public class LogPanelTextarea extends JPanel{
 	private JTextArea logTextarea;
 	private JScrollPane scrollPane;
 
@@ -32,14 +30,16 @@ public class LogPanelTextarea extends JPanel implements Observer{
 		scrollPane=new JScrollPane(logTextarea);
 		add(scrollPane);
 
-		model.addObserver(this);
+		model.addChangeListener(this::updateModelChanges);
 	}
 
 	public void addLog(String s) {
 	}
 
-	@Override
-	public void update(Observable o, Object object) {
+	public void updateModelChanges(Object object) {
+//		if(logger.isTraceEnabled()) {
+//			logger.trace("update: "+object);
+//		}
 		if(object instanceof ILoggingEvent) {
 			ILoggingEvent loggingEvent=(ILoggingEvent)object;
 			logTextarea.append(loggingEvent.getFormattedMessage());

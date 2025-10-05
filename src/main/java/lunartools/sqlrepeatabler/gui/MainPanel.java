@@ -7,11 +7,8 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -21,12 +18,11 @@ import javax.swing.JTextArea;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.DailyBackgroundProvider;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
-public class MainPanel extends JPanel implements Observer{
+public class MainPanel extends JPanel{
 	private static Logger logger = LoggerFactory.getLogger(MainPanel.class);
 	private SqlRepeatablerModel model;
 	private IOPanel[] ioPanels;
@@ -69,13 +65,12 @@ public class MainPanel extends JPanel implements Observer{
 		
 		add(jSplitPaneVertical);
 		jSplitPaneVertical.setVisible(false);
-		model.addObserver(this);
+		model.addChangeListener(this::updateModelChanges);
 	}
 
-	@Override
-	public void update(Observable observable, Object object) {
+	public void updateModelChanges(Object object) {
 		if(logger.isTraceEnabled()) {
-			logger.trace("update: "+observable+", "+object);
+			logger.trace("update: "+object);
 		}
 		if(object==SimpleEvents.MODEL_SQLINPUTFILESCHANGED) {
 			jSplitPaneVertical.setVisible(true);
@@ -86,7 +81,7 @@ public class MainPanel extends JPanel implements Observer{
 			}
 			if(ioPanels!=null) {
 				for(IOPanel iopanel:ioPanels) {
-					model.deleteObserver(iopanel);
+					model.removeChangeListener(iopanel::updateModelChanges);
 				}
 			}
 			ioPanels=new IOPanel[files.size()];

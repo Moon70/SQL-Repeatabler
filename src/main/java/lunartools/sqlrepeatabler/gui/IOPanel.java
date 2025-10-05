@@ -20,7 +20,7 @@ import lunartools.FileTools;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
-public class IOPanel extends JPanel implements Observer{
+public class IOPanel extends JPanel{
 	private static Logger logger = LoggerFactory.getLogger(IOPanel.class);
 	JTextArea inputTextarea;
 	private JTextArea outputTextarea;
@@ -31,7 +31,7 @@ public class IOPanel extends JPanel implements Observer{
 		this.model=model;
 		this.sqlFileIndex=sqlFileIndex;
 		
-		model.addObserver(this);
+		model.addChangeListener(this::updateModelChanges);
 
 		Font font=new Font("Courier New", Font.PLAIN,12);
 		inputTextarea=new JTextArea(48,110);
@@ -58,10 +58,9 @@ public class IOPanel extends JPanel implements Observer{
 
 	}
 
-	@Override
-	public void update(Observable observable, Object object) {
+	public void updateModelChanges(Object object) {
 		if(logger.isTraceEnabled()) {
-			logger.trace("update: "+observable+", "+object);
+			logger.trace("update: "+object);
 		}
 		if(object==SimpleEvents.MODEL_SQLINPUTFILESCHANGED) {
 			

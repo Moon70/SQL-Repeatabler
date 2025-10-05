@@ -7,8 +7,6 @@ import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +16,7 @@ import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
 import lunartools.sqlrepeatabler.worker.ConvertSqlFileWorker;
 
-public class SqlRepeatablerController implements Observer{
+public class SqlRepeatablerController{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerController.class);
 	private SqlRepeatablerModel model;
 	private SqlRepeatablerView view;
@@ -36,7 +34,7 @@ public class SqlRepeatablerController implements Observer{
 
 		Rectangle frameBounds=fixScreenBounds(settings.getRectangle(SqlRepeatablerSettings.VIEW_BOUNDS, SqlRepeatablerModel.getDefaultFrameBounds()),SqlRepeatablerModel.getDefaultFrameSize());
 		model.setFrameBounds(frameBounds);
-		model.addObserver(this);
+		model.addChangeListener(this::updateModelChanges);
 	}
 
 	private Rectangle fixScreenBounds(Rectangle screenBounds, Dimension defaultFrameSize) {
@@ -72,10 +70,9 @@ public class SqlRepeatablerController implements Observer{
 		return view;
 	}
 
-	@Override
-	public void update(Observable observable, Object object) {
+	public void updateModelChanges(Object object) {
 		if(logger.isTraceEnabled()) {
-			logger.trace("update: "+observable+", "+object);
+			logger.trace("update: "+object);
 		}
 		if(object==SimpleEvents.EXIT) {
 			shutdown();

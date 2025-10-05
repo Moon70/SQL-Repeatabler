@@ -6,19 +6,23 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import lunartools.ChangeListenerSupport;
 import lunartools.SwingTools;
 
-public class SqlRepeatablerModel extends Observable{
+public class SqlRepeatablerModel implements ChangeListenerSupport{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerModel.class);
 	public static final String PROGRAMNAME = "SQL-Repeatabler";
 	private static String versionProgram=SwingTools.determineProgramVersion();
-
+	private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>();
+	
 	public static final int DEFAULT_FRAME_WIDTH=1290;
 	public static final int DEFAULT_FRAME_HEIGHT=(int)(DEFAULT_FRAME_WIDTH/SwingTools.SECTIOAUREA);
 	private Rectangle frameBounds=new Rectangle(0,0,DEFAULT_FRAME_WIDTH,DEFAULT_FRAME_HEIGHT);
@@ -30,9 +34,9 @@ public class SqlRepeatablerModel extends Observable{
 		return versionProgram;
 	}
 
-	private void sendMessage(Object message) {
-		setChanged();
-		notifyObservers(message);
+	@Override
+	public List<ChangeListener> getListeners() {
+		return listeners;
 	}
 
 	public ArrayList<File> getSqlInputFiles() {
@@ -42,7 +46,7 @@ public class SqlRepeatablerModel extends Observable{
 	public void addSqlInputFile(File file) {
 		if(!this.sqlInputFiles.contains(file)) {
 			this.sqlInputFiles.add(file);
-			sendMessage(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
+			notifyListeners(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
 		}
 	}
 
@@ -56,13 +60,13 @@ public class SqlRepeatablerModel extends Observable{
 			}
 		}
 		if(changed) {
-			sendMessage(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
+			notifyListeners(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
 		}
 	}
 
 	public void clearConvertedSqlScript() {
 		sqlConvertedScripts=new ArrayList<>();
-		sendMessage(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
+		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
 
 	public boolean hasSqlConvertedScripts() {
@@ -75,7 +79,7 @@ public class SqlRepeatablerModel extends Observable{
 	
 	public void setConvertedSqlScripts(ArrayList<StringBuffer> sqlConvertedScripts) {
 		this.sqlConvertedScripts=sqlConvertedScripts;
-		sendMessage(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
+		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
 	
 	public StringBuffer getConvertedSqlScript() {
@@ -105,7 +109,7 @@ public class SqlRepeatablerModel extends Observable{
 
 	public void setFrameBounds(Rectangle frameBounds) {
 		this.frameBounds = frameBounds;
-		sendMessage(SimpleEvents.MODEL_FRAMESIZECHANGED);
+		notifyListeners(SimpleEvents.MODEL_FRAMESIZECHANGED);
 	}
 
 	public Rectangle getFrameBounds() {
@@ -115,16 +119,16 @@ public class SqlRepeatablerModel extends Observable{
 	public void reset() {
 		sqlInputFiles=new ArrayList<>();
 		sqlConvertedScripts=new ArrayList<>();
-		sendMessage(SimpleEvents.MODEL_RESET);
-		sendMessage(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
+		notifyListeners(SimpleEvents.MODEL_RESET);
+		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
 
 	public void fireLogEvent(ILoggingEvent loggingEvent) {
-		sendMessage(loggingEvent);
+		notifyListeners(loggingEvent);
 	}
 
 	public void clearInputPanel() {
-		sendMessage(SimpleEvents.MODEL_CLEARINPUTPANEL);
+		notifyListeners(SimpleEvents.MODEL_CLEARINPUTPANEL);
 	}
 
 }

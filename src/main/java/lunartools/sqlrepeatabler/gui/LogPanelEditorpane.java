@@ -2,8 +2,6 @@ package lunartools.sqlrepeatabler.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
@@ -19,7 +17,7 @@ import ch.qos.logback.classic.spi.ThrowableProxyUtil;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
-public class LogPanelEditorpane extends JPanel implements Observer{
+public class LogPanelEditorpane extends JPanel{
 	private JEditorPane logEditorPane;
 	private final String htmlIntro;
 	private final String htmlOutro;
@@ -88,11 +86,13 @@ public class LogPanelEditorpane extends JPanel implements Observer{
 
 		sbHtmlLines=new StringBuffer();
 
-		model.addObserver(this);
+		model.addChangeListener(this::updateModelChanges);
 	}
 
-	@Override
-	public void update(Observable o, Object object) {
+	public void updateModelChanges(Object object) {
+//		if(logger.isTraceEnabled()) {
+//			logger.trace("update: "+object);
+//		}
 		if(object instanceof ILoggingEvent) {
 			ILoggingEvent loggingEvent=(ILoggingEvent)object;
 			switch(loggingEvent.getLevel().levelInt) {
