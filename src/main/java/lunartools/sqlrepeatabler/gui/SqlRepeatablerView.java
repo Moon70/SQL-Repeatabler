@@ -1,10 +1,6 @@
 package lunartools.sqlrepeatabler.gui;
 
 import java.awt.Dimension;
-import java.awt.Image;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -12,7 +8,7 @@ import javax.swing.JTextArea;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.ImageTools;
+import lunartools.SwingTools;
 import lunartools.sqlrepeatabler.About;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
@@ -34,21 +30,7 @@ public class SqlRepeatablerView extends JFrame{
 		setSize(new Dimension(WINDOW_MINIMUM_WIDTH,WINDOW_MINIMUM_HEIGHT));
 		setResizable(false);
 		this.model=model;
-
-		try {
-			List<Image> icons=new ArrayList<Image>();
-			icons.add(ImageTools.createImageFromResource("/icons/ProgramIcon64x64.png"));
-			icons.add(ImageTools.createImageFromResource("/icons/ProgramIcon56x56.png"));
-			icons.add(ImageTools.createImageFromResource("/icons/ProgramIcon48x48.png"));
-			icons.add(ImageTools.createImageFromResource("/icons/ProgramIcon40x40.png"));
-			icons.add(ImageTools.createImageFromResource("/icons/ProgramIcon32x32.png"));
-			icons.add(ImageTools.createImageFromResource("/icons/ProgramIcon24x24.png"));
-			icons.add(ImageTools.createImageFromResource("/icons/ProgramIcon16x16.png"));
-			this.setIconImages(icons);
-		} catch (IOException e) {
-			System.err.println("error loading frame icon");
-			e.printStackTrace();
-		}
+		this.setIconImages(SwingTools.getDefaultIconImages());
 
 		mainPanel=new MainPanel(model,logTextArea);
 		add(mainPanel);

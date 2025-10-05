@@ -4,6 +4,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
 
 public class MenuModel {
@@ -49,6 +50,7 @@ public class MenuModel {
 	private JMenu createHelpMenu(){
 		menuHelp=new JMenu("?");
 		menuHelpItemAbout=new JMenuItem(actionFactory.createAboutAction());
+		menuHelpItemAbout.setIcon(ImageTools.createImageIcon("/icons/ProgramIcon16.png"));
 		menuHelp.add(menuHelpItemAbout);
 		return menuHelp;
 	}

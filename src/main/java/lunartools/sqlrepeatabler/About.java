@@ -38,7 +38,7 @@ public class About {
 			editorPane.setEditable(false);
 			editorPane.setBackground(jframe.getBackground());
 
-			JOptionPane.showMessageDialog(jframe, editorPane, "About "+SqlRepeatablerModel.PROGRAMNAME,JOptionPane.INFORMATION_MESSAGE,ImageTools.createImageIcon("/icons/ProgramIcon90x90.png"));
+			JOptionPane.showMessageDialog(jframe, editorPane, "About "+SqlRepeatablerModel.PROGRAMNAME,JOptionPane.INFORMATION_MESSAGE,ImageTools.createImageIcon("/icons/ProgramIcon90.png"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
