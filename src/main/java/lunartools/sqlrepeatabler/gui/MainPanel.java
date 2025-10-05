@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.ImageTools;
+import lunartools.sqlrepeatabler.DailyBackgroundProvider;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
@@ -64,11 +65,7 @@ public class MainPanel extends JPanel implements Observer{
 			}
 		});
 		
-		try {
-			imageBackground = ImageTools.createImageFromResource("/Background01.jpg");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		imageBackground=DailyBackgroundProvider.getImage();		
 		
 		add(jSplitPaneVertical);
 		jSplitPaneVertical.setVisible(false);
