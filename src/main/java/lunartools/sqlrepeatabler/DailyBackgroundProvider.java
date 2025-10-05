@@ -7,7 +7,7 @@ import java.util.Calendar;
 import lunartools.ImageTools;
 
 public class DailyBackgroundProvider {
-	private static final int NUMBER_OF_BACKGROUNDS=3;
+	private static final int NUMBER_OF_BACKGROUNDS=4;
 	private static Image imageBackground;
 
 	public static Image getImage() {
