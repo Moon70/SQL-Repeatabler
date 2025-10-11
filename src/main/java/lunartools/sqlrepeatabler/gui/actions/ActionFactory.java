@@ -23,6 +23,10 @@ public class ActionFactory {
 		return new SaveAsAction(controller);
 	}
 
+	public Action createReloadAction() {
+		return new ReloadAction(controller);
+	}
+
 	public Action createResetAction() {
 		return new ResetAction(controller);
 	}
@@ -48,6 +52,20 @@ public class ActionFactory {
             controller.shutdown();
         }
     }
+
+	private class ReloadAction extends AbstractAction {
+		private SqlRepeatablerController controller;
+
+		public ReloadAction(SqlRepeatablerController controller) {
+			this.controller = controller;
+            this.putValue(NAME, "Reload");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			controller.getModel().reload();
+		}
+	}
 
 	private class ResetAction extends AbstractAction {
 		private SqlRepeatablerController controller;

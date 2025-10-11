@@ -7,7 +7,6 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
@@ -114,6 +113,10 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 
 	public Rectangle getFrameBounds() {
 		return frameBounds;
+	}
+
+	public void reload() {
+		notifyListeners(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
 	}
 
 	public void reset() {

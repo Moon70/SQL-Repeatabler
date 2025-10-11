@@ -14,6 +14,7 @@ public class MenuModel {
 	private JMenu menuFile;
 	private JMenuItem menuFileItemOpen;
 	private JMenuItem menuFileItemSaveAs;
+	private JMenuItem menuFileItemReload;
 	private JMenuItem menuFileItemReset;
 	private JMenuItem menuFileItemExitProgram;
 
@@ -37,6 +38,10 @@ public class MenuModel {
         menuFileItemSaveAs=new JMenuItem(actionFactory.createSaveAsAction());
         menuFileItemSaveAs.setEnabled(true);
         menuFile.add(menuFileItemSaveAs);
+
+        menuFileItemReload=new JMenuItem(actionFactory.createReloadAction());
+        menuFileItemReload.setEnabled(true);
+        menuFile.add(menuFileItemReload);
 
         menuFileItemReset=new JMenuItem(actionFactory.createResetAction());
         menuFileItemReset.setEnabled(true);
