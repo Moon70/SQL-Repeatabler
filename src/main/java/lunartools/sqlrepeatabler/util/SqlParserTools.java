@@ -125,11 +125,11 @@ public class SqlParserTools {
 		}
 	}
 
-	public static String consumeTokensInBraces(StringBuilder sbCommand) throws Exception{
+	public static String consumeTokensInParenthesis(StringBuilder sbCommand) throws Exception{
 		int openParenthesis=0;
 		stripSpace(sbCommand);
 		if(sbCommand.charAt(0)!='(') {
-			throw new Exception("Error parsing tokens in braces! Expected: >(<. Found: >"+sbCommand.charAt(0)+"<, Buffer: >"+(sbCommand.length()>10?sbCommand.substring(0,10):sbCommand.toString()));
+			throw new Exception("Error parsing tokens in parenthesis! Expected: >(<. Found: >"+sbCommand.charAt(0)+"<, Buffer: >"+(sbCommand.length()>10?sbCommand.substring(0,10):sbCommand.toString()));
 		}
 		int index=1;
 		while(true) {
@@ -146,7 +146,7 @@ public class SqlParserTools {
 			index++;
 		}
 		
-//		int i=getIndexOfClosingBraceIgnoringQuotes(sbCommand);
+//		int i=getIndexOfClosingParenthesisIgnoringQuotes(sbCommand);
 		String result=sbCommand.substring(0, index+1);
 		sbCommand.delete(0, index+1);
 		if(sbCommand.charAt(0)==' ') {
@@ -155,7 +155,7 @@ public class SqlParserTools {
 		return result;
 	}
 
-	private static int getIndexOfClosingBraceIgnoringQuotes(StringBuilder sbCommand) throws Exception {
+	private static int getIndexOfClosingParenthesisIgnoringQuotes(StringBuilder sbCommand) throws Exception {
 		boolean quotes=false;
 		boolean doubleQuotes=false;
 		for(int i=0;i<sbCommand.length();i++) {
@@ -169,7 +169,7 @@ public class SqlParserTools {
 				return i;
 			}
 		}
-		throw new Exception("closing braces not found");
+		throw new Exception("closing parenthesis not found");
 	}
 
 }

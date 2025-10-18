@@ -34,7 +34,7 @@ public class InsertIntoStatementFactory extends StatementFactory{
 		TableName tableName=TableName.createInstanceByConsuming(sbStatement);
 		logger.debug(tableName.toString());
 
-		String columnNames=SqlParserTools.consumeTokensInBraces(sbStatement);
+		String columnNames=SqlParserTools.consumeTokensInParenthesis(sbStatement);
 
 		if(!SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbStatement, "VALUES")) {
 			throw new Exception("Keyword VALUES not found");
@@ -45,7 +45,7 @@ public class InsertIntoStatementFactory extends StatementFactory{
 			if(sbStatement.charAt(0)==',') {
 				sbStatement.deleteCharAt(0);
 			}
-			String columnValues=SqlParserTools.consumeTokensInBraces(sbStatement);
+			String columnValues=SqlParserTools.consumeTokensInParenthesis(sbStatement);
 			columnValuesList.add(columnValues);
 		}
 

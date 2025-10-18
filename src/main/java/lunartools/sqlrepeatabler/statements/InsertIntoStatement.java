@@ -23,12 +23,12 @@ public class InsertIntoStatement implements Statement{
 	
 	@Override
 	public void toSql(StringBuilder sb) throws Exception {
-		String nameId=getFirstValueFromCsvInbraces(columnNames);
+		String nameId=getFirstValueFromCsvInParenthesis(columnNames);
 		if(!nameId.equalsIgnoreCase("ID")){
 			logger.warn("INSERT INTO: First column name is '"+nameId+"', expected is 'ID' !");
 		}
 		for(int i=0;i<columnValuesList.size();i++) {
-			sb.append(String.format("if (select COUNT(*) from %s where %s=%s)=0",tableName.getFullName(),nameId,getFirstValueFromCsvInbraces(columnValuesList.get(i)))).append(SqlParser.CRLF);
+			sb.append(String.format("if (select COUNT(*) from %s where %s=%s)=0",tableName.getFullName(),nameId,getFirstValueFromCsvInParenthesis(columnValuesList.get(i)))).append(SqlParser.CRLF);
 			sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
 			sb.append(String.format("\tSET IDENTITY_INSERT %s ON;",tableName.getFullSchemaAndName())).append(SqlParser.CRLF);
 			sb.append(String.format("\t\tINSERT INTO %s %s VALUES",tableName.getFullName(),columnNames)).append(SqlParser.CRLF);
@@ -41,7 +41,7 @@ public class InsertIntoStatement implements Statement{
 		}
 	}
 
-	private String getFirstValueFromCsvInbraces(String s) {
+	private String getFirstValueFromCsvInParenthesis(String s) {
 		int start=s.indexOf('(')+1;
 		int end=s.indexOf(',', start);
 		return s.substring(start,end);
