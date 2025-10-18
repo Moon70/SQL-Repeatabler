@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.common.SqlScript;
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.util.SqlParserTools;
 
 public class InsertIntoStatementFactory extends StatementFactory{

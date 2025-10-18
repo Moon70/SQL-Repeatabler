@@ -1,7 +1,7 @@
 package lunartools.sqlrepeatabler.statements;
 
 import lunartools.sqlrepeatabler.SqlParser;
-import lunartools.sqlrepeatabler.common.SqlScript;
+import lunartools.sqlrepeatabler.parser.SqlScript;
 
 public class OneLineCommentStatement implements Statement{
 	public static final String COMMAND="--";

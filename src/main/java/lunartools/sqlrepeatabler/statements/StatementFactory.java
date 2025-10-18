@@ -1,6 +1,6 @@
 package lunartools.sqlrepeatabler.statements;
 
-import lunartools.sqlrepeatabler.common.SqlScript;
+import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.util.SqlParserTools;
 
 public abstract class StatementFactory {

@@ -3,7 +3,7 @@ package lunartools.sqlrepeatabler.statements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.common.SqlScript;
+import lunartools.sqlrepeatabler.parser.SqlScript;
 
 public class OneLineCommentStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(OneLineCommentStatementFactory.class);
