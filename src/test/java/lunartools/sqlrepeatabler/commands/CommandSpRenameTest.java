@@ -1,37 +1,40 @@
 package lunartools.sqlrepeatabler.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import lunartools.FileTools;
-import lunartools.sqlrepeatabler.services.StringWriterLn;
+import lunartools.sqlrepeatabler.TestHelper;
+import lunartools.sqlrepeatabler.common.SqlScript;
+import lunartools.sqlrepeatabler.statements.SpRenameStatementFactory;
+import lunartools.sqlrepeatabler.statements.Statement;
 
 class CommandSpRenameTest {
-    private StringWriterLn writer;
-    private Command command;
+	private static final String TESTDATAFOLDER="/CommandSpRename/";
+    private SpRenameStatementFactory factory=new SpRenameStatementFactory();
     
-    @BeforeEach
-    void init() {
-        writer=new StringWriterLn();
-        command=new CommandSpRename();
+    @Test
+    void nonSpRenameLineIsNotAccepted() throws Exception {
+    	String filenameTestdata=	TESTDATAFOLDER+"OneNonSpRenameLine_Testdata.txt";
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+   		assertFalse(factory.match(sqlScript.peekLine()));
     }
 
     @Test
-    void spRenameForColumnIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/SpRename/RenameColumn.txt");
-        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
-        String line=reader.readLine();
-        assertTrue(command.acceptLine(line, reader, writer));
-        
-        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/SpRename/RenameColumn_Expected.txt");
-        assertEquals(FileTools.readInputStreamToStringBuffer(inputStreamExpected,"UTF-8").toString(),writer.toString());
-    }
+    void spRename_RenameColumn() throws Exception{
+    	String filenameTestdata=	TESTDATAFOLDER+"RenameColumn_Testdata.txt";
+    	String filenameExpecteddata=TESTDATAFOLDER+"RenameColumn_Expected.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+    
 }

@@ -1,59 +1,70 @@
 package lunartools.sqlrepeatabler.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import lunartools.FileTools;
-import lunartools.sqlrepeatabler.services.StringWriterLn;
+import lunartools.sqlrepeatabler.TestHelper;
+import lunartools.sqlrepeatabler.common.SqlScript;
+import lunartools.sqlrepeatabler.statements.CreateTableStatementFactory;
+import lunartools.sqlrepeatabler.statements.Statement;
 
 class CommandCreateTableTest {
-    private StringWriterLn writer;
-    private Command command;
-    
-    @BeforeEach
-    void init() {
-        writer=new StringWriterLn();
-        command=new CommandCreateTable();
-    }
+	private static final String TESTDATAFOLDER="/CommandCreateTable/";
+	private CreateTableStatementFactory factory=new CreateTableStatementFactory();
 
-    @Test
-    void createTableWhenNamesInSquareBracketsIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/CreateTable/CreateOneTable_TableNameAndFieldsInSquareBrackets.txt");
-        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
-        String line=reader.readLine();
-        assertTrue(command.acceptLine(line, reader, writer));
-        
-        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/CreateTable/CreateOneTable_Expected.txt");
-        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
-    }
+	@Test
+	void nonCreateTableIsNotAccepted() throws Exception {
+		String filenameTestdata=	TESTDATAFOLDER+"NonCreateTableLine_Testdata.txt";
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertFalse(factory.match(sqlScript.peekLine()));
+	}
 
-    @Test
-    void createTableWhenNamesInBackTicksIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/CreateTable/CreateOneTable_TableNameAndFieldsInBackTicks.txt");
-        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
-        String line=reader.readLine();
-        assertTrue(command.acceptLine(line, reader, writer));
-        
-        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/CreateTable/CreateOneTable_Expected.txt");
-        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
-    }
+	@Test
+	void createTable_SquareBracketDelimiterIsAccepted() throws Exception{
+		String filenameTestdata=	TESTDATAFOLDER+"CreateOneTable_DelimiterSquareBrackets_Testdata.txt";
+		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_DelimiterSquareBrackets_Expected.txt";
+		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
-    @Test
-    void bracesOfDatetimeFieldTypeAreRemovedCorrectly() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/CreateTable/CreateOneTable_DatetimeWithBraces.txt");
-        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
-        String line=reader.readLine();
-        assertTrue(command.acceptLine(line, reader, writer));
-        
-        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/CreateTable/CreateOneTable_Expected.txt");
-        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
-    }
-    
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+	}
+
+	@Test
+	void createTable_QuoteDelimiterIsAccepted() throws Exception{
+		String filenameTestdata=	TESTDATAFOLDER+"CreateOneTable_DelimiterQuotes_Testdata.txt";
+		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_DelimiterQuotes_Expected.txt";
+		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+	}
+
+	@Test
+	void createTable_BacktickDelimiterIsAccepted() throws Exception{
+		String filenameTestdata=	TESTDATAFOLDER+"CreateOneTable_DelimiterBackticks_Testdata.txt";
+		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_DelimiterBackticks_Expected.txt";
+		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+	}
+
 }

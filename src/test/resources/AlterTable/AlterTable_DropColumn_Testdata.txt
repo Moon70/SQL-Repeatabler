@@ -1,2 +1,0 @@
-    alter table [DB_FOO]
-       drop column [TO_DELETE];

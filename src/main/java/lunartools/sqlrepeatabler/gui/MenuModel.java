@@ -3,6 +3,7 @@ package lunartools.sqlrepeatabler.gui;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.UIManager;
 
 import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
@@ -33,21 +34,26 @@ public class MenuModel {
 
         menuFileItemOpen=new JMenuItem(actionFactory.createOpenAction());
         menuFileItemOpen.setEnabled(true);
+        menuFileItemOpen.setIcon(ImageTools.createImageIcon("/icons/file_open_16.png"));
         menuFile.add(menuFileItemOpen);
 
         menuFileItemSaveAs=new JMenuItem(actionFactory.createSaveAsAction());
         menuFileItemSaveAs.setEnabled(true);
+        menuFileItemSaveAs.setIcon(ImageTools.createImageIcon("/icons/save_as_16.png"));
         menuFile.add(menuFileItemSaveAs);
 
         menuFileItemReload=new JMenuItem(actionFactory.createReloadAction());
         menuFileItemReload.setEnabled(true);
+        menuFileItemReload.setIcon(ImageTools.createImageIcon("/icons/refresh_16.png"));
         menuFile.add(menuFileItemReload);
 
         menuFileItemReset=new JMenuItem(actionFactory.createResetAction());
         menuFileItemReset.setEnabled(true);
+        menuFileItemReset.setIcon(ImageTools.createImageIcon("/icons/restart_alt_16.png"));
         menuFile.add(menuFileItemReset);
 
         menuFileItemExitProgram=new JMenuItem(actionFactory.createExitProgramAction());
+        menuFileItemExitProgram.setIcon(ImageTools.createImageIcon("/icons/logout_16.png"));
         menuFile.add(menuFileItemExitProgram);
         return menuFile;
     }

@@ -1,7 +1,0 @@
-    create table `DB_FOO` (
-        `ID` int auto_increment not null,
-        `FIELD_FOO_1` nvarchar(255),
-        `FIELD_FOO_2` int,
-        `FIELD_FOO_3` datetime,
-        primary key (`ID`)
-    ) engine=InnoDB;

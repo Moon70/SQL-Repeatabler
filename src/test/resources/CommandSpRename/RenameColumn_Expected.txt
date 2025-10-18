@@ -1,0 +1,4 @@
+IF COL_LENGTH ('table_name','new_column_name') IS NULL
+BEGIN
+	exec sp_rename '[table_name].[old_column_name]', [new_column_name], [type];
+END;

@@ -1,6 +1,0 @@
-IF OBJECT_ID('dbo.FOO_constraintname','UQ') IS NULL
-BEGIN
-  ALTER TABLE [DB_FOO]
-    ADD CONSTRAINT FOO_constraintname unique ([FOO_ID]);
-END;
-

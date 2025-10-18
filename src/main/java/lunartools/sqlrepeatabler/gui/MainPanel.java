@@ -2,13 +2,8 @@ package lunartools.sqlrepeatabler.gui;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -39,28 +34,6 @@ public class MainPanel extends JPanel{
 		LogPanelTextarea logPanel=new LogPanelTextarea(model,logTextArea);
 		jSplitPaneVertical.setBottomComponent(logPanel);
 
-		this.setDropTarget(new DropTarget() {
-			public synchronized void drop(DropTargetDropEvent evt) {
-				try {
-					evt.acceptDrop(DnDConstants.ACTION_COPY);
-					List<File> droppedFiles = (List<File>)evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-					ArrayList<File> arraylistAcceptedFiles=new ArrayList<>();
-					for (File file : droppedFiles) {
-						if(file.getName().toLowerCase().endsWith(".sql")) {
-							arraylistAcceptedFiles.add(file);
-						}else {
-							logger.warn("ignoring unsupported file: "+file);
-						}
-					}
-					if(arraylistAcceptedFiles.size()>0) {
-						MainPanel.this.model.addSqlInputFiles(arraylistAcceptedFiles);
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		});
-		
 		imageBackground=DailyBackgroundProvider.getImage();		
 		
 		add(jSplitPaneVertical);

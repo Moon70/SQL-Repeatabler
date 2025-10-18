@@ -1,93 +1,205 @@
 package lunartools.sqlrepeatabler.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import lunartools.FileTools;
-import lunartools.sqlrepeatabler.services.StringWriterLn;
+import lunartools.sqlrepeatabler.TestHelper;
+import lunartools.sqlrepeatabler.common.SqlScript;
+import lunartools.sqlrepeatabler.statements.AlterTableStatementFactory;
+import lunartools.sqlrepeatabler.statements.Statement;
 
 class CommandAlterTableTest {
-    private StringWriterLn writer;
-    private Command command;
+	private static final String TESTDATAFOLDER="/CommandAlterTable/";
+    private AlterTableStatementFactory factory=new AlterTableStatementFactory();
     
-    @BeforeEach
-    void init() {
-        writer=new StringWriterLn();
-        command=new CommandAlterTable();
+    @Test
+    void nonAlterTableIsNotAccepted() throws Exception {
+    	String filenameTestdata=	TESTDATAFOLDER+"NonAlterTableLine_Testdata.txt";
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+   		assertFalse(factory.match(sqlScript.peekLine()));
     }
 
     @Test
-    void alterTableIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddFieldModifyColumn_Testdata.txt");
-        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
-        String line=reader.readLine();
-        assertTrue(command.acceptLine(line, reader, writer));
-        
-        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddFieldModifyColumn_Expected.txt");
-        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
-    }
+    void alterTable_Column_AddOne() throws Exception{
+    	String filenameTestdata=	TESTDATAFOLDER+"Column_AddOne_Testdata.txt";
+    	String filenameExpecteddata=TESTDATAFOLDER+"Column_AddOne_Expected.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
-    @Test
-    void alterTableNoSquareBracketsIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_NoSquareBrackets_Testdata.txt");
-        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
-        String line=reader.readLine();
-        assertTrue(command.acceptLine(line, reader, writer));
-        
-        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_NoSquareBrackets_Expected.txt");
-        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
-    }
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
 
-    @Test
-    void alterTableAndAddConstraintInOneLineIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddConstraintOneLine_Testdata.txt");
-        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
-        String line=reader.readLine();
-        assertTrue(command.acceptLine(line, reader, writer));
-        
-        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddConstraintOneLine_Expected.txt");
-        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
-    }
-
-    @Test
-    void alterTableAndAddFieldInOneLineIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddFieldOneLine_Testdata.txt");
-        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
-        String line=reader.readLine();
-        assertTrue(command.acceptLine(line, reader, writer));
-        
-        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AddFieldOneLine_Expected.txt");
-        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
-    }
-
-    @Test
-    void alterTableAndDropColumnIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_DropColumn_Testdata.txt");
-        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
-        String line=reader.readLine();
-        assertTrue(command.acceptLine(line, reader, writer));
-        
-        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_DropColumn_Expected.txt");
-        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
-    }
-
-
-    @Test
-    void alterTableAlterColumnIsAccepted() throws Exception {
-        InputStream inputStream=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AlterColumn_Testdata.txt");
-        BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
-        String line=reader.readLine();
-        assertTrue(command.acceptLine(line, reader, writer));
-        
-        InputStream inputStreamExpected=this.getClass().getResourceAsStream("/AlterTable/AlterTable_AlterColumn_Expected.txt");
-        assertEquals(FileTools.getStringBufferFromInputStream(inputStreamExpected,"UTF-8").toString(),writer.toString());
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
     }
     
+    @Test
+    void alterTable_Column_AddOne_OneLine() throws Exception{
+    	String filenameTestdata=	TESTDATAFOLDER+"Column_AddOne_OneLine_Testdata.txt";
+    	String filenameExpecteddata=TESTDATAFOLDER+"Column_AddOne_OneLine_Expected.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+    	
+    	SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+    	assertTrue(factory.match(sqlScript.peekLine()));
+    	
+    	Statement sqlSegment=factory.createSqlSegment(sqlScript);
+    	StringBuilder sb=new StringBuilder();
+    	sqlSegment.toSql(sb);
+    	assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_Column_AddThree() throws Exception{
+    	String filenameExpecteddata=TESTDATAFOLDER+"Column_AddThree_Expected.txt";
+    	String filenameTestdata=	TESTDATAFOLDER+"Column_AddThree_Testdata.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_Constraint_FK_AddOne() throws Exception{
+    	String filenameTestdata=	TESTDATAFOLDER+"Constraint_FK_AddOne_Testdata.txt";
+    	String filenameExpecteddata=TESTDATAFOLDER+"Constraint_FK_AddOne_Expected.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_Constraint_Unique_AddOne() throws Exception{
+    	String filenameTestdata=	TESTDATAFOLDER+"Constraint_Unique_AddOne_Testdata.txt";
+    	String filenameExpecteddata=TESTDATAFOLDER+"Constraint_Unique_AddOne_Expected.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_Constraint_FK_AddTwo() throws Exception{
+    	String filenameTestdata=	TESTDATAFOLDER+"Constraint_FK_AddTwo_Testdata.txt";
+    	String filenameExpecteddata=TESTDATAFOLDER+"Constraint_FK_AddTwo_Expected.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_DropOneColumnWorksAsExpected() throws Exception{
+    	String filenameExpecteddata=TESTDATAFOLDER+"Column_DropOne_Expected.txt";
+    	String filenameTestdata=	TESTDATAFOLDER+"Column_DropOne_Testdata.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_DropThreeColumnWorksAsExpected() throws Exception{
+    	String filenameExpecteddata=TESTDATAFOLDER+"Column_DropThree_Expected.txt";
+    	String filenameTestdata=	TESTDATAFOLDER+"Column_DropThree_Testdata.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_DropOneConstraintWorksAsExpected() throws Exception{
+    	String filenameExpecteddata=TESTDATAFOLDER+"Constraint_DropOne_Expected.txt";
+    	String filenameTestdata=	TESTDATAFOLDER+"Constraint_DropOne_Testdata.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_AlterColumn_OneColumn() throws Exception{
+    	String filenameTestdata=	TESTDATAFOLDER+"AlterTable_AlterColumn_OneColumn_Testdata.txt";
+    	String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_AlterColumn_OneColumn_Expected.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_AlterColumn_ThreeColumns() throws Exception{
+    	String filenameTestdata=	TESTDATAFOLDER+"AlterTable_AlterColumn_ThreeColumns_Testdata.txt";
+    	String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_AlterColumn_ThreeColumns_Expected.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_unsupported_modify() throws Exception{
+    	String filenameTestdata=	TESTDATAFOLDER+"AlterTable_ModifyColumn_Testdata.txt";
+    	String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_ModifyColumn_Expected.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
 }

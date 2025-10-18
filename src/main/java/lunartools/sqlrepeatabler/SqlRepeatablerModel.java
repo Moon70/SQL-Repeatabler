@@ -73,6 +73,9 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 	}
 	
 	public StringBuffer getSingleConvertedSqlScript(int index) {
+		if(index>=sqlConvertedScripts.size()) {
+			return new StringBuffer();
+		}
 		return sqlConvertedScripts.get(index);
 	}
 	

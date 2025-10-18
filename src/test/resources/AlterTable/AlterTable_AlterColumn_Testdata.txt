@@ -1,2 +1,0 @@
-    alter table [dbo].[DB_FOO]
-       alter column [FIELD_5] nvarchar(255);

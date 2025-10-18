@@ -1,3 +1,0 @@
-  ALTER TABLE [DB_FOO]
-    ALTER COLUMN [FIELD_5] nvarchar(255);
-

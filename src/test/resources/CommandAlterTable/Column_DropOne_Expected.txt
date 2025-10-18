@@ -1,0 +1,5 @@
+IF COL_LENGTH ('table_name','column1_name') IS NOT NULL
+BEGIN
+	ALTER TABLE [table_name]
+		DROP COLUMN [column1_name];
+END;

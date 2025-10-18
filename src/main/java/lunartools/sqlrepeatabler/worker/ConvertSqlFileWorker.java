@@ -41,7 +41,12 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, Void> {
 	@Override
 	protected void done() {
 		super.done();
-		model.setConvertedSqlScripts(convertedSqlScripts);
+		try {
+			model.setConvertedSqlScripts(convertedSqlScripts);
+		} catch (Exception e) {
+			logger.error("buuu",e);
+			throw e;
+		}
 	}
 	
 }

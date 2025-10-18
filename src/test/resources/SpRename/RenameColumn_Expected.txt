@@ -1,4 +1,0 @@
-IF COL_LENGTH ('RWT_MANDANT','AML') IS NULL
-BEGIN
-   exec sp_rename '[RWT_MANDANT].[SUPERVISOR]', [AML], [column];
-END;

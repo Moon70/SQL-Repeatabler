@@ -1,0 +1,4 @@
+alter table [table_name]
+    drop constraint [constraint1_name];
+alter table [table_name]
+    drop constraint [constraint2_name];

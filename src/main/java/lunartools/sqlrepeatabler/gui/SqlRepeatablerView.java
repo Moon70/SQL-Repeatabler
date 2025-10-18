@@ -1,8 +1,16 @@
 package lunartools.sqlrepeatabler.gui;
 
 import java.awt.Dimension;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import org.slf4j.Logger;
@@ -15,9 +23,8 @@ import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
 
 public class SqlRepeatablerView extends JFrame{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerView.class);
-	public static final double SECTIOAUREA=1.6180339887;
 	public static final int WINDOW_MINIMUM_WIDTH=1600;
-	public static final int WINDOW_MINIMUM_HEIGHT=(int)(WINDOW_MINIMUM_WIDTH/SECTIOAUREA);
+	public static final int WINDOW_MINIMUM_HEIGHT=(int)(WINDOW_MINIMUM_WIDTH/SwingTools.SECTIOAUREA);
 
 	private SqlRepeatablerModel model;
 	private MainPanel mainPanel;
@@ -34,6 +41,32 @@ public class SqlRepeatablerView extends JFrame{
 
 		mainPanel=new MainPanel(model,logTextArea);
 		add(mainPanel);
+		
+		JPanel glass=(JPanel)getGlassPane();
+		glass.setVisible(true);
+		glass.setOpaque(false);
+		glass.setDropTarget(new DropTarget() {
+			public synchronized void drop(DropTargetDropEvent evt) {
+				try {
+					evt.acceptDrop(DnDConstants.ACTION_COPY);
+					List<File> droppedFiles = (List<File>)evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+					ArrayList<File> arraylistAcceptedFiles=new ArrayList<>();
+					for (File file : droppedFiles) {
+						if(file.getName().toLowerCase().endsWith(".sql")) {
+							arraylistAcceptedFiles.add(file);
+						}else {
+							logger.warn("ignoring unsupported file: "+file);
+						}
+					}
+					if(arraylistAcceptedFiles.size()>0) {
+						SqlRepeatablerView.this.model.addSqlInputFiles(arraylistAcceptedFiles);
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+		
 		pack();
 	}
 

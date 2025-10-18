@@ -1,6 +1,0 @@
-    alter table [DB_FOO]
-       add [FIELD_1] nvarchar(255),
-       add [FIELD_2] datetime,
-       modify column [FIELD_3] nvarchar(255),
-       add [FIELD_4] tinyint,
-       alter column [FIELD_5] nvarchar(255);
