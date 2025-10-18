@@ -3,7 +3,6 @@ package lunartools.sqlrepeatabler.gui;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.UIManager;
 
 import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
