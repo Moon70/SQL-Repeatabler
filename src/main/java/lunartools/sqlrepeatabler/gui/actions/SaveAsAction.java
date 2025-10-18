@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
@@ -40,11 +41,18 @@ class SaveAsAction extends AbstractAction {
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new TextFileFilter());
 		File file=null;
-		String filepath=SqlRepeatablerSettings.getSettings().getString(SqlRepeatablerSettings.FILE_SAVEFOLDER);
-		if(filepath!=null && filepath.length()>0) {
-			file=new File(filepath);
+
+//		String filepath=SqlRepeatablerSettings.getSettings().getString(SqlRepeatablerSettings.FILE_SAVEFOLDER);		
+//		if(filepath!=null && filepath.length()>0) {
+//			file=new File(filepath);
+//			fileChooser.setCurrentDirectory(file.getAbsoluteFile());
+//		}
+		ArrayList<File> inputFiles=controller.getModel().getSqlInputFiles();
+		if(inputFiles.size()>0) {
+			file=inputFiles.get(0).getParentFile();
 			fileChooser.setCurrentDirectory(file.getAbsoluteFile());
 		}
+		
 		fileChooser.setDialogTitle("Select file to save");
 		fileChooser.setPreferredSize(new Dimension(800,(int)(800/SwingTools.SECTIOAUREA)));
 		if(fileChooser.showSaveDialog(controller.getView())==JFileChooser.APPROVE_OPTION) {
