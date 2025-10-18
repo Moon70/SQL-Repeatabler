@@ -26,14 +26,18 @@ public class DailyBackgroundProvider {
 			"Jason",
 			"SQL pirate",
 			"Titanic Apeisode Two",
-			"Ape Lisa"
+			"Ape Lisa",
+			"First ape on the moon",
+			"Apeula",
+			"2001 An Ape Odyssey",
+			"Sphinx"
 			));
 	
 	
 	public static Image getImage() {
 		if(imageBackground==null) {
 			int indexBackground=Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % affenvisionen.size();
-indexBackground=7;
+//indexBackground=14;
 			String resourceBackground="/pixelzeug/"+affenvisionen.get(indexBackground)+".sskp";
 			try {
 //				imageBackground = ImageTools.createImageFromResource(resourceBackground);
@@ -47,13 +51,9 @@ indexBackground=7;
 	}
 
 	private static Image createImage(String resourcePath) throws IOException {
-		try (InputStream inputStream = ImageTools.class.getResourceAsStream(resourcePath);
-				InputStream inputStream2=new SSKPFilterInputStream(inputStream)
+		try (InputStream inputStream=new SSKPFilterInputStream(ImageTools.class.getResourceAsStream(resourcePath))
 				){
-			if(inputStream2==null) {
-				return null;
-			}
-			byte[] imagedata=FileTools.readInputStreamToByteArray(inputStream2);
+			byte[] imagedata=FileTools.readInputStreamToByteArray(inputStream);
 			Image image=Toolkit.getDefaultToolkit().createImage(imagedata);
 			return image;
 		}
