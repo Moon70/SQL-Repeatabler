@@ -126,15 +126,29 @@ public class SqlParserTools {
 	}
 
 	public static String consumeTokensInBraces(StringBuilder sbCommand) throws Exception{
-		if(sbCommand.charAt(0)==' ') {
-			sbCommand.deleteCharAt(0);
-		}
+		int openParenthesis=0;
+		stripSpace(sbCommand);
 		if(sbCommand.charAt(0)!='(') {
 			throw new Exception("Error parsing tokens in braces! Expected: >(<. Found: >"+sbCommand.charAt(0)+"<, Buffer: >"+(sbCommand.length()>10?sbCommand.substring(0,10):sbCommand.toString()));
 		}
-		int i=getIndexOfClosingBraceIgnoringQuotes(sbCommand);
-		String result=sbCommand.substring(0, i+1);
-		sbCommand.delete(0, i+1);
+		int index=1;
+		while(true) {
+			char c=sbCommand.charAt(index);
+			if(c==')'){
+				if(openParenthesis==0) {
+					break;
+				}else{
+					openParenthesis--;
+				}
+			}else if(c=='(') {
+				openParenthesis++;
+			}
+			index++;
+		}
+		
+//		int i=getIndexOfClosingBraceIgnoringQuotes(sbCommand);
+		String result=sbCommand.substring(0, index+1);
+		sbCommand.delete(0, index+1);
 		if(sbCommand.charAt(0)==' ') {
 			sbCommand.deleteCharAt(0);
 		}

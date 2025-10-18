@@ -51,5 +51,20 @@ class CommandInsertTest {
 		sqlSegment.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
     }
+
+    @Test
+    void insert_OneColumn_ColumnWithFunction() throws Exception{
+    	String filenameTestdata=	TESTDATAFOLDER+"InsertInto_OneRow_ColumnWithFunction_Testdata.txt";
+    	String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_OneRow_ColumnWithFunction_Expected.txt";
+    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
     
 }

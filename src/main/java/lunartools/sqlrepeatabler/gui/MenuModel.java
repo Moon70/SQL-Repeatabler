@@ -33,23 +33,23 @@ public class MenuModel {
         menuFile=new JMenu("File");
 
         menuFileItemOpen=new JMenuItem(actionFactory.createOpenAction());
-        menuFileItemOpen.setEnabled(true);
         menuFileItemOpen.setIcon(ImageTools.createImageIcon("/icons/file_open_16.png"));
+        menuFileItemOpen.setEnabled(true);
         menuFile.add(menuFileItemOpen);
 
         menuFileItemSaveAs=new JMenuItem(actionFactory.createSaveAsAction());
-        menuFileItemSaveAs.setEnabled(true);
         menuFileItemSaveAs.setIcon(ImageTools.createImageIcon("/icons/save_as_16.png"));
+        menuFileItemSaveAs.setEnabled(true);
         menuFile.add(menuFileItemSaveAs);
 
         menuFileItemReload=new JMenuItem(actionFactory.createReloadAction());
-        menuFileItemReload.setEnabled(true);
         menuFileItemReload.setIcon(ImageTools.createImageIcon("/icons/refresh_16.png"));
+        menuFileItemReload.setEnabled(true);
         menuFile.add(menuFileItemReload);
 
         menuFileItemReset=new JMenuItem(actionFactory.createResetAction());
-        menuFileItemReset.setEnabled(true);
         menuFileItemReset.setIcon(ImageTools.createImageIcon("/icons/restart_alt_16.png"));
+        menuFileItemReset.setEnabled(true);
         menuFile.add(menuFileItemReset);
 
         menuFileItemExitProgram=new JMenuItem(actionFactory.createExitProgramAction());
