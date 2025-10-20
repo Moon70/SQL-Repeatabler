@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.Token;
 
 public class SetIdentityInsertStatement implements Statement{
 	private static Logger logger = LoggerFactory.getLogger(SetIdentityInsertStatement.class);
@@ -11,7 +12,7 @@ public class SetIdentityInsertStatement implements Statement{
 //	private TableName tableName;
 //	private String parameters;
 
-	public SetIdentityInsertStatement(TableName tableName,String parameters) {
+	public SetIdentityInsertStatement(TableName tableName,Token parameters) {
 //		this.tableName=tableName;
 //		this.parameters=parameters;
 	}

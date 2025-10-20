@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.util.SqlParserTools;
+import lunartools.sqlrepeatabler.parser.StatementTokenizer;
+import lunartools.sqlrepeatabler.parser.Token;
 
 public class InsertIntoStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(InsertIntoStatementFactory.class);
@@ -18,7 +19,7 @@ public class InsertIntoStatementFactory extends StatementFactory{
 	}
 
 	@Override
-	public Statement createSqlSegment(SqlScript sqlScript) throws Exception{
+	public Statement createStatement(SqlScript sqlScript) throws Exception{
 		if(!match(sqlScript.peekLine())) {
 			throw new Exception("Illegal factory call");
 		}
@@ -26,30 +27,31 @@ public class InsertIntoStatementFactory extends StatementFactory{
 			logger.trace("parsing statement");
 		}
 
-		StringBuilder sbStatement=sqlScript.consumeStatement();
-		logger.info("statement: "+sbStatement.toString());
-		sbStatement.delete(0, InsertIntoStatement.COMMAND.length()+1);
-		SqlParserTools.stripSpace(sbStatement);
+		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
+		logger.info("statement: "+statementTokenizer.toString());
 
-		TableName tableName=TableName.createInstanceByConsuming(sbStatement);
+		statementTokenizer.nextToken();//skip 'INSERT' token	
+		statementTokenizer.nextToken();//skip 'INTO' token
+
+		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
 
-		String columnNames=SqlParserTools.consumeTokensInParenthesis(sbStatement);
+		Token tokenColumnNames=statementTokenizer.nextToken('(',')');
 
-		if(!SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbStatement, "VALUES")) {
+		if(!statementTokenizer.consumePrefixIgnoreCaseAndSpace("VALUES")) {
 			throw new Exception("Keyword VALUES not found");
 		}
 
-		ArrayList<String> columnValuesList=new ArrayList<>();
-		while(sbStatement.length()>0 && sbStatement.charAt(0)!=';') {
-			if(sbStatement.charAt(0)==',') {
-				sbStatement.deleteCharAt(0);
+		ArrayList<Token> columnValuesTokensList= new ArrayList<>();
+		while(statementTokenizer.hasNext()) {
+			if(statementTokenizer.charAt(0).getChar()==',') {
+				statementTokenizer.deleteCharAt(0);
 			}
-			String columnValues=SqlParserTools.consumeTokensInParenthesis(sbStatement);
-			columnValuesList.add(columnValues);
+			Token tokenValues=statementTokenizer.nextToken('(', ')');
+			columnValuesTokensList.add(tokenValues);
 		}
 
-		return new InsertIntoStatement(tableName,columnNames,columnValuesList);
+		return new InsertIntoStatement(tableName,tokenColumnNames,columnValuesTokensList);
 	}
 
 }

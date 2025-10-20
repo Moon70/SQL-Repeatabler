@@ -13,28 +13,28 @@ import lunartools.sqlrepeatabler.statements.Statement;
 
 class CommandMultiLineCommentTest {
 	private static final String TESTDATAFOLDER="/CommandMultiLineComment/";
-    private MultiLineCommentStatementFactory factory=new MultiLineCommentStatementFactory();
-    
-    @Test
-    void nonMultiLineCommentIsNotAccepted() throws Exception {
-    	String filenameTestdata=	TESTDATAFOLDER+"OneNonMultiLineCommentLine_Testdata.txt";
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-   		assertFalse(factory.match(sqlScript.peekLine()));
-    }
+	private MultiLineCommentStatementFactory factory=new MultiLineCommentStatementFactory();
 
-    @Test
-    void multiLineCommentIsAccepted() throws Exception{
-    	String filenameTestdata=	TESTDATAFOLDER+"TwoMultiLineCommentLines_Testdata.txt";
-    	String filenameExpecteddata=TESTDATAFOLDER+"TwoMultiLineCommentLines_Expected.txt";
-    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+	@Test
+	void nonMultiLineCommentIsNotAccepted() throws Exception {
+		String filenameTestdata=	TESTDATAFOLDER+"OneNonMultiLineCommentLine_Testdata.txt";
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertFalse(factory.match(sqlScript.peekLine()));
+	}
+
+	@Test
+	void multiLineCommentIsAccepted() throws Exception{
+		String filenameTestdata=	TESTDATAFOLDER+"TwoMultiLineCommentLines_Testdata.txt";
+		String filenameExpecteddata=TESTDATAFOLDER+"TwoMultiLineCommentLines_Expected.txt";
+		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertTrue(factory.match(sqlScript.peekLine()));
 
-		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
 		sqlSegment.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
-    }
+	}
 
 }

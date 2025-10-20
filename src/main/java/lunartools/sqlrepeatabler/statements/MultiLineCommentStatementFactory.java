@@ -14,7 +14,7 @@ public class MultiLineCommentStatementFactory extends StatementFactory{
 	}
 
 	@Override
-	public Statement createSqlSegment(SqlScript sqlScript) throws Exception{
+	public Statement createStatement(SqlScript sqlScript) throws Exception{
 		String line=sqlScript.readLine();
 		if(!match(line)) {
 			throw new Exception("Illegal factory call");

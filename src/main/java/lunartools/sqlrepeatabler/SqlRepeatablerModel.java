@@ -21,7 +21,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 	public static final String PROGRAMNAME = "SQL-Repeatabler";
 	private static String versionProgram=SwingTools.determineProgramVersion();
 	private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>();
-	
+
 	public static final int DEFAULT_FRAME_WIDTH=1290;
 	public static final int DEFAULT_FRAME_HEIGHT=(int)(DEFAULT_FRAME_WIDTH/SwingTools.SECTIOAUREA);
 	private Rectangle frameBounds=new Rectangle(0,0,DEFAULT_FRAME_WIDTH,DEFAULT_FRAME_HEIGHT);
@@ -71,19 +71,19 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 	public boolean hasSqlConvertedScripts() {
 		return sqlConvertedScripts.size()>0;
 	}
-	
+
 	public StringBuffer getSingleConvertedSqlScript(int index) {
 		if(index>=sqlConvertedScripts.size()) {
 			return new StringBuffer();
 		}
 		return sqlConvertedScripts.get(index);
 	}
-	
+
 	public void setConvertedSqlScripts(ArrayList<StringBuffer> sqlConvertedScripts) {
 		this.sqlConvertedScripts=sqlConvertedScripts;
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
-	
+
 	public StringBuffer getConvertedSqlScript() {
 		StringBuffer sbConvertedScripts=new StringBuffer();
 		sbConvertedScripts.append("-- "+SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion()+System.lineSeparator());
@@ -95,7 +95,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		}
 		return sbConvertedScripts;
 	}
-	
+
 	public static Rectangle getDefaultFrameBounds() {
 		GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();  
 		GraphicsDevice defaultGraphicsDevice = graphicsEnvironment.getDefaultScreenDevice();

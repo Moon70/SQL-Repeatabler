@@ -5,7 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.util.SqlParserTools;
+import lunartools.sqlrepeatabler.parser.StatementTokenizer;
+import lunartools.sqlrepeatabler.parser.Token;
 
 public class SetIdentityInsertStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(SetIdentityInsertStatementFactory.class);
@@ -16,7 +17,7 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 	}
 
 	@Override
-	public Statement createSqlSegment(SqlScript sqlScript) throws Exception{
+	public Statement createStatement(SqlScript sqlScript) throws Exception{
 		if(!match(sqlScript.peekLine())) {
 			throw new Exception("Illegal factory call");
 		}
@@ -24,19 +25,20 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 			logger.trace("parsing statement");
 		}
 
-		StringBuilder sbStatement=sqlScript.consumeStatement();
-		logger.info("statement: "+sbStatement.toString());
-		sbStatement.delete(0, SetIdentityInsertStatement.COMMAND.length()+1);
-		SqlParserTools.stripSpace(sbStatement);
+		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
+		logger.info("statement: "+statementTokenizer.toString());
+		
+		statementTokenizer.nextToken();//skip 'SET' token	
+		statementTokenizer.nextToken();//skip 'IDENTITY_INSERT' token
 
-		TableName tableName=TableName.createInstanceByConsuming(sbStatement);
+		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
 
-		SqlParserTools.stripSpaceRight(sbStatement);
-		if(sbStatement.charAt(sbStatement.length()-1)==';') {
-			sbStatement.deleteCharAt(sbStatement.length()-1);
+		statementTokenizer.stripSpaceRight();
+		if(statementTokenizer.charAt(statementTokenizer.length()-1).getChar()==';') {
+			statementTokenizer.deleteCharAt(statementTokenizer.length()-1);
 		}
-		String parameters=sbStatement.toString();
+		Token parameters=statementTokenizer.toToken();
 
 		return new SetIdentityInsertStatement(tableName,parameters);
 	}

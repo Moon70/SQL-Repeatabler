@@ -13,28 +13,28 @@ import lunartools.sqlrepeatabler.statements.WhitespaceLineStatementFactory;
 
 class CommandWhitespaceLineTest {
 	private static final String TESTDATAFOLDER="/CommandWhitespaceLine/";
-    private WhitespaceLineStatementFactory factory=new WhitespaceLineStatementFactory();
-    
-    @Test
-    void nonWhitespaceLineIsNotAccepted() throws Exception {
-    	String filenameTestdata=	TESTDATAFOLDER+"OneNonWhitespaceLine_Testdata.txt";
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-   		assertFalse(factory.match(sqlScript.peekLine()));
-    }
+	private WhitespaceLineStatementFactory factory=new WhitespaceLineStatementFactory();
 
-    @Test
-    void whitespaceLinesAreAccepted() throws Exception{
-    	String filenameTestdata=	TESTDATAFOLDER+"TwoWhitespaceLines_Testdata.txt";
-    	String filenameExpecteddata=TESTDATAFOLDER+"TwoWhitespaceLines_Expected.txt";
-    	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+	@Test
+	void nonWhitespaceLineIsNotAccepted() throws Exception {
+		String filenameTestdata=	TESTDATAFOLDER+"OneNonWhitespaceLine_Testdata.txt";
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertFalse(factory.match(sqlScript.peekLine()));
+	}
+
+	@Test
+	void whitespaceLinesAreAccepted() throws Exception{
+		String filenameTestdata=	TESTDATAFOLDER+"TwoWhitespaceLines_Testdata.txt";
+		String filenameExpecteddata=TESTDATAFOLDER+"TwoWhitespaceLines_Expected.txt";
+		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertTrue(factory.match(sqlScript.peekLine()));
 
-		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
 		sqlSegment.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
-    }
+	}
 
 }

@@ -2,12 +2,13 @@ package lunartools.sqlrepeatabler.segments;
 
 import lunartools.sqlrepeatabler.SqlParser;
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.Token;
 
 public class DropColumnSegment extends Segment{
 	private String action;
-	private String name;
+	private Token name;
 
-	public DropColumnSegment(String action,String name) {
+	public DropColumnSegment(String action,Token name) {
 		super(action,name);
 		this.action=action;
 		this.name=name;

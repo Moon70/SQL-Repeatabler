@@ -1,25 +1,27 @@
 package lunartools.sqlrepeatabler.segments;
 
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.Token;
 
 public abstract class Segment {
 	private String action;
-	private String name;
-	
-	public Segment(String action,String name) {
+	private Token name;
+
+	public Segment(String action,Token name) {
 		this.action=action;
 		this.name=name;
 	}
 
 	public String getColumnNameWithoutDelimiters(){
-		int len=name.length();
+		String s=name.toString();
+		int len=s.length();
 		if(
-				(name.charAt(0)=='[' && name.charAt(len-1)==']') ||
-				(name.charAt(0)=='"' && name.charAt(len-1)=='"')
+				(s.charAt(0)=='[' && s.charAt(len-1)==']') ||
+				(s.charAt(0)=='"' && s.charAt(len-1)=='"')
 				) {
-			return name.substring(1, len-1);
+			return s.substring(1, len-1);
 		}
-		return name;
+		return s;
 	}
 
 	public String stripDelimiters(String s) {
@@ -32,11 +34,11 @@ public abstract class Segment {
 		}
 		return s;
 	}
-	
+
 	public String getAction() {
 		return action;
 	}
-	
+
 	public abstract void toSql(StringBuilder sb,TableName tableName,boolean mySql) throws Exception;
 
 }

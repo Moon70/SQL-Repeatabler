@@ -11,7 +11,7 @@ import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.statements.InsertIntoStatementFactory;
 import lunartools.sqlrepeatabler.statements.Statement;
 
-class CommandInsertTest {
+class CommandInsertIntoTest {
 	private static final String TESTDATAFOLDER="/CommandInsertInto/";
     private InsertIntoStatementFactory factory=new InsertIntoStatementFactory();
     
@@ -31,7 +31,7 @@ class CommandInsertTest {
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertTrue(factory.match(sqlScript.peekLine()));
 
-		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
 		sqlSegment.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
@@ -46,7 +46,7 @@ class CommandInsertTest {
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertTrue(factory.match(sqlScript.peekLine()));
 
-		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
 		sqlSegment.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
@@ -61,7 +61,7 @@ class CommandInsertTest {
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertTrue(factory.match(sqlScript.peekLine()));
 
-		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
 		sqlSegment.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());

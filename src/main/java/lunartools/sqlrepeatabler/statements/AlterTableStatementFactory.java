@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.parser.StatementTokenizer;
+import lunartools.sqlrepeatabler.parser.Token;
 import lunartools.sqlrepeatabler.segments.AddColumnSegment;
 import lunartools.sqlrepeatabler.segments.AddForeignKeyConstraintSegment;
 import lunartools.sqlrepeatabler.segments.AddUniqueConstraintSegment;
@@ -14,7 +16,6 @@ import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
 import lunartools.sqlrepeatabler.segments.DropColumnSegment;
 import lunartools.sqlrepeatabler.segments.DropConstraintSegment;
 import lunartools.sqlrepeatabler.segments.Segment;
-import lunartools.sqlrepeatabler.util.SqlParserTools;
 
 public class AlterTableStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(AlterTableStatementFactory.class);
@@ -25,7 +26,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 	}
 
 	@Override
-	public Statement createSqlSegment(SqlScript sqlScript) throws Exception{
+	public Statement createStatement(SqlScript sqlScript) throws Exception{
 		if(!match(sqlScript.peekLine())) {
 			throw new Exception("Illegal factory call");
 		}
@@ -33,35 +34,35 @@ public class AlterTableStatementFactory extends StatementFactory{
 			logger.trace("parsing statement");
 		}
 
-		StringBuilder sbStatement=sqlScript.consumeStatement();
-		logger.info("statement: "+sbStatement.toString());
-		sbStatement.delete(0, AlterTableStatement.COMMAND.length()+1);
-		SqlParserTools.stripSpace(sbStatement);
+		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
+		logger.info("statement: "+statementTokenizer.toString());
 
-		TableName tableName=TableName.createInstanceByConsuming(sbStatement);
+		statementTokenizer.nextToken();//skip 'ALTER' token	
+		statementTokenizer.nextToken();//skip 'TABLE' token
+
+		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
 
-		SqlParserTools.stripSpace(sbStatement);
-		if(!beginsWithSupportedCommand(sbStatement)) {
-			throw new Exception("unsupported ALTER TABLE action found: "+sbStatement.toString());
-		}
+		statementTokenizer.stripSpaceLeft();
 
 		ArrayList<Segment> columnElements=null;
-		if(SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbStatement, "ADD")) {
-			columnElements=parseAddAction(sbStatement);
-		}else if(SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbStatement, "DROP")) {
-			columnElements=parseDropAction(sbStatement);
-		}else if(SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbStatement, "ALTER COLUMN")) {
-			columnElements=parseAlterColumnAction(sbStatement);
-		}else if(SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbStatement, "MODIFY COLUMN")) {//invalid
+		if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("ADD")) {
+			columnElements=parseAddAction(statementTokenizer);
+		}else if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("DROP")) {
+			columnElements=parseDropAction(statementTokenizer);
+		}else if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("ALTER COLUMN")) {
+			columnElements=parseAlterColumnAction(statementTokenizer);
+		}else if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("MODIFY COLUMN")) {//invalid
 			logger.warn("found MODIFY COLUMN action which is most likely MySql and not supported on T-SQL. Processing as ALTER COLUMN...");
-			columnElements=parseAlterColumnAction(sbStatement);
+			columnElements=parseAlterColumnAction(statementTokenizer);
+		}else {
+			throw new Exception("unsupported ALTER TABLE action found");
 		}
 
 		return new AlterTableStatement(tableName,columnElements);
 	}
 
-	public ArrayList<Segment> parseAddAction(StringBuilder sbCommand) throws Exception {
+	public ArrayList<Segment> parseAddAction(StatementTokenizer statementTokenizer) throws Exception {
 		//column definitions
 		//constraint definitions
 		/*
@@ -73,111 +74,110 @@ public class AlterTableStatementFactory extends StatementFactory{
 		 * foreign key ([COLUMNNAME_ID])
 		 * references [T_FOO] ([ID]);
 		 */
-		logger.debug("parsing ADD action: "+sbCommand.toString());
+		logger.debug("parsing ADD action: ");
 		ArrayList<Segment> columnElements=new ArrayList<>();
 
-		while(sbCommand.length()>1 && sbCommand.charAt(0)!=';') {
-			if(beginsWithSupportedCommand(sbCommand)) {
+		while(statementTokenizer.hasNext()) {
+			if(beginsWithSupportedCommand(statementTokenizer)) {
 				break;
-			}else if(SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbCommand, "CONSTRAINT")) {
-				String constraintName=consumeTokenIgnoreSpaceAndComma(sbCommand);
+			}else if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("CONSTRAINT")) {
+				Token tokenConstraintName=statementTokenizer.nextToken();
 
-				if(SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbCommand, "FOREIGN KEY")) {
-					String foreignKey=consumeTokenIgnoreSpaceAndComma(sbCommand);
-					if(!SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbCommand, "REFERENCES")) {
-						throw new Exception("'REFERENCES' keyword not found: "+sbCommand.substring(0,1+sbCommand.lastIndexOf(";")));
+				if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("FOREIGN KEY")) {
+					Token tokenForeignKey=statementTokenizer.nextToken();
+
+					if(!statementTokenizer.consumePrefixIgnoreCaseAndSpace("REFERENCES")) {
+						throw new Exception("'REFERENCES' keyword not found: ");
 					}
-					String referencesTable=consumeTokenIgnoreSpaceAndComma(sbCommand);
-					String referencesColumn=consumeTokenIgnoreSpaceAndComma(sbCommand);
+					Token tokenReferencesTable=statementTokenizer.nextToken();
+					Token tokenReferencesColumn=statementTokenizer.nextToken();
 
-					Segment columnElement=new AddForeignKeyConstraintSegment("ADD",constraintName,foreignKey,referencesTable,referencesColumn);
+					Segment columnElement=new AddForeignKeyConstraintSegment("ADD",tokenConstraintName,tokenForeignKey,tokenReferencesTable,tokenReferencesColumn);
 					columnElements.add(columnElement);
 
-				}else if(SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbCommand, "UNIQUE")) {
-					String referencesColumn=consumeTokenIgnoreSpaceAndComma(sbCommand);
+				}else if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("UNIQUE")) {
+					Token tokenReferencesColumn=statementTokenizer.nextToken();
 
-					Segment columnElement=new AddUniqueConstraintSegment("ADD",constraintName,referencesColumn);
+					Segment columnElement=new AddUniqueConstraintSegment("ADD",tokenConstraintName,tokenReferencesColumn);
 					columnElements.add(columnElement);
-
 				}else {
-					throw new Exception("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword not found: "+sbCommand.substring(0,1+sbCommand.lastIndexOf(";")));
+					throw new Exception("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword not found");
 				}
 			}else {
-				if(SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbCommand, "COLUMN")){
+				if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("COLUMN")){
 					logger.warn("Script is most likely in MySql format. Ignoring COLUMN keyword which is not allowed in T_SQL");
 				}
-				String columnName=consumeTokenIgnoreSpaceAndComma(sbCommand);
-				String columnParameter=consumeAllTokensIgnoreComma(sbCommand);
-				Segment columnElement=new AddColumnSegment("ADD",columnName,columnParameter);
+				Token tokenColumName=statementTokenizer.nextToken();
+				Token tokenColumParameter=statementTokenizer.nextTokenUntil(',');
+
+				Segment columnElement=new AddColumnSegment("ADD",tokenColumName,tokenColumParameter);
 				columnElements.add(columnElement);
 			}
 		}
 		return columnElements;
 	}
 
-	public ArrayList<Segment> parseDropAction(StringBuilder sbCommand) throws Exception {
+	public ArrayList<Segment> parseDropAction(StatementTokenizer statementTokenizer) throws Exception {
 		//column targets
 		//constraint targets
-		logger.debug("parsing DROP action: "+sbCommand.toString());
+		logger.debug("parsing DROP action");
 		ArrayList<Segment> columnElements=new ArrayList<>();
-		String target=consumeTokenIgnoreSpaceAndComma(sbCommand);
+		Token tokenTarget=statementTokenizer.nextToken();
 
-		if(target.equalsIgnoreCase("COLUMN")) {
+		if(tokenTarget.toString().equalsIgnoreCase("COLUMN")) {
 			while(true) {
-				String columnName=consumeTokenIgnoreSpaceAndComma(sbCommand);
-				Segment columnElement=new DropColumnSegment("DROP",columnName);
+				Token tokenColumnName=statementTokenizer.nextToken();
+
+				Segment columnElement=new DropColumnSegment("DROP",tokenColumnName);
 				columnElements.add(columnElement);
 
-				if(sbCommand.charAt(0)==';') {
+				if(!statementTokenizer.hasNext()) {
 					break;
 				}
 
-				if(sbCommand.charAt(0)==',') {
-					sbCommand.deleteCharAt(0);
-				}
+				statementTokenizer.consumePrefixIgnoreCaseAndSpace(",");
 			}
 
-		}else if(target.equalsIgnoreCase("CONSTRAINT")) {
-			String constraintName=consumeTokenIgnoreSpaceAndComma(sbCommand);
-			Segment columnElement=new DropConstraintSegment("DROP",constraintName);
+		}else if(tokenTarget.toString().equalsIgnoreCase("CONSTRAINT")) {
+			Token tokenConstraintName=statementTokenizer.nextToken();
+
+			Segment columnElement=new DropConstraintSegment("DROP",tokenConstraintName);
 			columnElements.add(columnElement);
 
 		}else {
-			throw new Exception("DROP target not supported: >"+target+"<");
+			throw new Exception("DROP target not supported: >"+tokenTarget+"<");
 		}
 		return columnElements;
 	}
 
-	public ArrayList<Segment> parseAlterColumnAction(StringBuilder sbCommand) throws Exception {
-		logger.debug("parsing ALTER COLUMN action: "+sbCommand.toString());
+	public ArrayList<Segment> parseAlterColumnAction(StatementTokenizer statementTokenizer) throws Exception {
+		logger.debug("parsing ALTER COLUMN action");
 		ArrayList<Segment> columnElements=new ArrayList<>();
 		while(true) {
-			String columnName=consumeTokenIgnoreSpaceAndComma(sbCommand);
-			String columnParameter=consumeAllTokensIgnoreCommaParenthesis(sbCommand);
+			Token tokenColumnName=statementTokenizer.nextToken();
+			Token tokenColumnParameter=statementTokenizer.nextTokenUntil(',');
 
-			Segment columnElement=new AlterColumnSegment("ALTER COLUMN",columnName,columnParameter);
+			Segment columnElement=new AlterColumnSegment("ALTER COLUMN",tokenColumnName,tokenColumnParameter);
 			columnElements.add(columnElement);
 
-			if(sbCommand.charAt(0)==';') {
+			if(!statementTokenizer.hasNext()) {
 				break;
 			}
 
-			if(sbCommand.charAt(0)==',') {
-				sbCommand.deleteCharAt(0);
-			}
+			statementTokenizer.consumePrefixIgnoreCaseAndSpace(",");
 
 			//TODO: should be consumed in higher loop
-			SqlParserTools.consumePrefixIgnoreCaseAndSpace(sbCommand, "ALTER COLUMN");
+			statementTokenizer.consumePrefixIgnoreCaseAndSpace("ALTER COLUMN");
 		}
 		return columnElements;
 	}
 
-	public boolean beginsWithSupportedCommand(StringBuilder sbCommand) {
+	public boolean beginsWithSupportedCommand(StatementTokenizer statementTokenizer) {
 		return 
-				SqlParserTools.startsWithIgnoreCase(sbCommand, "ADD") ||
-				SqlParserTools.startsWithIgnoreCase(sbCommand, "DROP") ||
-				SqlParserTools.startsWithIgnoreCase(sbCommand, "ALTER COLUMN") ||
-				SqlParserTools.startsWithIgnoreCase(sbCommand, "MODIFY COLUMN" //MySql, invalid for T-SQL, is interpreted as 'ALTER COLUMN'
+				statementTokenizer.startsWithIgnoreCase("ADD") ||
+				statementTokenizer.startsWithIgnoreCase("DROP") ||
+				statementTokenizer.startsWithIgnoreCase("ALTER COLUMN") ||
+				statementTokenizer.startsWithIgnoreCase("MODIFY COLUMN" //MySql, invalid for T-SQL, is interpreted as 'ALTER COLUMN'
 						) ;
 	}
 

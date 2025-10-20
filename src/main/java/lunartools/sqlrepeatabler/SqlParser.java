@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.common.SqlScript;
+import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.statements.AlterTableStatementFactory;
 import lunartools.sqlrepeatabler.statements.CreateTableStatementFactory;
 import lunartools.sqlrepeatabler.statements.InsertIntoStatementFactory;
@@ -54,26 +54,26 @@ public class SqlParser {
 		sqlSegmentFactories.add(new WhitespaceLineStatementFactory());
 
 		SqlScript sqlScript=SqlScript.createInstance(bufferedReader);
-		while(sqlScript.hasCurrentLines()) {
+		while(sqlScript.hasCurrentLine()) {
 			String line=sqlScript.peekLine();
 			int lineNumber=sqlScript.getLineNumber();
 			
 			logger.debug("processing line "+lineNumber+"\t:"+line);
-			Statement sqlSegment=null;
-			for(StatementFactory sqlSegmentFactory:sqlSegmentFactories) {
-				if(sqlSegmentFactory.match(line)) {
-					sqlSegment=sqlSegmentFactory.createSqlSegment(sqlScript);
-					sqlSegments.add(sqlSegment);
+			Statement statement=null;
+			for(StatementFactory statementFactory:sqlSegmentFactories) {
+				if(statementFactory.match(line)) {
+					statement=statementFactory.createStatement(sqlScript);
+					sqlSegments.add(statement);
 					//System.out.println("##################################################");
 					StringBuilder sb=new StringBuilder();
-					sqlSegment.toSql(sb);
+					statement.toSql(sb);
 					//System.out.print(sb.toString());
 					result.append(sb);
 					//System.out.println("##################################################");
 					break;
 				}
 			}
-			if(sqlSegment==null) {
+			if(statement==null) {
 				throw new Exception("Unsupported content in line "+lineNumber+" :"+line);
 			}
 		}

@@ -7,8 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.parser.StatementTokenizer;
+import lunartools.sqlrepeatabler.parser.Token;
 import lunartools.sqlrepeatabler.segments.TableSegment;
-import lunartools.sqlrepeatabler.util.SqlParserTools;
 
 public class CreateTableStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(CreateTableStatementFactory.class);
@@ -19,7 +20,7 @@ public class CreateTableStatementFactory extends StatementFactory{
 	}
 
 	@Override
-	public Statement createSqlSegment(SqlScript sqlScript) throws Exception{
+	public Statement createStatement(SqlScript sqlScript) throws Exception{
 		if(!match(sqlScript.peekLine())) {
 			throw new Exception("Illegal factory call");
 		}
@@ -27,30 +28,23 @@ public class CreateTableStatementFactory extends StatementFactory{
 			logger.trace("parsing statement");
 		}
 
-		StringBuilder sbStatement=sqlScript.consumeStatement();
-		logger.info("statement: "+sbStatement.toString());
-		sbStatement.delete(0, CreateTableStatement.COMMAND.length()+1);
-		SqlParserTools.stripSpace(sbStatement);
+		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
+		logger.info("statement: "+statementTokenizer.toString());
 
-		TableName tableName=TableName.createInstanceByConsuming(sbStatement);
+		statementTokenizer.nextToken();//skip 'CREATE' token	
+		statementTokenizer.nextToken();//skip 'TABLE' token
+
+		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
 
 		ArrayList<TableSegment> tableElements=new ArrayList<>();
-		SqlParserTools.stripUntil(sbStatement,'(');
-		sbStatement.deleteCharAt(0);
-		SqlParserTools.stripSpace(sbStatement);
-		int p=-1;
-		while((p=SqlParserTools.indexOfNotInLiteral(sbStatement, ','))!=-1) {
-			String s=sbStatement.substring(0, p);
-			sbStatement.delete(0, p+1);
-			SqlParserTools.stripSpace(sbStatement);
-			tableElements.add(new TableSegment(s));
+
+		Token allCollumnsToken=statementTokenizer.nextToken('(',')');
+		allCollumnsToken.removeEnclosing('(',')');
+		Token[] columns=allCollumnsToken.split(',');
+		for(int i=0;i<columns.length;i++) {
+			tableElements.add(new TableSegment(columns[i]));
 		}
-		p=SqlParserTools.lastIndexOfNotInLiteral(sbStatement, ')');
-		String s=sbStatement.substring(0, p).trim();
-		sbStatement.delete(0, p+1);
-		SqlParserTools.stripSpace(sbStatement);
-		tableElements.add(new TableSegment(s));
 
 		return new CreateTableStatement(tableName,tableElements);
 	}

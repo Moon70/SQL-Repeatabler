@@ -2,15 +2,16 @@ package lunartools.sqlrepeatabler.segments;
 
 import lunartools.sqlrepeatabler.SqlParser;
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.Token;
 
 public class AddForeignKeyConstraintSegment extends Segment{
 	private String action;
-	private String name;
-	private String foreignKey;
-	private String referencesTable;
-	private String referencesColumn;
+	private Token name;
+	private Token foreignKey;
+	private Token referencesTable;
+	private Token referencesColumn;
 
-	public AddForeignKeyConstraintSegment(String action,String name,String foreignKey, String referencesTable, String referencesColumn) {
+	public AddForeignKeyConstraintSegment(String action,Token name,Token foreignKey, Token referencesTable, Token referencesColumn) {
 		super(action,name);
 		this.action=action;
 		this.name=name;
@@ -23,7 +24,7 @@ public class AddForeignKeyConstraintSegment extends Segment{
 		sb.append(String.format("IF NOT EXISTS (")).append(SqlParser.CRLF);
 		sb.append(String.format("\tSELECT 1")).append(SqlParser.CRLF);
 		sb.append(String.format("\tFROM sys.foreign_keys")).append(SqlParser.CRLF);
-		sb.append(String.format("\tWHERE name = '%s' AND parent_object_id = OBJECT_ID('%s')", stripDelimiters(name), tableName.getFullNameWithoutDelimiter())).append(SqlParser.CRLF);
+		sb.append(String.format("\tWHERE name = '%s' AND parent_object_id = OBJECT_ID('%s')", stripDelimiters(name.toString()), tableName.getFullNameWithoutDelimiter())).append(SqlParser.CRLF);
 		sb.append(String.format(")")).append(SqlParser.CRLF);
 		sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
 		sb.append(String.format("\tALTER TABLE %s",tableName.getFullName())).append(SqlParser.CRLF);

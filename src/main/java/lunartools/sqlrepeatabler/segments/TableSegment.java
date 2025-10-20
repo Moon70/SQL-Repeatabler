@@ -3,17 +3,19 @@ package lunartools.sqlrepeatabler.segments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.parser.Token;
+
 public class TableSegment {
 	private static Logger logger = LoggerFactory.getLogger(TableSegment.class);
-	private String element;
+	private Token token;
 
-	public TableSegment(String element) {
-		this.element=element;
+	public TableSegment(Token token) {
+		this.token=token;
 	}
 
 	public void toSql(StringBuilder sb,boolean mySql) throws Exception {
 		if(mySql) {
-			String element=replaceBackTicksWithSquareBrackets(this.element);
+			String element=replaceBackTicksWithSquareBrackets(token.toString());
 			if(element.contains("auto_increment")) {
 				logger.warn("replacing 'auto_increment' (MySQL) with 'identity' (MSSQL):");
 				logger.warn("--- "+element);
@@ -35,7 +37,7 @@ public class TableSegment {
 			}
 			sb.append(element);
 		}else {
-			sb.append(element);
+			sb.append(token.toString());
 		}
 
 	}

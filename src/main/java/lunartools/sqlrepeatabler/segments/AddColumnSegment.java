@@ -2,13 +2,14 @@ package lunartools.sqlrepeatabler.segments;
 
 import lunartools.sqlrepeatabler.SqlParser;
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.Token;
 
 public class AddColumnSegment extends Segment{
 	private String action;
-	private String name;
-	private String parameters;
+	private Token name;
+	private Token parameters;
 
-	public AddColumnSegment(String action,String name,String parameters) {
+	public AddColumnSegment(String action,Token name,Token parameters) {
 		super(action,name);
 		this.action=action;
 		this.name=name;

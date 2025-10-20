@@ -12,39 +12,39 @@ import lunartools.sqlrepeatabler.statements.Statement;
 
 class CommandSetIdentityInsertTest {
 	private static final String TESTDATAFOLDER="/CommandSetIdentityInsert/";
-    private SetIdentityInsertStatementFactory factory=new SetIdentityInsertStatementFactory();
-    
-    @Test
-    void nonInsertIntoLineIsNotAccepted() throws Exception {
-    	String filenameTestdata=	TESTDATAFOLDER+"OneNonSetIdentityInsertLine_Testdata.txt";
+	private SetIdentityInsertStatementFactory factory=new SetIdentityInsertStatementFactory();
+
+	@Test
+	void nonInsertIntoLineIsNotAccepted() throws Exception {
+		String filenameTestdata=	TESTDATAFOLDER+"OneNonSetIdentityInsertLine_Testdata.txt";
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-   		assertFalse(factory.match(sqlScript.peekLine()));
-    }
+		assertFalse(factory.match(sqlScript.peekLine()));
+	}
 
-    @Test
-    void setIdentityInsert_On() throws Exception{
-    	String filenameTestdata=	TESTDATAFOLDER+"SetIdentityInsert_On_Testdata.txt";
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLine()));
-
-		Statement sqlSegment=factory.createSqlSegment(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		sqlSegment.toSql(sb);
-		assertTrue(TestHelper.removeCR(sb).length()==0);
-    }
-
-    @Test
-    void setIdentityInsert_Off() throws Exception{
-    	String filenameTestdata=	TESTDATAFOLDER+"SetIdentityInsert_Off_Testdata.txt";
+	@Test
+	void setIdentityInsert_On() throws Exception{
+		String filenameTestdata=	TESTDATAFOLDER+"SetIdentityInsert_On_Testdata.txt";
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertTrue(factory.match(sqlScript.peekLine()));
 
-		Statement sqlSegment=factory.createSqlSegment(sqlScript);
+		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
 		sqlSegment.toSql(sb);
 		assertTrue(TestHelper.removeCR(sb).length()==0);
-    }
-    
+	}
+
+	@Test
+	void setIdentityInsert_Off() throws Exception{
+		String filenameTestdata=	TESTDATAFOLDER+"SetIdentityInsert_Off_Testdata.txt";
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLine()));
+
+		Statement sqlSegment=factory.createStatement(sqlScript);
+		StringBuilder sb=new StringBuilder();
+		sqlSegment.toSql(sb);
+		assertTrue(TestHelper.removeCR(sb).length()==0);
+	}
+
 }

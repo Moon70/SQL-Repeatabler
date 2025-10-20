@@ -5,51 +5,51 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.parser.SqlCharacter;
+import lunartools.sqlrepeatabler.parser.StatementTokenizer;
+import lunartools.sqlrepeatabler.parser.Token;
+
 public class TableName {
 	private static Logger logger = LoggerFactory.getLogger(TableName.class);
-	private String databaseName;
-	private String schemaName;
-	//	private String schemaName="[dbo]";
-	private String tableName;
+	private Token databaseName;
+	private Token schemaName;
+	//private String schemaName="[dbo]";
+	private Token tableName;
 	private boolean mySql;
 
-	private TableName(ArrayList<StringBuilder> segments, boolean mySql) {
-		if(segments.get(0)!=null) {
-			this.databaseName=segments.get(0).toString();
-		}
-		if(segments.get(1)!=null) {
-			this.schemaName=segments.get(1).toString();
-		}
-		this.tableName=segments.get(2).toString();
+	private TableName(ArrayList<Token> segments, boolean mySql) {
+		this.databaseName=segments.get(0);
+		this.schemaName=segments.get(1);
+		this.tableName=segments.get(2);
 		this.mySql=mySql;
 	}
 
-	public static TableName createInstanceByConsuming(StringBuilder sbCommand) throws Exception{
+	public static TableName createInstanceByConsuming(StatementTokenizer statementTokenizer) throws Exception{
 		boolean mySql=false;
-		ArrayList<StringBuilder> segments=new ArrayList<>();
+		ArrayList<Token> segments=new ArrayList<>();
 
 		for(int i=0;i<3;i++) {//database name, schema name, table name
-			stripSpace(sbCommand);
-			if(sbCommand.charAt(0)=='[') {
-				StringBuilder segment=createBracketSegmentByConsuming(sbCommand);
+			statementTokenizer.stripSpaceLeft();
+			SqlCharacter character=statementTokenizer.charAt(0);
+			if(character.getChar()=='[') {
+				Token segment=createBracketSegmentByConsuming(statementTokenizer);
 				segments.add(segment);
-			}else if(sbCommand.charAt(0)=='"') {
-				StringBuilder segment=createQuoteSegmentByConsuming(sbCommand);
+			}else if(character.getChar()=='"') {
+				Token segment=createQuoteSegmentByConsuming(statementTokenizer);
 				segments.add(segment);
-			}else if(sbCommand.charAt(0)=='`') {
+			}else if(character.getChar()=='`') {
 				mySql=true;
-				StringBuilder segment=createBacktickSegmentByConsuming(sbCommand);
+				Token segment=createBacktickSegmentByConsuming(statementTokenizer);
 				segments.add(segment);
 			}else {
-				//				throw new Exception("Error scanning table name: >"+sbCommand.toString()+"<");
-				StringBuilder segment=createSpaceSegmentByConsuming(sbCommand);
+				Token segment=createSpaceSegmentByConsuming(statementTokenizer);
 				segments.add(segment);
 			}
-			stripSpace(sbCommand);
-			if(sbCommand.charAt(0)!='.') {
+			statementTokenizer.stripSpaceLeft();
+			if(statementTokenizer.charAt(0).getChar()!='.') {
 				break;
 			}
-			sbCommand.deleteCharAt(0);
+			statementTokenizer.deleteCharAt(0);
 		}
 		while(segments.size()<3) {
 			segments.add(0,null);
@@ -57,115 +57,114 @@ public class TableName {
 		return new TableName(segments,mySql);
 	}
 
-	private static void stripSpace(StringBuilder sbCommand) {
-		while(sbCommand.charAt(0)==' ') {
-			sbCommand.deleteCharAt(0);
-		}
-	}
-
-	private static StringBuilder createBracketSegmentByConsuming(StringBuilder sbCommand) {
-		StringBuilder sbSegment=new StringBuilder();
-		sbSegment.append(sbCommand.charAt(0));
-		sbCommand.deleteCharAt(0);
+	private static Token createBracketSegmentByConsuming(StatementTokenizer statementTokenizer) {
+		ArrayList<SqlCharacter> sbSegment=new ArrayList<>();
+		sbSegment.add(statementTokenizer.charAt(0));
+		statementTokenizer.deleteCharAt(0);
 		while(true) {
-			if(sbCommand.charAt(0)==']') {
-				sbSegment.append(sbCommand.charAt(0));
-				sbCommand.deleteCharAt(0);
-				if(sbCommand.charAt(1)==']') {
+			if(statementTokenizer.charAt(0).getChar()==']') {
+				sbSegment.add(statementTokenizer.charAt(0));
+				statementTokenizer.deleteCharAt(0);
+				if(statementTokenizer.charAt(0).getChar()==']') {
 					continue;
 				}else {
 					break;
 				}
 			}
-			sbSegment.append(sbCommand.charAt(0));
-			sbCommand.deleteCharAt(0);
+			sbSegment.add(statementTokenizer.charAt(0));
+			statementTokenizer.deleteCharAt(0);
 		}
-		return sbSegment;
+		return new Token(sbSegment);
 	}
 
-	private static StringBuilder createQuoteSegmentByConsuming(StringBuilder sbCommand) {
-		StringBuilder sbSegment=new StringBuilder();
-		sbSegment.append(sbCommand.charAt(0));
-		sbCommand.deleteCharAt(0);
+	private static Token createQuoteSegmentByConsuming(StatementTokenizer statementTokenizer) {
+		ArrayList<SqlCharacter> sbSegment=new ArrayList<>();
+		sbSegment.add(statementTokenizer.charAt(0));
+		statementTokenizer.deleteCharAt(0);
 		while(true) {
-			if(sbCommand.charAt(0)=='"') {
-				sbSegment.append(sbCommand.charAt(0));
-				sbCommand.deleteCharAt(0);
-				if(sbCommand.charAt(1)=='"') {
+			if(statementTokenizer.charAt(0).getChar()=='"') {
+				sbSegment.add(statementTokenizer.charAt(0));
+				statementTokenizer.deleteCharAt(0);
+				if(statementTokenizer.charAt(0).getChar()=='"') {
 					continue;
 				}else {
 					break;
 				}
 			}
-			sbSegment.append(sbCommand.charAt(0));
-			sbCommand.deleteCharAt(0);
+			sbSegment.add(statementTokenizer.charAt(0));
+			statementTokenizer.deleteCharAt(0);
 		}
-		return sbSegment;
+		return new Token(sbSegment);
 	}
 
-	private static StringBuilder createBacktickSegmentByConsuming(StringBuilder sbCommand) {
-		StringBuilder sbSegment=new StringBuilder();
-		sbSegment.append('[');
-		sbCommand.deleteCharAt(0);
+	private static Token createBacktickSegmentByConsuming(StatementTokenizer statementTokenizer) {
+		ArrayList<SqlCharacter> sbSegment=new ArrayList<>();
+		sbSegment.add(new SqlCharacter('[',-1,-1,-1));
+		statementTokenizer.deleteCharAt(0);
 		while(true) {
-			if(sbCommand.charAt(0)=='`') {
-				if(sbCommand.charAt(1)=='`') {
-					sbSegment.append("``");
-					sbCommand.delete(0,2);
+			if(statementTokenizer.charAt(0).getChar()=='`') {
+				if(statementTokenizer.charAt(1).getChar()=='`') {
+					sbSegment.add(statementTokenizer.charAt(0));
+					sbSegment.add(statementTokenizer.charAt(1));
+					statementTokenizer.deleteCharAt(0);
+					statementTokenizer.deleteCharAt(0);
 					continue;
 				}else {
-					sbSegment.append(']');
-					sbCommand.deleteCharAt(0);
+					sbSegment.add(new SqlCharacter(']',-1,-1,-1));
+					statementTokenizer.deleteCharAt(0);
 					break;
 				}
 			}
-			sbSegment.append(sbCommand.charAt(0));
-			sbCommand.deleteCharAt(0);
+			sbSegment.add(statementTokenizer.charAt(0));
+			statementTokenizer.deleteCharAt(0);
 		}
-		return sbSegment;
+		return new Token(sbSegment);
 	}
 
-	private static StringBuilder createSpaceSegmentByConsuming(StringBuilder sbCommand) {
-		StringBuilder sbSegment=new StringBuilder();
-		sbSegment.append(sbCommand.charAt(0));
-		sbCommand.deleteCharAt(0);
+	private static Token createSpaceSegmentByConsuming(StatementTokenizer statementTokenizer) {
+		ArrayList<SqlCharacter> sbSegment=new ArrayList<>();
+		sbSegment.add(statementTokenizer.charAt(0));
+		statementTokenizer.deleteCharAt(0);
 		while(true) {
-			if(sbCommand.charAt(0)==' ') {
-				sbCommand.deleteCharAt(0);
-				if(sbCommand.charAt(1)==' ') {
+			if(statementTokenizer.charAt(0).isSpace()) {
+				statementTokenizer.deleteCharAt(0);
+				if(statementTokenizer.charAt(0).isSpace()) {
 					continue;
 				}else {
 					break;
 				}
 			}
-			sbSegment.append(sbCommand.charAt(0));
-			sbCommand.deleteCharAt(0);
+			sbSegment.add(statementTokenizer.charAt(0));
+			statementTokenizer.deleteCharAt(0);
 		}
-		return sbSegment;
+		return new Token(sbSegment);
 	}
 
 	public String getDatabaseName() {
-		return databaseName;
+		return databaseName.toString();
 	}
 
 	public String getSchemaName() {
-		return schemaName;
+		return schemaName.toString();
 	}
 
 	public String getTableName() {
-		return tableName;
+		return tableName.toString();
 	}
 
 	public String getDatabaseNameWithoutDelimiter() {
-		return databaseName.substring(1, databaseName.length()-1);
+		String databaseNameString=getDatabaseName();
+		return databaseNameString.substring(1, databaseNameString.length()-1);
 	}
 
 	public String getSchemaNameWithoutDelimiter() {
-		return schemaName.substring(1, schemaName.length()-1);
+		String schemaNameString=getSchemaName();
+		return schemaNameString.substring(1,schemaNameString.length()-1);
 	}
 
 	public String getTableNameWithoutDelimiter() {
-		return tableName.substring(1, tableName.length()-1);
+		String tableNameString=getTableName();
+		return tableNameString.substring(1, tableNameString.length()-1);
 	}
 
 	public String getFullName() {
