@@ -1,6 +1,7 @@
 package lunartools.sqlrepeatabler.parser;
 
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -109,7 +110,7 @@ public class SqlScript {
 		while(true) {
 			ArrayList<SqlCharacter> charactersOfLine=readLineCharacters();
 			if(charactersOfLine==null) {
-				throw new Exception("Unexpected end of script");
+				throw new EOFException("Unexpected end of script");
 			}
 			if(charactersOfStatement.size()>0 && charactersOfStatement.get(charactersOfStatement.size()-1).isSpace()) {
 				charactersOfStatement.add(sqlCharacterInsertedSpace);

@@ -114,8 +114,9 @@ public class StatementTokenizer {
 	public Token nextToken(char left, char right) throws Exception {
 		int openParenthesis=0;
 		stripSpaceLeft();
-		if(charAt(0).getChar()!='(') {
-			throw new Exception("Error parsing tokens in parenthesis! Expected: >(<. Found: >"+charAt(0).getChar()+"<");
+		if(charAt(0).getChar()!=left) {
+			SqlCharacter character=charAt(0);
+			throw new SqlParserException("Error parsing tokens in parenthesis! Expected: >(<. Found: >"+character.getChar()+"<",character.getRow(),character.getColumn(),character.getIndexInFile());
 		}
 		int index=1;
 		while(true) {
