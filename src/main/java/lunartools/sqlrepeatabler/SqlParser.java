@@ -23,6 +23,7 @@ import lunartools.sqlrepeatabler.statements.SetIdentityInsertStatementFactory;
 import lunartools.sqlrepeatabler.statements.SpRenameStatementFactory;
 import lunartools.sqlrepeatabler.statements.Statement;
 import lunartools.sqlrepeatabler.statements.StatementFactory;
+import lunartools.sqlrepeatabler.statements.UseStatementFactory;
 import lunartools.sqlrepeatabler.statements.WhitespaceLineStatementFactory;
 
 public class SqlParser {
@@ -52,7 +53,8 @@ public class SqlParser {
 		sqlSegmentFactories.add(new OneLineCommentStatementFactory());
 		sqlSegmentFactories.add(new SetIdentityInsertStatementFactory());
 		sqlSegmentFactories.add(new SpRenameStatementFactory());
-		sqlSegmentFactories.add(new WhitespaceLineStatementFactory());
+        sqlSegmentFactories.add(new WhitespaceLineStatementFactory());
+        sqlSegmentFactories.add(new UseStatementFactory());
 
 		SqlScript sqlScript=SqlScript.createInstance(bufferedReader);
 		while(sqlScript.hasCurrentLine()) {
