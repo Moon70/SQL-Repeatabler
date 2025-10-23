@@ -88,6 +88,17 @@ public class SqlScript {
 		return lines.get(index++);
 	}
 	
+	public SqlCharacter getFirstCharacterOfCurrentLine() {
+        if(index==lines.size()) {
+            return null;
+        }
+	    ArrayList<SqlCharacter> sqlCharacterLine=sqlCharacters.get(index);
+        if(sqlCharacterLine.size()==0) {
+            return null;
+        }
+	    return sqlCharacterLine.get(0);
+	}
+	
 	/**
 	 * @return line after incrementing the index 
 	 */
@@ -112,7 +123,7 @@ public class SqlScript {
 			if(charactersOfLine==null) {
 				throw new EOFException("Unexpected end of script");
 			}
-			if(charactersOfStatement.size()>0 && charactersOfStatement.get(charactersOfStatement.size()-1).isSpace()) {
+			if(charactersOfStatement.size()>0 && !charactersOfStatement.get(charactersOfStatement.size()-1).isWhiteSpace()) {
 				charactersOfStatement.add(sqlCharacterInsertedSpace);
 			}
 			charactersOfStatement.addAll(charactersOfLine);
@@ -184,4 +195,16 @@ public class SqlScript {
 		return lines.get(index);
 	}
 
+	@Override
+	public String toString() {
+	    StringBuilder sb=new StringBuilder();
+	    for(int line=0;line<sqlCharacters.size();line++) {
+	        ArrayList<SqlCharacter> charactersOfLine=sqlCharacters.get(line);
+	        for(int k=0;k<charactersOfLine.size();k++) {
+	            sb.append(charactersOfLine.get(k).getChar());
+	        }
+            sb.append("\r\n");
+	    }
+	    return sb.toString();
+	}
 }

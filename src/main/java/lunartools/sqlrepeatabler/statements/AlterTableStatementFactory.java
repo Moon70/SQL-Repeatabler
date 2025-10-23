@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.SqlParserException;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -43,7 +44,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
 
-		statementTokenizer.stripSpaceLeft();
+		statementTokenizer.stripWhiteSpaceLeft();
 
 		ArrayList<Segment> columnElements=null;
 		if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("ADD")) {
@@ -57,6 +58,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 			columnElements=parseAlterColumnAction(statementTokenizer);
 		}else {
 			throw new Exception("unsupported ALTER TABLE action found");
+            //throw new SqlParserException("unsupported ALTER TABLE action found",statementTokenizer.getFirstCharacter());
 		}
 
 		return new AlterTableStatement(tableName,columnElements);

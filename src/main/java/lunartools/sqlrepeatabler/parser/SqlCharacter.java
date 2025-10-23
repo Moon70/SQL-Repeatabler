@@ -34,6 +34,10 @@ public class SqlCharacter {
 		return c==' ';
 	}
 
+    public boolean isWhiteSpace() {
+        return c==' ' || c=='\t';
+    }
+
 	public boolean isSemicolon() {
 		return c==';';
 	}

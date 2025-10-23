@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.parser.SqlParserException;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.statements.AlterTableStatementFactory;
 import lunartools.sqlrepeatabler.statements.CreateTableStatementFactory;
@@ -74,7 +75,8 @@ public class SqlParser {
 				}
 			}
 			if(statement==null) {
-				throw new Exception("Unsupported content in line "+lineNumber+" :"+line);
+			    throw new Exception("Unsupported content in line "+lineNumber+" :"+line);
+				//throw new SqlParserException("Unsupported content: "+(line.length()<20?line:line.substring(0, 20)+"..."),sqlScript.getFirstCharacterOfCurrentLine());
 			}
 		}
 		return result;

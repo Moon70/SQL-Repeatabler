@@ -56,10 +56,10 @@ public class Token {
 	}
 
 	public void trim() {
-		while(charactersOfToken.size()>0 && charactersOfToken.get(0).isSpace()) {
+		while(charactersOfToken.size()>0 && charactersOfToken.get(0).isWhiteSpace()) {
 			charactersOfToken.remove(0);
 		}
-		while(charactersOfToken.size()>0 && charactersOfToken.get(charactersOfToken.size()-1).isSpace()) {
+		while(charactersOfToken.size()>0 && charactersOfToken.get(charactersOfToken.size()-1).isWhiteSpace()) {
 			charactersOfToken.remove(charactersOfToken.size()-1);
 		}
 	}

@@ -29,7 +29,7 @@ public class TableName {
 		ArrayList<Token> segments=new ArrayList<>();
 
 		for(int i=0;i<3;i++) {//database name, schema name, table name
-			statementTokenizer.stripSpaceLeft();
+			statementTokenizer.stripWhiteSpaceLeft();
 			SqlCharacter character=statementTokenizer.charAt(0);
 			if(character.getChar()=='[') {
 				Token segment=createBracketSegmentByConsuming(statementTokenizer);
@@ -45,7 +45,7 @@ public class TableName {
 				Token segment=createSpaceSegmentByConsuming(statementTokenizer);
 				segments.add(segment);
 			}
-			statementTokenizer.stripSpaceLeft();
+			statementTokenizer.stripWhiteSpaceLeft();
 			if(statementTokenizer.charAt(0).getChar()!='.') {
 				break;
 			}

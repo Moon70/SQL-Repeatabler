@@ -35,7 +35,7 @@ public class StatementTokenizer {
 				return new Token(token);
 			}else if(character.getChar()==tokenDelimiter || character.getChar()==',') {
 				charactersOfStatement.remove(0);
-				stripSpaceLeft(charactersOfStatement);
+				stripWhiteSpaceLeft(charactersOfStatement);
 				return new Token(token);
 			}
 			token.add(character);
@@ -44,14 +44,14 @@ public class StatementTokenizer {
 		throw new Exception("Unexpected end of buffer");
 	}
 	
-	public void stripSpaceLeft() {
-		while(hasNext() && charactersOfStatement.get(0).isSpace()) {
+	public void stripWhiteSpaceLeft() {
+		while(hasNext() && charactersOfStatement.get(0).isWhiteSpace()) {
 			charactersOfStatement.remove(0);
 		}
 	}
 	
-	public void stripSpaceRight() {
-		while(charactersOfStatement.get(charactersOfStatement.size()-1).isSpace()) {
+	public void stripWhiteSpaceRight() {
+		while(charactersOfStatement.get(charactersOfStatement.size()-1).isWhiteSpace()) {
 			charactersOfStatement.remove(charactersOfStatement.size()-1);
 		}
 	}
@@ -60,8 +60,8 @@ public class StatementTokenizer {
 		return charactersOfStatement.size();
 	}
 	
-	private static void stripSpaceLeft(ArrayList<SqlCharacter> characters) {
-		while(characters.get(0).isSpace()) {
+	private static void stripWhiteSpaceLeft(ArrayList<SqlCharacter> characters) {
+		while(characters.get(0).isWhiteSpace()) {
 			characters.remove(0);
 		}
 	}
@@ -113,7 +113,7 @@ public class StatementTokenizer {
 
 	public Token nextToken(char left, char right) throws Exception {
 		int openParenthesis=0;
-		stripSpaceLeft();
+		stripWhiteSpaceLeft();
 		if(charAt(0).getChar()!=left) {
 			SqlCharacter character=charAt(0);
 			throw new SqlParserException("Error parsing tokens in parenthesis! Expected: >(<. Found: >"+character.getChar()+"<",character.getRow(),character.getColumn(),character.getIndexInFile());
@@ -140,7 +140,7 @@ public class StatementTokenizer {
 		for(int i=0;i<index+1;i++) {
 			charactersOfStatement.remove(0);
 		}
-		stripSpaceLeft();
+		stripWhiteSpaceLeft();
 		return token;
 	}
 
@@ -149,7 +149,7 @@ public class StatementTokenizer {
 			for(int i=0;i<prefix.length();i++) {
 				charactersOfStatement.remove(0);
 			}
-			stripSpaceLeft();
+			stripWhiteSpaceLeft();
 			return true;
 		}else {
 			return false;
@@ -165,5 +165,12 @@ public class StatementTokenizer {
 		}
 		return true;
 	}
+
+    public SqlCharacter getFirstCharacter() {
+        if(charactersOfStatement.size()==0) {
+            return null;
+        }
+        return charactersOfStatement.get(0);
+    }
 	
 }

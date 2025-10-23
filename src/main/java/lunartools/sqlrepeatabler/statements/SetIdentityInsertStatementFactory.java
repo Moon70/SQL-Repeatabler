@@ -34,7 +34,7 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
 
-		statementTokenizer.stripSpaceRight();
+		statementTokenizer.stripWhiteSpaceRight();
 		if(statementTokenizer.charAt(statementTokenizer.length()-1).getChar()==';') {
 			statementTokenizer.deleteCharAt(statementTokenizer.length()-1);
 		}
