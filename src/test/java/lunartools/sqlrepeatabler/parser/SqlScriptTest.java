@@ -16,9 +16,9 @@ class SqlScriptTest {
 
 		assertEquals(0,sqlScript.getIndex());
 		assertTrue(sqlScript.hasCurrentLine());
-		assertEquals("line 1",sqlScript.peekLine());
+		assertEquals("line 1",sqlScript.peekLineAsString());
 		assertEquals(0,sqlScript.getIndex());
-		assertEquals("line 1",sqlScript.peekLine());
+		assertEquals("line 1",sqlScript.peekLineAsString());
 
 		//    	assertEquals(1,sqlScript.getIndex());
 		//    	assertTrue(sqlScript.hasCurrentLine());

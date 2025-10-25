@@ -29,6 +29,7 @@ public class MultiLineCommentStatementFactory extends StatementFactory{
 		if(!line.endsWith("*/")) {
 			while(true) {
 				line=sqlScript.readLine();
+				
 				if(line==null) {
 					throw new Exception("Unexpected end of data");
 				}

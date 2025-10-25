@@ -19,7 +19,7 @@ class CommandCreateTableTest {
 	void nonCreateTableIsNotAccepted() throws Exception {
 		String filenameTestdata=	TESTDATAFOLDER+"NonCreateTableLine_Testdata.txt";
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertFalse(factory.match(sqlScript.peekLine()));
+		assertFalse(factory.match(sqlScript.peekLineAsString()));
 	}
 
 	@Test
@@ -29,7 +29,7 @@ class CommandCreateTableTest {
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLine()));
+		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
@@ -44,7 +44,7 @@ class CommandCreateTableTest {
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLine()));
+		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
@@ -59,7 +59,7 @@ class CommandCreateTableTest {
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLine()));
+		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
@@ -74,7 +74,7 @@ class CommandCreateTableTest {
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLine()));
+		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();

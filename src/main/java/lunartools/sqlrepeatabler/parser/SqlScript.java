@@ -5,13 +5,11 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class SqlScript {
-	private ArrayList<String> lines=new ArrayList<>();
-	private HashMap<Integer,ArrayList<SqlCharacter>> sqlCharacters=new HashMap<>();
+	private ArrayList<SqlScriptLine> sqlCharacterLines=new ArrayList<>();
 	private int index;
-	
+
 	public static SqlScript createInstance(StringBuffer stringBuffer) throws Exception{
 		try(
 				StringReader stringReader=new StringReader(stringBuffer.toString());
@@ -19,7 +17,7 @@ public class SqlScript {
 			return createInstance(bufferedReader);
 		}
 	}
-	
+
 	public static SqlScript createInstance(StringBuilder stringBuilder) throws Exception{
 		try(
 				StringReader stringReader=new StringReader(stringBuilder.toString());
@@ -33,107 +31,129 @@ public class SqlScript {
 	}
 
 	private SqlScript(BufferedReader bufferedReader) throws IOException {
-		String line;
-		int lineIndex=0;
-		int characterIndex=0;
-		while((line=bufferedReader.readLine())!=null) {
-			lines.add(line);
-			ArrayList<SqlCharacter> sqlCharacterInLine=new ArrayList<>();
-			for(int i=0;i<line.length();i++) {
-				SqlCharacter sqlCharacter=new SqlCharacter(line.charAt(i),lineIndex,i,characterIndex+i);
-				sqlCharacterInLine.add(sqlCharacter);
-			}
-			sqlCharacters.put(lineIndex, sqlCharacterInLine);
-			lineIndex++;
-			characterIndex+=line.length();
+		ArrayList<Integer> scriptAsIntegerArray=new ArrayList<>();
+		int iChar;
+		while((iChar=bufferedReader.read())!=-1) {
+			scriptAsIntegerArray.add(iChar);
 		}
+
+		int lineIndex=0;
+		int column=0;
+		int characterIndex=-1;
+		ArrayList<SqlCharacter> sqlCharacters=new ArrayList<>();
+		for(int i=0;i<scriptAsIntegerArray.size();i++) {
+			characterIndex++;
+			iChar=scriptAsIntegerArray.get(i);
+			char c=(char)iChar;
+			if(c==0x0a) {//LF
+				lineIndex++;
+				column=0;
+				sqlCharacterLines.add(new SqlScriptLine(sqlCharacters));
+				sqlCharacters=new ArrayList<>();
+			}else if(c==0x0d) {//CR
+				lineIndex++;
+				column=0;
+				sqlCharacterLines.add(new SqlScriptLine(sqlCharacters));
+				sqlCharacters=new ArrayList<>();
+				if(i<scriptAsIntegerArray.size()-1 && (scriptAsIntegerArray.get(i+1))==0x0a){
+					characterIndex++;
+					i++;
+				}
+			}else {
+				SqlCharacter sqlCharacter=new SqlCharacter(c,lineIndex,column,characterIndex);
+				sqlCharacters.add(sqlCharacter);
+			}
+		}
+		sqlCharacterLines.add(new SqlScriptLine(sqlCharacters));
 	}
 
 	/**
 	 * @return true when index points to a valid line, false at eof
 	 */
 	public boolean hasCurrentLine() {
-		return index<lines.size();
+		return index<sqlCharacterLines.size();
 	}
-	
+
 	/**
 	 * @return Index of current line, or -1 at eof
 	 */
 	public int getIndex() {
-		return index<lines.size()?index:-1;
-	}
-
-	/**
-	 * @return Index plus 1 of current line, or -1 at eof
-	 */
-	//TODO: remove after improving error location handling
-	public int getLineNumber() {
-		return index<lines.size()?index+1:-1;
+		return index<sqlCharacterLines.size()?index:-1;
 	}
 
 	/**
 	 * @return Current line
 	 */
-	public String peekLine() {
-		if(index==lines.size()) {
+	public String peekLineAsString() {
+		if(index==sqlCharacterLines.size()) {
 			return null;
 		}
-		return lines.get(index);
+		return sqlCharacterLines.get(index).toString();
 	}
-	
+
+	/**
+	 * @return Current line
+	 */
+	public SqlScriptLine peekLine() {
+		if(index==sqlCharacterLines.size()) {
+			return null;
+		}
+		return sqlCharacterLines.get(index);
+	}
+
 	public String readLine() {
-		if(index==lines.size()) {
+		if(index==sqlCharacterLines.size()) {
 			return null;
 		}
-		return lines.get(index++);
+		return sqlCharacterLines.get(index++).toString();
 	}
-	
+
 	public SqlCharacter getFirstCharacterOfCurrentLine() {
-        if(index==lines.size()) {
-            return null;
-        }
-	    ArrayList<SqlCharacter> sqlCharacterLine=sqlCharacters.get(index);
-        if(sqlCharacterLine.size()==0) {
-            return null;
-        }
-	    return sqlCharacterLine.get(0);
+		if(index==sqlCharacterLines.size()) {
+			return null;
+		}
+		SqlScriptLine sqlScriptLine=sqlCharacterLines.get(index);
+		return sqlScriptLine.getFirstCharacter();
 	}
-	
+
 	/**
 	 * @return line after incrementing the index 
 	 */
-	public String readNextLine() {
+	public String readNextLineAsString() {
 		index++;
-		String line=peekLine();
-		return line;
-	}
-
-	private ArrayList<SqlCharacter> readLineCharacters() {
-		if(index==lines.size()) {
+		SqlScriptLine sqlScriptLine=peekLine();
+		if(sqlScriptLine==null) {
 			return null;
 		}
-		return sqlCharacters.get(index++);
+		return sqlScriptLine.toString();
+	}
+
+	private SqlScriptLine readLineCharacters() {
+		if(index==sqlCharacterLines.size()) {
+			return null;
+		}
+		return sqlCharacterLines.get(index++);
 	}
 
 	public StatementTokenizer consumeStatement() throws Exception {
 		SqlCharacter sqlCharacterInsertedSpace=new SqlCharacter(' ',-1,-1,-1);
 		ArrayList<SqlCharacter> charactersOfStatement=new ArrayList<>();
 		while(true) {
-			ArrayList<SqlCharacter> charactersOfLine=readLineCharacters();
-			if(charactersOfLine==null) {
+			SqlScriptLine sqlScriptLine=readLineCharacters();
+			if(sqlScriptLine==null) {
 				throw new EOFException("Unexpected end of script");
 			}
 			if(charactersOfStatement.size()>0 && !charactersOfStatement.get(charactersOfStatement.size()-1).isWhiteSpace()) {
 				charactersOfStatement.add(sqlCharacterInsertedSpace);
 			}
-			charactersOfStatement.addAll(charactersOfLine);
-			if(endsWithSemicolon(charactersOfLine)) {
+			charactersOfStatement.addAll(sqlScriptLine.getCharacters());
+			if(sqlScriptLine.endsWithSemicolon()) {
 				break;
 			}
 		}
 		return new StatementTokenizer(stripWhitespace(charactersOfStatement));
 	}
-	
+
 	private ArrayList<SqlCharacter> stripWhitespace(ArrayList<SqlCharacter> characterList){
 		boolean singleQuoteOpen=false;
 		boolean doubleQuoteOpen=false;
@@ -181,7 +201,7 @@ public class SqlScript {
 		return strippedCharacterList;
 
 	}
-	
+
 	private boolean endsWithSemicolon(ArrayList<SqlCharacter> characters) {
 		for(int i=characters.size()-1;i>=0;i--) {
 			if(characters.get(i).isSemicolon()) {
@@ -192,19 +212,16 @@ public class SqlScript {
 	}
 
 	public String getLineAt(int index) {
-		return lines.get(index);
+		return sqlCharacterLines.get(index).toString();
 	}
 
 	@Override
 	public String toString() {
-	    StringBuilder sb=new StringBuilder();
-	    for(int line=0;line<sqlCharacters.size();line++) {
-	        ArrayList<SqlCharacter> charactersOfLine=sqlCharacters.get(line);
-	        for(int k=0;k<charactersOfLine.size();k++) {
-	            sb.append(charactersOfLine.get(k).getChar());
-	        }
-            sb.append("\r\n");
-	    }
-	    return sb.toString();
+		StringBuilder sb=new StringBuilder();
+		for(int line=0;line<sqlCharacterLines.size();line++) {
+			sb.append(sqlCharacterLines.get(line).toString());
+			sb.append("\r\n");
+		}
+		return sb.toString();
 	}
 }

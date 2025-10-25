@@ -19,7 +19,7 @@ class CommandInsertIntoTest {
     void nonInsertIntoLineIsNotAccepted() throws Exception {
     	String filenameTestdata=	TESTDATAFOLDER+"OneNonInsertIntoLine_Testdata.txt";
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-   		assertFalse(factory.match(sqlScript.peekLine()));
+   		assertFalse(factory.match(sqlScript.peekLineAsString()));
     }
 
     @Test
@@ -29,7 +29,7 @@ class CommandInsertIntoTest {
     	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLine()));
+		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
@@ -44,7 +44,7 @@ class CommandInsertIntoTest {
     	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLine()));
+		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
@@ -59,7 +59,7 @@ class CommandInsertIntoTest {
     	String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLine()));
+		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement sqlSegment=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();

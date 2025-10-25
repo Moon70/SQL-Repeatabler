@@ -26,7 +26,7 @@ public class OneLineCommentStatementFactory extends StatementFactory{
 		int endIndex=sqlScript.getIndex();
 		int startIndex=endIndex-1;
 		String line;
-		while((line=sqlScript.peekLine())!=null) {
+		while((line=sqlScript.peekLineAsString())!=null) {
 			if(!match(line)){
 				break;
 			}

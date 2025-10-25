@@ -28,7 +28,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 
 	@Override
 	public Statement createStatement(SqlScript sqlScript) throws Exception{
-		if(!match(sqlScript.peekLine())) {
+		if(!match(sqlScript.peekLineAsString())) {
 			throw new Exception("Illegal factory call");
 		}
 		if(logger.isTraceEnabled()) {

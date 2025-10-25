@@ -56,13 +56,13 @@ public class SqlParser {
 
 		SqlScript sqlScript=SqlScript.createInstance(bufferedReader);
 		while(sqlScript.hasCurrentLine()) {
-			String line=sqlScript.peekLine();
-			int lineNumber=sqlScript.getLineNumber();
+			//String line=sqlScript.peekLineAsString();
+			SqlScriptLine sqlScriptLine=sqlScript.peekLine();
 			
-			logger.debug("processing line "+lineNumber+"\t:"+line);
+			logger.debug("processing line "+(sqlScript.getIndex()+1)+"\t:"+sqlScriptLine.toString());
 			Statement statement=null;
 			for(StatementFactory statementFactory:sqlSegmentFactories) {
-				if(statementFactory.match(line)) {
+				if(statementFactory.match(sqlScriptLine.toString())) {
 					statement=statementFactory.createStatement(sqlScript);
 					sqlSegments.add(statement);
 					//System.out.println("##################################################");
@@ -75,8 +75,7 @@ public class SqlParser {
 				}
 			}
 			if(statement==null) {
-			    throw new Exception("Unsupported content in line "+lineNumber+" :"+line);
-				//throw new SqlParserException("Unsupported content: "+(line.length()<20?line:line.substring(0, 20)+"..."),sqlScript.getFirstCharacterOfCurrentLine());
+				throw new SqlParserException("Unsupported content: "+sqlScriptLine.toString(),sqlScriptLine.getFirstCharacter());
 			}
 		}
 		return result;
