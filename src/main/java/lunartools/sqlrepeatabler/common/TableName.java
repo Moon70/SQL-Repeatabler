@@ -152,19 +152,37 @@ public class TableName {
 		return tableName.toString();
 	}
 
-	public String getDatabaseNameWithoutDelimiter() {
+	public String getDatabaseNameWithoutDelimiterAsString() {
 		String databaseNameString=getDatabaseName();
-		return databaseNameString.substring(1, databaseNameString.length()-1);
+		if(databaseNameString.startsWith("[") && databaseNameString.endsWith("]")) {
+			return databaseNameString.substring(1, databaseNameString.length()-1);
+		}else if(databaseNameString.startsWith("\"") && databaseNameString.endsWith("\"")) {
+			return databaseNameString.substring(1, databaseNameString.length()-1);
+		}else {
+			return databaseNameString;
+		}
 	}
 
-	public String getSchemaNameWithoutDelimiter() {
+	public String getSchemaNameWithoutDelimiterAsString() {
 		String schemaNameString=getSchemaName();
-		return schemaNameString.substring(1,schemaNameString.length()-1);
+		if(schemaNameString.startsWith("[") && schemaNameString.endsWith("]")) {
+			return schemaNameString.substring(1, schemaNameString.length()-1);
+		}else if(schemaNameString.startsWith("\"") && schemaNameString.endsWith("\"")) {
+			return schemaNameString.substring(1, schemaNameString.length()-1);
+		}else {
+			return schemaNameString;
+		}
 	}
 
-	public String getTableNameWithoutDelimiter() {
+	public String getTableNameWithoutDelimiterAsString() {
 		String tableNameString=getTableName();
-		return tableNameString.substring(1, tableNameString.length()-1);
+		if(tableNameString.startsWith("[") && tableNameString.endsWith("]")) {
+			return tableNameString.substring(1, tableNameString.length()-1);
+		}else if(tableNameString.startsWith("\"") && tableNameString.endsWith("\"")) {
+			return tableNameString.substring(1, tableNameString.length()-1);
+		}else {
+			return tableNameString;
+		}
 	}
 
 	public String getFullName() {
@@ -194,14 +212,14 @@ public class TableName {
 	public String getFullNameWithoutDelimiter() {
 		StringBuffer sb=new StringBuffer();
 		if(databaseName!=null) {
-			sb.append(getDatabaseNameWithoutDelimiter());
+			sb.append(getDatabaseNameWithoutDelimiterAsString());
 			sb.append('.');
 		}
 		if(schemaName!=null) {
-			sb.append(getSchemaNameWithoutDelimiter());
+			sb.append(getSchemaNameWithoutDelimiterAsString());
 			sb.append('.');
 		}
-		sb.append(getTableNameWithoutDelimiter());
+		sb.append(getTableNameWithoutDelimiterAsString());
 		return sb.toString();
 	}
 

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.SqlParser;
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.segments.TableSegment;
 
 public class CreateTableStatement implements Statement{

@@ -1,7 +1,7 @@
 package lunartools.sqlrepeatabler.segments;
 
-import lunartools.sqlrepeatabler.SqlParser;
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public class AddForeignKeyConstraintSegment extends Segment{

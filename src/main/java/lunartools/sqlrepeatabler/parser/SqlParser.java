@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler;
+package lunartools.sqlrepeatabler.parser;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.parser.SqlParserException;
-import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.statements.AlterTableStatementFactory;
 import lunartools.sqlrepeatabler.statements.CreateTableStatementFactory;
 import lunartools.sqlrepeatabler.statements.InsertIntoStatementFactory;

@@ -5,8 +5,8 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.SqlParser;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.parser.SqlParser;
 
 public class ConverterService {
 	private static Logger logger = LoggerFactory.getLogger(ConverterService.class);

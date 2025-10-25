@@ -1,6 +1,6 @@
 package lunartools.sqlrepeatabler.statements;
 
-import lunartools.sqlrepeatabler.SqlParser;
+import lunartools.sqlrepeatabler.parser.SqlParser;
 
 public class WhitespaceLineStatement implements Statement{
 	private int numberOfEmptyLines;

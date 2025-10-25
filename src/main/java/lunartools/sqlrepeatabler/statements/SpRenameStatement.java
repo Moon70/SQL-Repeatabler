@@ -3,7 +3,7 @@ package lunartools.sqlrepeatabler.statements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.SqlParser;
+import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public class SpRenameStatement implements Statement{

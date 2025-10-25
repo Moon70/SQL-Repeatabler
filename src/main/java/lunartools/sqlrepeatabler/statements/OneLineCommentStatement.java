@@ -1,6 +1,6 @@
 package lunartools.sqlrepeatabler.statements;
 
-import lunartools.sqlrepeatabler.SqlParser;
+import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 
 public class OneLineCommentStatement implements Statement{

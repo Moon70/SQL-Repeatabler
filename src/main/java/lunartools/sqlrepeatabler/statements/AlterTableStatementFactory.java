@@ -57,8 +57,8 @@ public class AlterTableStatementFactory extends StatementFactory{
 			logger.warn("found MODIFY COLUMN action which is most likely MySql and not supported on T-SQL. Processing as ALTER COLUMN...");
 			columnElements=parseAlterColumnAction(statementTokenizer);
 		}else {
-			throw new Exception("unsupported ALTER TABLE action found");
-            //throw new SqlParserException("unsupported ALTER TABLE action found",statementTokenizer.getFirstCharacter());
+			//throw new Exception("unsupported ALTER TABLE action found");
+            throw new SqlParserException("unsupported ALTER TABLE action found",statementTokenizer.getFirstCharacter());
 		}
 
 		return new AlterTableStatement(tableName,columnElements);
