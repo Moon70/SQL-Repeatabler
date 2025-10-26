@@ -27,17 +27,17 @@ public class DailyBackgroundProvider {
 			"SQL pirate",
 			"Titanic Apeisode Two",
 			"Ape Lisa",
+			"Albert Apestein",
+			"Gipsy Ape",
 			"First ape on the moon",
 			"Apeula",
 			"2001 An Ape Odyssey",
 			"Sphinx"
 			));
 	
-	
 	public static Image getImage() {
 		if(imageBackground==null) {
 			int indexBackground=Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % affenvisionen.size();
-//indexBackground=14;
 			String resourceBackground="/pixelzeug/"+affenvisionen.get(indexBackground)+".sskp";
 			try {
 //				imageBackground = ImageTools.createImageFromResource(resourceBackground);
