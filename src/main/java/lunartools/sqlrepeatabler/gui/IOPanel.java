@@ -17,14 +17,19 @@ import org.slf4j.LoggerFactory;
 import lunartools.FileTools;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.parser.SqlScript;
 
 public class IOPanel extends JPanel{
 	private static Logger logger = LoggerFactory.getLogger(IOPanel.class);
-	JTextArea inputTextarea;
+	private JTextArea inputTextarea;
 	private JTextArea outputTextarea;
+	private ScriptPanelEditorPanel inputPanel;
+	private ScriptPanelEditorPanel outputPanel;
 	private final SqlRepeatablerModel model;
 	private final int sqlFileIndex;
 
+	private static final boolean TEST=false;
+	
 	public IOPanel(SqlRepeatablerModel model, int sqlFileIndex) {
 		this.model=model;
 		this.sqlFileIndex=sqlFileIndex;
@@ -32,23 +37,41 @@ public class IOPanel extends JPanel{
 		model.addChangeListener(this::updateModelChanges);
 
 		Font font=new Font("Courier New", Font.PLAIN,12);
-		inputTextarea=new JTextArea(48,110);
-		inputTextarea.setEditable(false);
-		inputTextarea.setFont(font);
+		if(TEST) {
+			inputPanel=new ScriptPanelEditorPanel(model);
+		}else {
+			inputTextarea=new JTextArea(48,110);
+			inputTextarea.setEditable(false);
+			inputTextarea.setFont(font);
+		}
+		
 		
 		outputTextarea=new JTextArea(48,110);
 		outputTextarea.setEditable(false);
 		outputTextarea.setFont(font);
 
 		JSplitPane jSplitPaneHorizontal = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
-		jSplitPaneHorizontal.setLeftComponent(new JScrollPane(inputTextarea));
+		if(TEST) {
+			jSplitPaneHorizontal.setLeftComponent(new JScrollPane(inputPanel));
+		}else {
+			jSplitPaneHorizontal.setLeftComponent(new JScrollPane(inputTextarea));
+		}
 		jSplitPaneHorizontal.setRightComponent(new JScrollPane(outputTextarea));
 		add(jSplitPaneHorizontal);
 
 		try {
 			ArrayList<File> files=model.getSqlInputFiles();
 			StringBuffer sbContent=FileTools.readFileToStringBuffer(files.get(sqlFileIndex), StandardCharsets.UTF_8.name());
-			inputTextarea.setText(sbContent.toString());
+			if(TEST) {
+				String s=sbContent.toString().replaceAll("\n","<br>");
+				s=s.replaceAll("\r","");
+				s=s.replaceAll(" ","&nbsp;");
+				s=s.replaceAll("\t","&nbsp;&nbsp;&nbsp;&nbsp;");
+				s=s.replaceAll("CREATED","WAMBO");
+				inputPanel.setText(s);
+			}else {
+				inputTextarea.setText(sbContent.toString());
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,11 +87,20 @@ public class IOPanel extends JPanel{
 			
 		}else if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
 			if(model.hasSqlConvertedScripts()) {
+				if(TEST) {
+					SqlScript sqlScript=model.getSqlScript(sqlFileIndex);
+					inputPanel.setText(sqlScript.toHtml());
+					this.repaint();
+				}else {
+				}
 				outputTextarea.setText(model.getSingleConvertedSqlScript(sqlFileIndex).toString());
-				this.repaint();
 			}
 		}else if(object==SimpleEvents.MODEL_RESET) {
-			inputTextarea.setText("");
+			if(TEST) {
+				inputPanel.setText("");
+			}else {
+				inputTextarea.setText("");
+			}
 			outputTextarea.setText("");
 		}
 	}

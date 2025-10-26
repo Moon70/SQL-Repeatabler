@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -26,24 +27,28 @@ public class TableName {
 
 	public static TableName createInstanceByConsuming(StatementTokenizer statementTokenizer) throws Exception{
 		boolean mySql=false;
-		ArrayList<Token> segments=new ArrayList<>();
+		ArrayList<Token> tokens=new ArrayList<>();
 
 		for(int i=0;i<3;i++) {//database name, schema name, table name
 			statementTokenizer.stripWhiteSpaceLeft();
 			SqlCharacter character=statementTokenizer.charAt(0);
 			if(character.getChar()=='[') {
-				Token segment=createBracketSegmentByConsuming(statementTokenizer);
-				segments.add(segment);
+				Token token=createBracketSegmentByConsuming(statementTokenizer);
+				token.categorize(Category.TABLE);
+				tokens.add(token);
 			}else if(character.getChar()=='"') {
-				Token segment=createQuoteSegmentByConsuming(statementTokenizer);
-				segments.add(segment);
+				Token token=createQuoteSegmentByConsuming(statementTokenizer);
+				//token.categorize(Category.TABLE);
+				tokens.add(token);
 			}else if(character.getChar()=='`') {
 				mySql=true;
-				Token segment=createBacktickSegmentByConsuming(statementTokenizer);
-				segments.add(segment);
+				Token token=createBacktickSegmentByConsuming(statementTokenizer);
+				//token.categorize(Category.TABLE);
+				tokens.add(token);
 			}else {
-				Token segment=createSpaceSegmentByConsuming(statementTokenizer);
-				segments.add(segment);
+				Token token=createSpaceSegmentByConsuming(statementTokenizer);
+				//token.categorize(Category.TABLE);
+				tokens.add(token);
 			}
 			statementTokenizer.stripWhiteSpaceLeft();
 			if(statementTokenizer.charAt(0).getChar()!='.') {
@@ -51,10 +56,10 @@ public class TableName {
 			}
 			statementTokenizer.deleteCharAt(0);
 		}
-		while(segments.size()<3) {
-			segments.add(0,null);
+		while(tokens.size()<3) {
+			tokens.add(0,null);
 		}
-		return new TableName(segments,mySql);
+		return new TableName(tokens,mySql);
 	}
 
 	private static Token createBracketSegmentByConsuming(StatementTokenizer statementTokenizer) {

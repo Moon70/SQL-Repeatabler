@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -31,8 +32,10 @@ public class CreateTableStatementFactory extends StatementFactory{
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
 
-		statementTokenizer.nextToken();//skip 'CREATE' token	
-		statementTokenizer.nextToken();//skip 'TABLE' token
+		Token token=statementTokenizer.nextToken();//skip 'CREATE' token	
+		token.categorize(Category.STATEMENT);
+		token=statementTokenizer.nextToken();//skip 'TABLE' token
+		token.categorize(Category.STATEMENT);
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());

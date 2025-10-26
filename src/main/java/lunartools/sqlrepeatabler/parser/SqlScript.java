@@ -7,7 +7,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 public class SqlScript {
-	private ArrayList<SqlScriptLine> sqlCharacterLines=new ArrayList<>();
+	private ArrayList<SqlScriptLine> sqlCharacterLinesOriginal=new ArrayList<>();
+	private ArrayList<SqlScriptLine> sqlCharacterLines;
 	private int index;
 
 	public static SqlScript createInstance(StringBuffer stringBuffer) throws Exception{
@@ -48,12 +49,12 @@ public class SqlScript {
 			if(c==0x0a) {//LF
 				lineIndex++;
 				column=0;
-				sqlCharacterLines.add(new SqlScriptLine(sqlCharacters));
+				sqlCharacterLinesOriginal.add(new SqlScriptLine(sqlCharacters));
 				sqlCharacters=new ArrayList<>();
 			}else if(c==0x0d) {//CR
 				lineIndex++;
 				column=0;
-				sqlCharacterLines.add(new SqlScriptLine(sqlCharacters));
+				sqlCharacterLinesOriginal.add(new SqlScriptLine(sqlCharacters));
 				sqlCharacters=new ArrayList<>();
 				if(i<scriptAsIntegerArray.size()-1 && (scriptAsIntegerArray.get(i+1))==0x0a){
 					characterIndex++;
@@ -64,7 +65,8 @@ public class SqlScript {
 				sqlCharacters.add(sqlCharacter);
 			}
 		}
-		sqlCharacterLines.add(new SqlScriptLine(sqlCharacters));
+		sqlCharacterLinesOriginal.add(new SqlScriptLine(sqlCharacters));
+		sqlCharacterLines=(ArrayList<SqlScriptLine>)sqlCharacterLinesOriginal.clone();
 	}
 
 	/**
@@ -214,6 +216,15 @@ public class SqlScript {
 	public String getLineAt(int index) {
 		return sqlCharacterLines.get(index).toString();
 	}
+	
+	public String toHtml() {
+		StringBuilder sb=new StringBuilder();
+		for(int line=0;line<sqlCharacterLines.size();line++) {
+			sb.append(sqlCharacterLines.get(line).toHtml());
+			sb.append("<br>");
+		}
+		return sb.toString();
+	}
 
 	@Override
 	public String toString() {
@@ -224,4 +235,5 @@ public class SqlScript {
 		}
 		return sb.toString();
 	}
+	
 }

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlParserException;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
@@ -38,8 +39,10 @@ public class AlterTableStatementFactory extends StatementFactory{
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
 
-		statementTokenizer.nextToken();//skip 'ALTER' token	
-		statementTokenizer.nextToken();//skip 'TABLE' token
+		Token token=statementTokenizer.nextToken();//skip 'ALTER' token	
+		token.categorize(Category.STATEMENT);
+		token=statementTokenizer.nextToken();//skip 'TABLE' token
+		token.categorize(Category.STATEMENT);
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
@@ -47,13 +50,13 @@ public class AlterTableStatementFactory extends StatementFactory{
 		statementTokenizer.stripWhiteSpaceLeft();
 
 		ArrayList<Segment> columnElements=null;
-		if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("ADD")) {
+		if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("ADD")) {
 			columnElements=parseAddAction(statementTokenizer);
-		}else if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("DROP")) {
+		}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("DROP")) {
 			columnElements=parseDropAction(statementTokenizer);
-		}else if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("ALTER COLUMN")) {
+		}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("ALTER COLUMN")) {
 			columnElements=parseAlterColumnAction(statementTokenizer);
-		}else if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("MODIFY COLUMN")) {//invalid
+		}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("MODIFY COLUMN")) {//invalid
 			logger.warn("found MODIFY COLUMN action which is most likely MySql and not supported on T-SQL. Processing as ALTER COLUMN...");
 			columnElements=parseAlterColumnAction(statementTokenizer);
 		}else {
@@ -82,13 +85,13 @@ public class AlterTableStatementFactory extends StatementFactory{
 		while(statementTokenizer.hasNext()) {
 			if(beginsWithSupportedCommand(statementTokenizer)) {
 				break;
-			}else if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("CONSTRAINT")) {
+			}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("CONSTRAINT")) {
 				Token tokenConstraintName=statementTokenizer.nextToken();
 
-				if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("FOREIGN KEY")) {
+				if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("FOREIGN KEY")) {
 					Token tokenForeignKey=statementTokenizer.nextToken();
 
-					if(!statementTokenizer.consumePrefixIgnoreCaseAndSpace("REFERENCES")) {
+					if(!statementTokenizer.consumeCommandIgnoreCaseAndSpace("REFERENCES")) {
 						throw new Exception("'REFERENCES' keyword not found: ");
 					}
 					Token tokenReferencesTable=statementTokenizer.nextToken();
@@ -97,7 +100,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 					Segment columnElement=new AddForeignKeyConstraintSegment("ADD",tokenConstraintName,tokenForeignKey,tokenReferencesTable,tokenReferencesColumn);
 					columnElements.add(columnElement);
 
-				}else if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("UNIQUE")) {
+				}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("UNIQUE")) {
 					Token tokenReferencesColumn=statementTokenizer.nextToken();
 
 					Segment columnElement=new AddUniqueConstraintSegment("ADD",tokenConstraintName,tokenReferencesColumn);
@@ -106,12 +109,14 @@ public class AlterTableStatementFactory extends StatementFactory{
 					throw new Exception("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword not found");
 				}
 			}else {
-				if(statementTokenizer.consumePrefixIgnoreCaseAndSpace("COLUMN")){
+				if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("COLUMN")){
 					logger.warn("Script is most likely in MySql format. Ignoring COLUMN keyword which is not allowed in T_SQL");
 				}
 				Token tokenColumName=statementTokenizer.nextToken();
+				tokenColumName.categorize(Category.COLUMN);
 				Token tokenColumParameter=statementTokenizer.nextTokenUntil(',');
-
+				tokenColumParameter.categorize(Category.COLUMNPARAMETER);
+				
 				Segment columnElement=new AddColumnSegment("ADD",tokenColumName,tokenColumParameter);
 				columnElements.add(columnElement);
 			}

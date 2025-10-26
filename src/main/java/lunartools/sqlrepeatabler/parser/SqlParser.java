@@ -28,19 +28,19 @@ public class SqlParser {
 	private static Logger logger = LoggerFactory.getLogger(SqlParser.class);
 	public static final String CRLF="\r\n";
 
-	public static StringBuilder parse(Path path) throws Exception {
-		try(BufferedReader bufferedReader=Files.newBufferedReader(path, StandardCharsets.UTF_8)){
-			return parse(bufferedReader);
-		}
-	}
+//	public static StringBuilder parse(Path path) throws Exception {
+//		try(BufferedReader bufferedReader=Files.newBufferedReader(path, StandardCharsets.UTF_8)){
+//			return parse(bufferedReader);
+//		}
+//	}
+//
+//	public static StringBuilder parse(File file) throws Exception {
+//		try(BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))){
+//			return parse(bufferedReader);
+//		}
+//	}
 
-	public static StringBuilder parse(File file) throws Exception {
-		try(BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))){
-			return parse(bufferedReader);
-		}
-	}
-
-	public static StringBuilder parse(BufferedReader bufferedReader) throws Exception {
+	public static StringBuilder parse(SqlScript sqlScript) throws Exception {
 		StringBuilder result=new StringBuilder();
 		ArrayList<StatementFactory> sqlSegmentFactories=new ArrayList<>();
 		ArrayList<Statement> sqlSegments=new ArrayList<>();
@@ -54,7 +54,6 @@ public class SqlParser {
         sqlSegmentFactories.add(new WhitespaceLineStatementFactory());
         sqlSegmentFactories.add(new UseStatementFactory());
 
-		SqlScript sqlScript=SqlScript.createInstance(bufferedReader);
 		while(sqlScript.hasCurrentLine()) {
 			//String line=sqlScript.peekLineAsString();
 			SqlScriptLine sqlScriptLine=sqlScript.peekLine();

@@ -155,6 +155,19 @@ public class StatementTokenizer {
 			return false;
 		}
 	}
+
+	public boolean consumeCommandIgnoreCaseAndSpace(String command) {
+		if(startsWithIgnoreCase(command)) {
+			for(int i=0;i<command.length();i++) {
+				charactersOfStatement.get(0).setCategory(Category.COMMAND);
+				charactersOfStatement.remove(0);
+			}
+			stripWhiteSpaceLeft();
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
 	public boolean startsWithIgnoreCase(String s) {
 		s=s.toLowerCase();

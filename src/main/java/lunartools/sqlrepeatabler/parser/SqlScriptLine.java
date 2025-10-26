@@ -46,6 +46,52 @@ public class SqlScriptLine {
 		}
 		return true;
 	}
+
+	public StringBuilder toHtml() {
+		StringBuilder sbResult=new StringBuilder();
+		StringBuilder sbFragement=new StringBuilder();
+		Category category=Category.UNCATEGORIZED;
+		for(int i=0;i<sqlCharacters.size();i++) {
+			SqlCharacter sqlCharacter=sqlCharacters.get(i);
+			if(category!=sqlCharacter.getCategory()) {
+				appendHtmlFragment(category,sbResult,sbFragement);
+				sbFragement=new StringBuilder();
+				category=sqlCharacter.getCategory();
+			}
+			char c=sqlCharacter.getChar();
+			if(c==' ') {
+				sbFragement.append("&nbsp;");
+			}else if(c=='\t') {
+				sbFragement.append("&nbsp;&nbsp;&nbsp;&nbsp;");
+			}else {
+				sbFragement.append(c);
+			}
+		}
+		appendHtmlFragment(category,sbResult,sbFragement);
+		return sbResult;
+	}
+
+	private void appendHtmlFragment(Category category, StringBuilder sbHtml, StringBuilder sbFragement) {
+		sbHtml.append("<span class=\""+category.toString()+"\">");
+		sbHtml.append(sbFragement);
+		sbHtml.append("</span>");
+//		switch(category) {
+//		case UNCATEGORIZED:
+//			sbHtml.append("<span class=\""+category.toString()+"\">");
+//			sbHtml.append(sbFragement);
+//			sbHtml.append("</span>");
+//			break;
+//		case STATEMENT:
+//			sbHtml.append("<span class=\""+category.toString()+"\">");
+//			sbHtml.append(sbFragement);
+//			sbHtml.append("</span>");
+//			break;
+//		default:
+//			sbHtml.append("<span class=\""+category.toString()+"\">");
+//			sbHtml.append(sbFragement);
+//			sbHtml.append("</span>");
+//		}
+	}
 	
 	@Override
 	public String toString() {
@@ -55,4 +101,5 @@ public class SqlScriptLine {
 		}
 		return sb.toString();
 	}
+	
 }

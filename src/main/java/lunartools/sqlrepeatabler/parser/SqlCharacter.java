@@ -6,6 +6,7 @@ public class SqlCharacter {
 	private int row;
 	private int column;
 	private int indexInFile;
+	private Category category=Category.UNCATEGORIZED;
 	
 	public SqlCharacter(char c, int row, int column, int indexInFile) {
 		this.c=c;
@@ -41,4 +42,13 @@ public class SqlCharacter {
 	public boolean isSemicolon() {
 		return c==';';
 	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+	
 }

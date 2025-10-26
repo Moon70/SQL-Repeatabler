@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import lunartools.ChangeListenerSupport;
 import lunartools.SwingTools;
+import lunartools.sqlrepeatabler.parser.SqlScript;
 
 public class SqlRepeatablerModel implements ChangeListenerSupport{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerModel.class);
@@ -27,6 +28,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 	private Rectangle frameBounds=new Rectangle(0,0,DEFAULT_FRAME_WIDTH,DEFAULT_FRAME_HEIGHT);
 
 	private ArrayList<File> sqlInputFiles=new ArrayList<>();
+	private ArrayList<SqlScript> sqlScripts=new ArrayList<>();
 	private ArrayList<StringBuffer> sqlConvertedScripts=new ArrayList<>();
 
 	public static String getProgramVersion() {
@@ -77,6 +79,14 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 			return new StringBuffer();
 		}
 		return sqlConvertedScripts.get(index);
+	}
+	
+	public SqlScript getSqlScript(int index) {
+		return sqlScripts.get(index);
+	}
+	
+	public void setSqlScripts(ArrayList<SqlScript> sqlScripts) {
+		this.sqlScripts=sqlScripts;
 	}
 
 	public void setConvertedSqlScripts(ArrayList<StringBuffer> sqlConvertedScripts) {
