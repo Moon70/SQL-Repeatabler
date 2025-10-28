@@ -75,22 +75,12 @@ public class SqlScriptLine {
 		sbHtml.append("<span class=\""+category.toString()+"\">");
 		sbHtml.append(sbFragement);
 		sbHtml.append("</span>");
-//		switch(category) {
-//		case UNCATEGORIZED:
-//			sbHtml.append("<span class=\""+category.toString()+"\">");
-//			sbHtml.append(sbFragement);
-//			sbHtml.append("</span>");
-//			break;
-//		case STATEMENT:
-//			sbHtml.append("<span class=\""+category.toString()+"\">");
-//			sbHtml.append(sbFragement);
-//			sbHtml.append("</span>");
-//			break;
-//		default:
-//			sbHtml.append("<span class=\""+category.toString()+"\">");
-//			sbHtml.append(sbFragement);
-//			sbHtml.append("</span>");
-//		}
+	}
+	
+	public void setCategory(Category category) {
+        for(SqlCharacter sqlCharacter:sqlCharacters) {
+            sqlCharacter.setCategory(category);
+        }
 	}
 	
 	@Override

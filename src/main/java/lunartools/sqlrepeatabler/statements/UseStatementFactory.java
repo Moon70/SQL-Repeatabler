@@ -3,6 +3,7 @@ package lunartools.sqlrepeatabler.statements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 
@@ -26,6 +27,7 @@ public class UseStatementFactory extends StatementFactory{
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
         logger.warn("Ignoring statement "+UseStatement.COMMAND);
+        statementTokenizer.nextToken().setCategory(Category.STATEMENT);;
 
 		return new UseStatement();
 	}

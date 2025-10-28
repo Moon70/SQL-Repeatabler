@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -28,8 +29,8 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
 		
-		statementTokenizer.nextToken();//skip 'SET' token	
-		statementTokenizer.nextToken();//skip 'IDENTITY_INSERT' token
+		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'SET' token	
+		statementTokenizer.nextToken().setCategory(Category.COMMAND);//skip 'IDENTITY_INSERT' token
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
@@ -39,7 +40,7 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 			statementTokenizer.deleteCharAt(statementTokenizer.length()-1);
 		}
 		Token parameters=statementTokenizer.toToken();
-
+		parameters.setCategory(Category.PARAMETER);
 		return new SetIdentityInsertStatement(tableName,parameters);
 	}
 

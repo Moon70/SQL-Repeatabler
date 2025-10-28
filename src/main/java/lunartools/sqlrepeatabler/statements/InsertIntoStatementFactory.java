@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -30,14 +31,16 @@ public class InsertIntoStatementFactory extends StatementFactory{
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
 
-		statementTokenizer.nextToken();//skip 'INSERT' token	
-		statementTokenizer.nextToken();//skip 'INTO' token
+		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'INSERT' token	
+		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'INTO' token
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
 
 		Token tokenColumnNames=statementTokenizer.nextToken('(',')');
-
+		tokenColumnNames.setCategory(Category.COLUMN);
+		
+		
 		if(!statementTokenizer.consumePrefixIgnoreCaseAndSpace("VALUES")) {
 			throw new Exception("Keyword VALUES not found");
 		}
@@ -48,6 +51,7 @@ public class InsertIntoStatementFactory extends StatementFactory{
 				statementTokenizer.deleteCharAt(0);
 			}
 			Token tokenValues=statementTokenizer.nextToken('(', ')');
+			tokenValues.setCategory(Category.COLUMNPARAMETER);
 			columnValuesTokensList.add(tokenValues);
 		}
 

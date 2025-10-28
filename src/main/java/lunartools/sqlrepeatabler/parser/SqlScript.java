@@ -103,12 +103,19 @@ public class SqlScript {
 		return sqlCharacterLines.get(index);
 	}
 
-	public String readLine() {
-		if(index==sqlCharacterLines.size()) {
-			return null;
-		}
-		return sqlCharacterLines.get(index++).toString();
-	}
+    public String readLineAsString() {
+        if(index==sqlCharacterLines.size()) {
+            return null;
+        }
+        return sqlCharacterLines.get(index++).toString();
+    }
+
+    public SqlScriptLine readLine() {
+        if(index==sqlCharacterLines.size()) {
+            return null;
+        }
+        return sqlCharacterLines.get(index++);
+    }
 
 	public SqlCharacter getFirstCharacterOfCurrentLine() {
 		if(index==sqlCharacterLines.size()) {

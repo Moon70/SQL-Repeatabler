@@ -28,7 +28,7 @@ public class IOPanel extends JPanel{
 	private final SqlRepeatablerModel model;
 	private final int sqlFileIndex;
 
-	private static final boolean TEST=false;
+	private static final boolean TEST=true;
 	
 	public IOPanel(SqlRepeatablerModel model, int sqlFileIndex) {
 		this.model=model;

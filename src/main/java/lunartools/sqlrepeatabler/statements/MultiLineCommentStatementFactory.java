@@ -3,7 +3,9 @@ package lunartools.sqlrepeatabler.statements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.parser.SqlScriptLine;
 
 public class MultiLineCommentStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(MultiLineCommentStatementFactory.class);
@@ -15,7 +17,8 @@ public class MultiLineCommentStatementFactory extends StatementFactory{
 
 	@Override
 	public Statement createStatement(SqlScript sqlScript) throws Exception{
-		String line=sqlScript.readLine();
+        SqlScriptLine sqlScriptLine=sqlScript.readLine();
+		String line=sqlScriptLine.toString();
 		if(!match(line)) {
 			throw new Exception("Illegal factory call");
 		}
@@ -23,12 +26,15 @@ public class MultiLineCommentStatementFactory extends StatementFactory{
 			logger.trace("parsing statement");
 		}
 
+		sqlScriptLine.setCategory(Category.COMMENT);
 		logger.info("statement: comment");
 		int endIndex=sqlScript.getIndex();
 		int startIndex=endIndex-1;
 		if(!line.endsWith("*/")) {
 			while(true) {
-				line=sqlScript.readLine();
+			    sqlScriptLine=sqlScript.readLine();
+		        sqlScriptLine.setCategory(Category.COMMENT);
+			    line=sqlScriptLine.toString();
 				
 				if(line==null) {
 					throw new Exception("Unexpected end of data");

@@ -50,7 +50,7 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, Void> {
 			model.setSqlScripts(sqlScripts);
 			model.setConvertedSqlScripts(convertedSqlScripts);
 		} catch (Exception e) {
-			logger.error("buuu",e);
+			logger.error("error setting converted data",e);
 			throw e;
 		}
 	}

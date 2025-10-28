@@ -73,10 +73,10 @@ public class Token {
 		return sb.toString();
 	}
 
-	public void categorize(Category category) {
+	public void setCategory(Category category) {
 		for(SqlCharacter sqlCharacter:charactersOfToken) {
 			sqlCharacter.setCategory(category);
 		}
-		
 	}
+	
 }

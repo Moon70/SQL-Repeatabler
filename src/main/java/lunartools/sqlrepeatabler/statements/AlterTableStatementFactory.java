@@ -39,10 +39,8 @@ public class AlterTableStatementFactory extends StatementFactory{
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
 
-		Token token=statementTokenizer.nextToken();//skip 'ALTER' token	
-		token.categorize(Category.STATEMENT);
-		token=statementTokenizer.nextToken();//skip 'TABLE' token
-		token.categorize(Category.STATEMENT);
+		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'ALTER' token	
+		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'TABLE' token
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
@@ -113,9 +111,9 @@ public class AlterTableStatementFactory extends StatementFactory{
 					logger.warn("Script is most likely in MySql format. Ignoring COLUMN keyword which is not allowed in T_SQL");
 				}
 				Token tokenColumName=statementTokenizer.nextToken();
-				tokenColumName.categorize(Category.COLUMN);
+				tokenColumName.setCategory(Category.COLUMN);
 				Token tokenColumParameter=statementTokenizer.nextTokenUntil(',');
-				tokenColumParameter.categorize(Category.COLUMNPARAMETER);
+				tokenColumParameter.setCategory(Category.COLUMNPARAMETER);
 				
 				Segment columnElement=new AddColumnSegment("ADD",tokenColumName,tokenColumParameter);
 				columnElements.add(columnElement);

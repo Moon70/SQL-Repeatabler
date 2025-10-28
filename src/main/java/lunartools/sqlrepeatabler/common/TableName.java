@@ -34,20 +34,20 @@ public class TableName {
 			SqlCharacter character=statementTokenizer.charAt(0);
 			if(character.getChar()=='[') {
 				Token token=createBracketSegmentByConsuming(statementTokenizer);
-				token.categorize(Category.TABLE);
+				token.setCategory(Category.TABLE);
 				tokens.add(token);
 			}else if(character.getChar()=='"') {
 				Token token=createQuoteSegmentByConsuming(statementTokenizer);
-				//token.categorize(Category.TABLE);
+				token.setCategory(Category.TABLE);
 				tokens.add(token);
 			}else if(character.getChar()=='`') {
 				mySql=true;
 				Token token=createBacktickSegmentByConsuming(statementTokenizer);
-				//token.categorize(Category.TABLE);
+				token.setCategory(Category.TABLE);
 				tokens.add(token);
 			}else {
 				Token token=createSpaceSegmentByConsuming(statementTokenizer);
-				//token.categorize(Category.TABLE);
+				token.setCategory(Category.TABLE);
 				tokens.add(token);
 			}
 			statementTokenizer.stripWhiteSpaceLeft();

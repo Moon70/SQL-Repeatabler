@@ -32,10 +32,8 @@ public class CreateTableStatementFactory extends StatementFactory{
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
 
-		Token token=statementTokenizer.nextToken();//skip 'CREATE' token	
-		token.categorize(Category.STATEMENT);
-		token=statementTokenizer.nextToken();//skip 'TABLE' token
-		token.categorize(Category.STATEMENT);
+		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'CREATE' token	
+		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'TABLE' token
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());

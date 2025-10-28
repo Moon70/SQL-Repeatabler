@@ -6,7 +6,9 @@ public enum Category {
 	TABLE("blue","bold"),
 	COMMAND("orange","bold"),
 	COLUMN("purple","bold"),
-	COLUMNPARAMETER("#555555",null);
+	COLUMNPARAMETER("#555555",null),
+	COMMENT("green",null),
+	PARAMETER("#643939","bold");
 	
 	private final String color;
 	private final String fontWeight;
