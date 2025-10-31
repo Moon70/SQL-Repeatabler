@@ -2,10 +2,10 @@ package lunartools.sqlrepeatabler.parser;
 
 import java.util.ArrayList;
 
-public class SqlScriptLine {
+public class SqlString {
 	private ArrayList<SqlCharacter> sqlCharacters=new ArrayList<>();
 
-    public static SqlScriptLine createScriptLineFromString(String string, Category category, Token... tokens){
+    public static SqlString createSqlStringFromString(String string, Category category, Token... tokens){
         String[] stringFragments=string.split("%s",-1);
         if(stringFragments.length!=tokens.length+1) {
             throw new IllegalArgumentException("String fragment count ("+stringFragments.length+") does not match token count ("+tokens.length+")");
@@ -24,10 +24,10 @@ public class SqlScriptLine {
             }
             
         }
-        return  new SqlScriptLine(characters);
+        return  new SqlString(characters);
     }
     
-	public SqlScriptLine(ArrayList<SqlCharacter> sqlCharacters) {
+	public SqlString(ArrayList<SqlCharacter> sqlCharacters) {
 		this.sqlCharacters=sqlCharacters;
 	}
 	
@@ -42,7 +42,7 @@ public class SqlScriptLine {
 		return sqlCharacters;
 	}
 	
-	public boolean endsWithSemicolon() {
+	public boolean endsWithSemicolonIgnoreWhiteSpace() {
 		for(int i=sqlCharacters.size()-1;i>=0;i--) {
 			SqlCharacter sqlCharacter=sqlCharacters.get(i);
 			if(sqlCharacter.isSemicolon()) {
@@ -107,6 +107,10 @@ public class SqlScriptLine {
 	
 	public void append(ArrayList<SqlCharacter> characters) {
 	    sqlCharacters.addAll(characters);
+	}
+	
+	public void append(SqlCharacter sqlCharacter) {
+        sqlCharacters.add(sqlCharacter);
 	}
 	
 	@Override

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.parser.SqlScriptLine;
+import lunartools.sqlrepeatabler.parser.SqlString;
 
 public class MultiLineCommentStatement implements Statement{
 	public static final String COMMAND="/*";
@@ -27,7 +27,7 @@ public class MultiLineCommentStatement implements Statement{
 	}
 
     @Override
-    public void toSqlCharacters(ArrayList<SqlScriptLine> sqlCharacterLines) throws Exception {
+    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
         // TODO Auto-generated method stub
         
     }

@@ -17,7 +17,7 @@ public class SqlParserException extends Exception{
         if(character!=null) {
             this.row=character.getRow()+1;
             this.column=character.getColumn()+1;
-            this.index=character.getIndexInFile()+1;
+            this.index=character.getIndex()+1;
         }
     }
 

@@ -3,7 +3,7 @@ package lunartools.sqlrepeatabler.statements;
 import java.util.ArrayList;
 
 import lunartools.sqlrepeatabler.parser.SqlParser;
-import lunartools.sqlrepeatabler.parser.SqlScriptLine;
+import lunartools.sqlrepeatabler.parser.SqlString;
 
 public class WhitespaceLineStatement implements Statement{
 	private int numberOfEmptyLines;
@@ -19,7 +19,7 @@ public class WhitespaceLineStatement implements Statement{
 	}
 
     @Override
-    public void toSqlCharacters(ArrayList<SqlScriptLine> sqlCharacterLines) throws Exception {
+    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
         // TODO Auto-generated method stub
         
     }

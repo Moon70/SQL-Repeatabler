@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.parser.SqlScriptLine;
+import lunartools.sqlrepeatabler.parser.SqlString;
 
 public class OneLineCommentStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(OneLineCommentStatementFactory.class);
@@ -17,7 +17,7 @@ public class OneLineCommentStatementFactory extends StatementFactory{
 
 	@Override
 	public Statement createStatement(SqlScript sqlScript) throws Exception{
-	    SqlScriptLine sqlScriptLine=sqlScript.readLine();
+	    SqlString sqlScriptLine=sqlScript.readLine();
 		if(!match(sqlScriptLine.toString())) {
 			throw new Exception("Illegal factory call");
 		}

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.SqlParser;
-import lunartools.sqlrepeatabler.parser.SqlScriptLine;
+import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
 import lunartools.sqlrepeatabler.segments.Segment;
 
@@ -59,7 +59,7 @@ public class AlterTableStatement implements Statement{
 	}
 
     @Override
-    public void toSqlCharacters(ArrayList<SqlScriptLine> sqlCharacterLines) throws Exception {
+    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
         // TODO Auto-generated method stub
         
     }

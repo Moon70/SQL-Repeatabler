@@ -9,7 +9,7 @@ import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlParser;
-import lunartools.sqlrepeatabler.parser.SqlScriptLine;
+import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.segments.TableSegment;
 
 public class CreateTableStatement implements Statement{
@@ -52,25 +52,25 @@ public class CreateTableStatement implements Statement{
     }
 
     @Override
-    public void toSqlCharacters(ArrayList<SqlScriptLine> sqlCharacterLines) throws Exception {
-        SqlScriptLine line=SqlScriptLine.createScriptLineFromString("IF OBJECT_ID(N'%s', 'U') IS NULL", Category.INSERTED, tableName.getFullNameWithoutDelimiter());
+    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
+        SqlString line=SqlString.createSqlStringFromString("IF OBJECT_ID(N'%s', 'U') IS NULL", Category.INSERTED, tableName.getFullNameWithoutDelimiter());
         sqlCharacterLines.add(line);
-        line=SqlScriptLine.createScriptLineFromString("BEGIN", Category.INSERTED);
+        line=SqlString.createSqlStringFromString("BEGIN", Category.INSERTED);
         sqlCharacterLines.add(line);
-        line=SqlScriptLine.createScriptLineFromString("\tCREATE TABLE %s (", Category.INSERTED,tableName.getFullName());
+        line=SqlString.createSqlStringFromString("\tCREATE TABLE %s (", Category.INSERTED,tableName.getFullName());
         sqlCharacterLines.add(line);
 
         for(int i=0;i<tableElements.size();i++) {
-            line=SqlScriptLine.createScriptLineFromString("\t\t%s", Category.INSERTED,tableElements.get(i).getToken());
+            line=SqlString.createSqlStringFromString("\t\t%s", Category.INSERTED,tableElements.get(i).getToken());
             if(i<tableElements.size()-1) {
-                line.append(SqlCharacter.createCharactersFromString(",", Category.INSERTED));
+                line.append(new SqlCharacter(',',Category.INSERTED));
             }
             sqlCharacterLines.add(line);
         }
 
-        line=SqlScriptLine.createScriptLineFromString("\t);", Category.INSERTED);
+        line=SqlString.createSqlStringFromString("\t);", Category.INSERTED);
         sqlCharacterLines.add(line);
-        line=SqlScriptLine.createScriptLineFromString("END;", Category.INSERTED);
+        line=SqlString.createSqlStringFromString("END;", Category.INSERTED);
         sqlCharacterLines.add(line);
 
         //sb.append(String.format("IF OBJECT_ID(N'%s', 'U') IS NULL", tableName.getFullNameWithoutDelimiter())).append(SqlParser.CRLF);

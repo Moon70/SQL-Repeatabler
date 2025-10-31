@@ -42,7 +42,7 @@ public class SqlParser {
 
 	public static StringBuilder parse(SqlScript sqlScript) throws Exception {
 		StringBuilder result=new StringBuilder();
-		ArrayList<SqlScriptLine> resultCharacters=new ArrayList<>();
+		ArrayList<SqlString> resultCharacters=new ArrayList<>();
 		ArrayList<StatementFactory> sqlSegmentFactories=new ArrayList<>();
 		ArrayList<Statement> sqlSegments=new ArrayList<>();
 		sqlSegmentFactories.add(new AlterTableStatementFactory());
@@ -57,7 +57,7 @@ public class SqlParser {
 
 		while(sqlScript.hasCurrentLine()) {
 			//String line=sqlScript.peekLineAsString();
-			SqlScriptLine sqlScriptLine=sqlScript.peekLine();
+			SqlString sqlScriptLine=sqlScript.peekLine();
 			
 			logger.debug("processing line "+(sqlScript.getIndex()+1)+"\t:"+sqlScriptLine.toString());
 			Statement statement=null;
@@ -67,7 +67,7 @@ public class SqlParser {
 					sqlSegments.add(statement);
 					System.out.println("##################################################");
 					StringBuilder sb=new StringBuilder();
-					ArrayList<SqlScriptLine> tempCharacters=new ArrayList<>();
+					ArrayList<SqlString> tempCharacters=new ArrayList<>();
 					statement.toSql(sb);
 					statement.toSqlCharacters(tempCharacters);
 					System.out.print(sb.toString());

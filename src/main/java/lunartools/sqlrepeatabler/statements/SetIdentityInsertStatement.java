@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
-import lunartools.sqlrepeatabler.parser.SqlScriptLine;
+import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public class SetIdentityInsertStatement implements Statement{
@@ -26,7 +26,7 @@ public class SetIdentityInsertStatement implements Statement{
 	}
 
     @Override
-    public void toSqlCharacters(ArrayList<SqlScriptLine> sqlCharacterLines) throws Exception {
+    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
         // TODO Auto-generated method stub
         
     }

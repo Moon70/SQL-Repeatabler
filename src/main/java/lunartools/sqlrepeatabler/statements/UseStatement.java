@@ -2,7 +2,7 @@ package lunartools.sqlrepeatabler.statements;
 
 import java.util.ArrayList;
 
-import lunartools.sqlrepeatabler.parser.SqlScriptLine;
+import lunartools.sqlrepeatabler.parser.SqlString;
 
 public class UseStatement implements Statement{
 	public static final String COMMAND="USE";
@@ -13,7 +13,7 @@ public class UseStatement implements Statement{
 	public void toSql(StringBuilder sb) throws Exception {}
 
     @Override
-    public void toSqlCharacters(ArrayList<SqlScriptLine> sqlCharacterLines) throws Exception {
+    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
         // TODO Auto-generated method stub
         
     }

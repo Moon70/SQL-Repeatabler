@@ -10,8 +10,11 @@ public class SqlCharacter {
 	private int indexInFile;
 	private Category category=Category.UNCATEGORIZED;
 	
-    //public static ArrayList<SqlCharacter> createCharactersFromString(String s, Category category, ){
-    public static ArrayList<SqlCharacter> createCharactersFromString(String string, Category category, Token... tokens){
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
+	public static ArrayList<SqlCharacter> createCharactersFromString(String string, Category category, Token... tokens){
         String[] stringFragments=string.split("%s",-1);
         if(stringFragments.length!=tokens.length+1) {
             throw new IllegalArgumentException("String fragment count ("+stringFragments.length+") does not match token count ("+tokens.length+")");
@@ -39,20 +42,33 @@ public class SqlCharacter {
 		this.column=column;
 		this.indexInFile=indexInFile;
 	}
+    
+    public SqlCharacter(char c, int row, int column, int indexInFile,Category category) {
+        this.c=c;
+        this.row=row;
+        this.column=column;
+        this.indexInFile=indexInFile;
+        this.category=category;
+    }
+    
+    public SqlCharacter(char c,Category category) {
+        this(c,-1,-1,-1);
+        this.category=category;
+    }
 	
 	public char getChar() {
 		return c;
 	}
 
-	public int getColumn() {
-		return column;
-	}
-
 	public int getRow() {
 		return row;
 	}
+	
+	public int getColumn() {
+	    return column;
+	}
 
-	public int getIndexInFile() {
+	public int getIndex() {
 		return indexInFile;
 	}
 

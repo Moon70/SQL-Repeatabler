@@ -7,8 +7,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 public class SqlScript {
-	private ArrayList<SqlScriptLine> sqlCharacterLinesOriginal=new ArrayList<>();
-	private ArrayList<SqlScriptLine> sqlCharacterLines;
+	private ArrayList<SqlString> sqlCharacterLinesOriginal=new ArrayList<>();
+	private ArrayList<SqlString> sqlCharacterLines;
 	private int index;
 
 	public static SqlScript createInstance(StringBuffer stringBuffer) throws Exception{
@@ -49,12 +49,12 @@ public class SqlScript {
 			if(c==0x0a) {//LF
 				lineIndex++;
 				column=0;
-				sqlCharacterLinesOriginal.add(new SqlScriptLine(sqlCharacters));
+				sqlCharacterLinesOriginal.add(new SqlString(sqlCharacters));
 				sqlCharacters=new ArrayList<>();
 			}else if(c==0x0d) {//CR
 				lineIndex++;
 				column=0;
-				sqlCharacterLinesOriginal.add(new SqlScriptLine(sqlCharacters));
+				sqlCharacterLinesOriginal.add(new SqlString(sqlCharacters));
 				sqlCharacters=new ArrayList<>();
 				if(i<scriptAsIntegerArray.size()-1 && (scriptAsIntegerArray.get(i+1))==0x0a){
 					characterIndex++;
@@ -65,8 +65,8 @@ public class SqlScript {
 				sqlCharacters.add(sqlCharacter);
 			}
 		}
-		sqlCharacterLinesOriginal.add(new SqlScriptLine(sqlCharacters));
-		sqlCharacterLines=(ArrayList<SqlScriptLine>)sqlCharacterLinesOriginal.clone();
+		sqlCharacterLinesOriginal.add(new SqlString(sqlCharacters));
+		sqlCharacterLines=(ArrayList<SqlString>)sqlCharacterLinesOriginal.clone();
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class SqlScript {
 	/**
 	 * @return Current line
 	 */
-	public SqlScriptLine peekLine() {
+	public SqlString peekLine() {
 		if(index==sqlCharacterLines.size()) {
 			return null;
 		}
@@ -110,7 +110,7 @@ public class SqlScript {
         return sqlCharacterLines.get(index++).toString();
     }
 
-    public SqlScriptLine readLine() {
+    public SqlString readLine() {
         if(index==sqlCharacterLines.size()) {
             return null;
         }
@@ -121,7 +121,7 @@ public class SqlScript {
 		if(index==sqlCharacterLines.size()) {
 			return null;
 		}
-		SqlScriptLine sqlScriptLine=sqlCharacterLines.get(index);
+		SqlString sqlScriptLine=sqlCharacterLines.get(index);
 		return sqlScriptLine.getFirstCharacter();
 	}
 
@@ -130,14 +130,14 @@ public class SqlScript {
 	 */
 	public String readNextLineAsString() {
 		index++;
-		SqlScriptLine sqlScriptLine=peekLine();
+		SqlString sqlScriptLine=peekLine();
 		if(sqlScriptLine==null) {
 			return null;
 		}
 		return sqlScriptLine.toString();
 	}
 
-	private SqlScriptLine readLineCharacters() {
+	private SqlString readLineCharacters() {
 		if(index==sqlCharacterLines.size()) {
 			return null;
 		}
@@ -148,7 +148,7 @@ public class SqlScript {
 		SqlCharacter sqlCharacterInsertedSpace=new SqlCharacter(' ',-1,-1,-1);
 		ArrayList<SqlCharacter> charactersOfStatement=new ArrayList<>();
 		while(true) {
-			SqlScriptLine sqlScriptLine=readLineCharacters();
+			SqlString sqlScriptLine=readLineCharacters();
 			if(sqlScriptLine==null) {
 				throw new EOFException("Unexpected end of script");
 			}
@@ -156,7 +156,7 @@ public class SqlScript {
 				charactersOfStatement.add(sqlCharacterInsertedSpace);
 			}
 			charactersOfStatement.addAll(sqlScriptLine.getCharacters());
-			if(sqlScriptLine.endsWithSemicolon()) {
+			if(sqlScriptLine.endsWithSemicolonIgnoreWhiteSpace()) {
 				break;
 			}
 		}
