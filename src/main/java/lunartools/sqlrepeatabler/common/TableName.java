@@ -261,7 +261,7 @@ public class TableName {
         return sb.toString();
     }
 
-	public String getFullSchemaAndName() {
+	public String getFullSchemaAndNameAsString() {
 		StringBuffer sb=new StringBuffer();
 		if(schemaName!=null) {
 			sb.append(schemaName);
@@ -270,6 +270,17 @@ public class TableName {
 		sb.append(tableName);
 		return sb.toString();
 	}
+
+    public Token getFullSchemaAndName() {
+        Token tokenFullname=getSchemaName();
+        if(tokenFullname==null) {
+            tokenFullname=getTableName();
+        }else {
+            tokenFullname.append(new SqlCharacter('.',-1,-1,-1));
+            tokenFullname.append(getTableName());
+        }
+        return tokenFullname;
+    }
 
     public Token getFullNameWithoutDelimiter() {
         Token tokenFullname=getDatabaseNameWithoutDelimiter();

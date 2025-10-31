@@ -13,9 +13,6 @@ public class UseStatement implements Statement{
 	public void toSql(StringBuilder sb) throws Exception {}
 
     @Override
-    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
-        // TODO Auto-generated method stub
-        
-    }
+    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {}
 
 }

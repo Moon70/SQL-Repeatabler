@@ -3,10 +3,17 @@ package lunartools.sqlrepeatabler.parser;
 import java.util.ArrayList;
 
 public class SqlString {
+    public static final SqlString EMPTY_LINE=SqlString.createSqlStringFromString("",Category.UNCATEGORIZED);
 	private ArrayList<SqlCharacter> sqlCharacters=new ArrayList<>();
 
     public static SqlString createSqlStringFromString(String string, Category category, Token... tokens){
-        String[] stringFragments=string.split("%s",-1);
+        String[] stringFragments;
+        if(category==Category.COMMENT) {
+            stringFragments=new String[1];
+            stringFragments[0]=string;
+        }else {
+            stringFragments=string.split("%s",-1);
+        }
         if(stringFragments.length!=tokens.length+1) {
             throw new IllegalArgumentException("String fragment count ("+stringFragments.length+") does not match token count ("+tokens.length+")");
         }

@@ -2,6 +2,7 @@ package lunartools.sqlrepeatabler.statements;
 
 import java.util.ArrayList;
 
+import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.SqlString;
@@ -28,8 +29,10 @@ public class OneLineCommentStatement implements Statement{
 
     @Override
     public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
-        // TODO Auto-generated method stub
-        
+        for(int i=startIndex;i<endIndex;i++) {
+            SqlString sqlString=SqlString.createSqlStringFromString(sqlScript.getLineAt(i),Category.COMMENT);
+            sqlCharacterLines.add(sqlString);
+        }
     }
 
 }

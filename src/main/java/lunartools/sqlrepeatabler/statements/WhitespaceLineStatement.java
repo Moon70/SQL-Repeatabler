@@ -20,8 +20,9 @@ public class WhitespaceLineStatement implements Statement{
 
     @Override
     public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
-        // TODO Auto-generated method stub
-        
+        for(int i=0;i<numberOfEmptyLines;i++) {
+            sqlCharacterLines.add(SqlString.EMPTY_LINE);
+        }
     }
 
 }

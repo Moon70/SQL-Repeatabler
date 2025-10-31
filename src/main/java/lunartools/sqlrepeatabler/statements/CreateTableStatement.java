@@ -47,10 +47,6 @@ public class CreateTableStatement implements Statement{
         sb.append("END;").append(SqlParser.CRLF);
     }
 
-    public boolean isMySql() {
-        return mySql;
-    }
-
     @Override
     public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
         SqlString line=SqlString.createSqlStringFromString("IF OBJECT_ID(N'%s', 'U') IS NULL", Category.INSERTED, tableName.getFullNameWithoutDelimiter());
@@ -91,6 +87,10 @@ public class CreateTableStatement implements Statement{
         //
         //sb.append("\t);"+SqlParser.CRLF);
         //sb.append("END;").append(SqlParser.CRLF);
+    }
+    
+    public boolean isMySql() {
+        return mySql;
     }
 
 }

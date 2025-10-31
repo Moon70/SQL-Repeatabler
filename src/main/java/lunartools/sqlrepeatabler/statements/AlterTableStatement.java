@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
@@ -54,14 +55,13 @@ public class AlterTableStatement implements Statement{
 		}
 	}
 
-	public boolean isMySql() {
-		return mySql;
-	}
-
     @Override
     public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
-        // TODO Auto-generated method stub
         
+    }
+    
+    public boolean isMySql() {
+        return mySql;
     }
 
 }
