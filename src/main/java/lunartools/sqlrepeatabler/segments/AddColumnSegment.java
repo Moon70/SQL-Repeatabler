@@ -17,9 +17,9 @@ public class AddColumnSegment extends Segment{
 	}
 
 	public void toSql(StringBuilder sb,TableName tableName,boolean mySql) throws Exception {
-		sb.append(String.format("IF COL_LENGTH ('%s','%s') IS NULL",tableName.getFullNameWithoutDelimiter(),getColumnNameWithoutDelimiters())).append(SqlParser.CRLF);
+		sb.append(String.format("IF COL_LENGTH ('%s','%s') IS NULL",tableName.getFullNameWithoutDelimiterAsString(),getColumnNameWithoutDelimiters())).append(SqlParser.CRLF);
 		sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
-		sb.append(String.format("\tALTER TABLE %s",tableName.getFullName())).append(SqlParser.CRLF);
+		sb.append(String.format("\tALTER TABLE %s",tableName.getFullNameAsString())).append(SqlParser.CRLF);
 		sb.append(String.format("\t\t%s %s %s;",action,name,parameters)).append(SqlParser.CRLF);
 		sb.append(String.format("END;")).append(SqlParser.CRLF);
 	}

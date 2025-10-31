@@ -1,9 +1,12 @@
 package lunartools.sqlrepeatabler.statements;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.parser.SqlParser;
+import lunartools.sqlrepeatabler.parser.SqlScriptLine;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public class SpRenameStatement implements Statement{
@@ -36,5 +39,11 @@ public class SpRenameStatement implements Statement{
 			return s;
 		}
 	}
+
+    @Override
+    public void toSqlCharacters(ArrayList<SqlScriptLine> sqlCharacterLines) throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

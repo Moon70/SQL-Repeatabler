@@ -19,7 +19,7 @@ public class AddUniqueConstraintSegment extends Segment{
 	public void toSql(StringBuilder sb,TableName tableName,boolean mySql) throws Exception {
 		sb.append(String.format("IF OBJECT_ID('%s','UQ') IS NULL", stripDelimiters(name.toString()))).append(SqlParser.CRLF);
 		sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
-		sb.append(String.format("\tALTER TABLE %s",tableName.getFullName())).append(SqlParser.CRLF);
+		sb.append(String.format("\tALTER TABLE %s",tableName.getFullNameAsString())).append(SqlParser.CRLF);
 		sb.append(String.format("\t\tADD CONSTRAINT %s unique %s;",name,referencesColumn)).append(SqlParser.CRLF);
 		sb.append("END;").append(SqlParser.CRLF);
 	}

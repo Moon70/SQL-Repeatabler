@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.SqlParser;
+import lunartools.sqlrepeatabler.parser.SqlScriptLine;
 import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
 import lunartools.sqlrepeatabler.segments.Segment;
 
@@ -38,7 +39,7 @@ public class AlterTableStatement implements Statement{
 			}
 		}
 		if(hasAlterColumnAction) {
-			sb.append(String.format("ALTER TABLE %s",tableName.getFullName())).append(SqlParser.CRLF);
+			sb.append(String.format("ALTER TABLE %s",tableName.getFullNameAsString())).append(SqlParser.CRLF);
 			sb.append(sbTemp).append(';').append(SqlParser.CRLF);
 		}
 
@@ -56,5 +57,11 @@ public class AlterTableStatement implements Statement{
 	public boolean isMySql() {
 		return mySql;
 	}
+
+    @Override
+    public void toSqlCharacters(ArrayList<SqlScriptLine> sqlCharacterLines) throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

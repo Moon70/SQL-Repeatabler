@@ -5,6 +5,28 @@ import java.util.ArrayList;
 public class SqlScriptLine {
 	private ArrayList<SqlCharacter> sqlCharacters=new ArrayList<>();
 
+    public static SqlScriptLine createScriptLineFromString(String string, Category category, Token... tokens){
+        String[] stringFragments=string.split("%s",-1);
+        if(stringFragments.length!=tokens.length+1) {
+            throw new IllegalArgumentException("String fragment count ("+stringFragments.length+") does not match token count ("+tokens.length+")");
+        }
+        
+        ArrayList<SqlCharacter> characters=new ArrayList<>();
+        for(int i=0;i<stringFragments.length;i++) {
+            String s=stringFragments[i];
+            for(int k=0;k<s.length();k++) {
+                SqlCharacter sqlCharacter=new SqlCharacter(s.charAt(k),-1,-1,-1);
+                sqlCharacter.setCategory(category);
+                characters.add(sqlCharacter);
+            }
+            if(i<stringFragments.length-1) {
+                characters.addAll(tokens[i].getCharacters());
+            }
+            
+        }
+        return  new SqlScriptLine(characters);
+    }
+    
 	public SqlScriptLine(ArrayList<SqlCharacter> sqlCharacters) {
 		this.sqlCharacters=sqlCharacters;
 	}
@@ -81,6 +103,10 @@ public class SqlScriptLine {
         for(SqlCharacter sqlCharacter:sqlCharacters) {
             sqlCharacter.setCategory(category);
         }
+	}
+	
+	public void append(ArrayList<SqlCharacter> characters) {
+	    sqlCharacters.addAll(characters);
 	}
 	
 	@Override

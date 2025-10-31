@@ -42,6 +42,7 @@ public class SqlParser {
 
 	public static StringBuilder parse(SqlScript sqlScript) throws Exception {
 		StringBuilder result=new StringBuilder();
+		ArrayList<SqlScriptLine> resultCharacters=new ArrayList<>();
 		ArrayList<StatementFactory> sqlSegmentFactories=new ArrayList<>();
 		ArrayList<Statement> sqlSegments=new ArrayList<>();
 		sqlSegmentFactories.add(new AlterTableStatementFactory());
@@ -64,12 +65,19 @@ public class SqlParser {
 				if(statementFactory.match(sqlScriptLine.toString())) {
 					statement=statementFactory.createStatement(sqlScript);
 					sqlSegments.add(statement);
-					//System.out.println("##################################################");
+					System.out.println("##################################################");
 					StringBuilder sb=new StringBuilder();
+					ArrayList<SqlScriptLine> tempCharacters=new ArrayList<>();
 					statement.toSql(sb);
-					//System.out.print(sb.toString());
+					statement.toSqlCharacters(tempCharacters);
+					System.out.print(sb.toString());
 					result.append(sb);
-					//System.out.println("##################################################");
+					resultCharacters.addAll(tempCharacters);
+                    System.out.println("--------------------------------------------------");
+                    for(int i=0;i<resultCharacters.size();i++) {
+                        System.out.println(resultCharacters.get(i).toString());
+                    }
+                    System.out.println("##################################################");
 					break;
 				}
 			}

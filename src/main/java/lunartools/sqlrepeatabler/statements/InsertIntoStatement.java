@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.SqlParser;
+import lunartools.sqlrepeatabler.parser.SqlScriptLine;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public class InsertIntoStatement implements Statement{
@@ -32,10 +33,10 @@ public class InsertIntoStatement implements Statement{
 			logger.warn("INSERT INTO: First column name is '"+nameId+"', expected is 'ID' !");
 		}
 		for(int i=0;i<columnValuesTokensList.size();i++) {
-			sb.append(String.format("if (select COUNT(*) from %s where %s=%s)=0",tableName.getFullName(),nameId,getFirstValueFromCsvInParenthesis(columnValuesTokensList.get(i).toString()))).append(SqlParser.CRLF);
+			sb.append(String.format("if (select COUNT(*) from %s where %s=%s)=0",tableName.getFullNameAsString(),nameId,getFirstValueFromCsvInParenthesis(columnValuesTokensList.get(i).toString()))).append(SqlParser.CRLF);
 			sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
 			sb.append(String.format("\tSET IDENTITY_INSERT %s ON;",tableName.getFullSchemaAndName())).append(SqlParser.CRLF);
-			sb.append(String.format("\t\tINSERT INTO %s %s VALUES",tableName.getFullName(),tokenColumnNames.toString())).append(SqlParser.CRLF);
+			sb.append(String.format("\t\tINSERT INTO %s %s VALUES",tableName.getFullNameAsString(),tokenColumnNames.toString())).append(SqlParser.CRLF);
 			sb.append(String.format("\t\t\t%s;",columnValuesTokensList.get(i).toString())).append(SqlParser.CRLF);
 			sb.append(String.format("\tSET IDENTITY_INSERT %s OFF;",tableName.getFullSchemaAndName())).append(SqlParser.CRLF);
 			sb.append(String.format("END;")).append(SqlParser.CRLF);
@@ -51,5 +52,11 @@ public class InsertIntoStatement implements Statement{
 		int end=s.indexOf(',', start);
 		return s.substring(start,end);
 	}
+
+    @Override
+    public void toSqlCharacters(ArrayList<SqlScriptLine> sqlCharacterLines) throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

@@ -1,6 +1,7 @@
 package lunartools.sqlrepeatabler.parser;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class Token {
 	private ArrayList<SqlCharacter> charactersOfToken;
@@ -8,6 +9,16 @@ public class Token {
 	public Token(ArrayList<SqlCharacter> charactersOfToken) {
 		this.charactersOfToken=charactersOfToken;
 	}
+
+    public Token(String s,Category category) {
+        ArrayList<SqlCharacter> characters=new ArrayList<>();
+        for(int k=0;k<s.length();k++) {
+            SqlCharacter sqlCharacter=new SqlCharacter(s.charAt(k),-1,-1,-1);
+            sqlCharacter.setCategory(category);
+            characters.add(sqlCharacter);
+        }
+        this.charactersOfToken=characters;
+    }
 
 	public Token[] split(char c) {
 		ArrayList<Token> tokens=new ArrayList<>();
@@ -38,7 +49,6 @@ public class Token {
 			charactersOfToken.remove(0);
 		}
 	}
-
 
 	public void removeEnclosing(char cLeft, char cRight) {
 		if(
@@ -78,5 +88,16 @@ public class Token {
 			sqlCharacter.setCategory(category);
 		}
 	}
-	
+
+    public ArrayList<SqlCharacter> getCharacters() {
+        return charactersOfToken;
+    }
+
+    public void append(Token token) {
+        charactersOfToken.addAll(token.getCharacters());
+    }
+
+    public void append(SqlCharacter character) {
+        charactersOfToken.add(character);
+    }
 }

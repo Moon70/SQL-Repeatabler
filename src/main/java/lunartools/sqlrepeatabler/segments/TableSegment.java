@@ -55,5 +55,9 @@ public class TableSegment {
 		}
 		return sb.toString();
 	}
+	
+	public Token getToken() {
+	    return token;
+	}
 
 }

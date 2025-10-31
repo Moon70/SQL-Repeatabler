@@ -24,10 +24,10 @@ public class AddForeignKeyConstraintSegment extends Segment{
 		sb.append(String.format("IF NOT EXISTS (")).append(SqlParser.CRLF);
 		sb.append(String.format("\tSELECT 1")).append(SqlParser.CRLF);
 		sb.append(String.format("\tFROM sys.foreign_keys")).append(SqlParser.CRLF);
-		sb.append(String.format("\tWHERE name = '%s' AND parent_object_id = OBJECT_ID('%s')", stripDelimiters(name.toString()), tableName.getFullNameWithoutDelimiter())).append(SqlParser.CRLF);
+		sb.append(String.format("\tWHERE name = '%s' AND parent_object_id = OBJECT_ID('%s')", stripDelimiters(name.toString()), tableName.getFullNameWithoutDelimiterAsString())).append(SqlParser.CRLF);
 		sb.append(String.format(")")).append(SqlParser.CRLF);
 		sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
-		sb.append(String.format("\tALTER TABLE %s",tableName.getFullName())).append(SqlParser.CRLF);
+		sb.append(String.format("\tALTER TABLE %s",tableName.getFullNameAsString())).append(SqlParser.CRLF);
 
 		sb.append(String.format("\t\t%s CONSTRAINT %s",action,name)).append(SqlParser.CRLF);
 		sb.append(String.format("\t\tFOREIGN KEY %s",foreignKey)).append(SqlParser.CRLF);

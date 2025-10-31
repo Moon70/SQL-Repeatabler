@@ -1,7 +1,10 @@
 package lunartools.sqlrepeatabler.statements;
 
+import java.util.ArrayList;
+
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.parser.SqlScriptLine;
 
 public class OneLineCommentStatement implements Statement{
 	public static final String COMMAND="--";
@@ -22,5 +25,11 @@ public class OneLineCommentStatement implements Statement{
 			sb.append(SqlParser.CRLF);
 		}
 	}
+
+    @Override
+    public void toSqlCharacters(ArrayList<SqlScriptLine> sqlCharacterLines) throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

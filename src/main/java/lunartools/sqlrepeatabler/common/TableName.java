@@ -17,12 +17,13 @@ public class TableName {
 	//private String schemaName="[dbo]";
 	private Token tableName;
 	private boolean mySql;
-
-	private TableName(ArrayList<Token> segments, boolean mySql) {
-		this.databaseName=segments.get(0);
-		this.schemaName=segments.get(1);
-		this.tableName=segments.get(2);
+	
+	private TableName(ArrayList<Token> tokens, boolean mySql) {
+		this.databaseName=tokens.get(0);
+		this.schemaName=tokens.get(1);
+		this.tableName=tokens.get(2);
 		this.mySql=mySql;
+		
 	}
 
 	public static TableName createInstanceByConsuming(StatementTokenizer statementTokenizer) throws Exception{
@@ -145,64 +146,120 @@ public class TableName {
 		return new Token(sbSegment);
 	}
 
-	public String getDatabaseName() {
-		return databaseName.toString();
-	}
+    public Token getDatabaseName() {
+        return databaseName;
+    }
 
-	public String getSchemaName() {
-		return schemaName.toString();
-	}
+    public String getDatabaseNameAsString() {
+        return databaseName.toString();
+    }
 
-	public String getTableName() {
-		return tableName.toString();
-	}
+    public Token getSchemaName() {
+        return schemaName;
+    }
 
-	public String getDatabaseNameWithoutDelimiterAsString() {
-		String databaseNameString=getDatabaseName();
-		if(databaseNameString.startsWith("[") && databaseNameString.endsWith("]")) {
-			return databaseNameString.substring(1, databaseNameString.length()-1);
-		}else if(databaseNameString.startsWith("\"") && databaseNameString.endsWith("\"")) {
-			return databaseNameString.substring(1, databaseNameString.length()-1);
-		}else {
-			return databaseNameString;
-		}
-	}
+    public String getSchemaNameAsString() {
+        return schemaName.toString();
+    }
 
-	public String getSchemaNameWithoutDelimiterAsString() {
-		String schemaNameString=getSchemaName();
-		if(schemaNameString.startsWith("[") && schemaNameString.endsWith("]")) {
-			return schemaNameString.substring(1, schemaNameString.length()-1);
-		}else if(schemaNameString.startsWith("\"") && schemaNameString.endsWith("\"")) {
-			return schemaNameString.substring(1, schemaNameString.length()-1);
-		}else {
-			return schemaNameString;
-		}
-	}
+    public Token getTableName() {
+        return tableName;
+    }
 
-	public String getTableNameWithoutDelimiterAsString() {
-		String tableNameString=getTableName();
-		if(tableNameString.startsWith("[") && tableNameString.endsWith("]")) {
-			return tableNameString.substring(1, tableNameString.length()-1);
-		}else if(tableNameString.startsWith("\"") && tableNameString.endsWith("\"")) {
-			return tableNameString.substring(1, tableNameString.length()-1);
-		}else {
-			return tableNameString;
-		}
-	}
+    public String getTableNameAsString() {
+        return tableName.toString();
+    }
 
-	public String getFullName() {
-		StringBuffer sb=new StringBuffer();
-		if(databaseName!=null) {
-			sb.append(databaseName);
-			sb.append('.');
-		}
-		if(schemaName!=null) {
-			sb.append(schemaName);
-			sb.append('.');
-		}
-		sb.append(tableName);
-		return sb.toString();
-	}
+    public Token getDatabaseNameWithoutDelimiter() {
+        Token token=getDatabaseName();
+        if(token!=null) {
+            token.removeEnclosing('[',']');
+            token.removeEnclosing('\"');
+        }
+        return token;
+    }
+
+    public String getDatabaseNameWithoutDelimiterAsString() {
+        String databaseNameString=getDatabaseNameAsString();
+        if(databaseNameString.startsWith("[") && databaseNameString.endsWith("]")) {
+            return databaseNameString.substring(1, databaseNameString.length()-1);
+        }else if(databaseNameString.startsWith("\"") && databaseNameString.endsWith("\"")) {
+            return databaseNameString.substring(1, databaseNameString.length()-1);
+        }else {
+            return databaseNameString;
+        }
+    }
+
+    public Token getSchemaNameWithoutDelimiter() {
+        Token token=getSchemaName();
+        if(token!=null) {
+            token.removeEnclosing('[', ']');
+            token.removeEnclosing('\"');
+        }
+        return token;
+    }
+
+    public String getSchemaNameWithoutDelimiterAsString() {
+        String schemaNameString=getSchemaNameAsString();
+        if(schemaNameString.startsWith("[") && schemaNameString.endsWith("]")) {
+            return schemaNameString.substring(1, schemaNameString.length()-1);
+        }else if(schemaNameString.startsWith("\"") && schemaNameString.endsWith("\"")) {
+            return schemaNameString.substring(1, schemaNameString.length()-1);
+        }else {
+            return schemaNameString;
+        }
+    }
+
+    public Token getTableNameWithoutDelimiter() {
+        Token token=getTableName();
+        if(token!=null) {
+            token.removeEnclosing('[', ']');
+            token.removeEnclosing('\"');
+        }
+        return token;
+    }
+
+    public String getTableNameWithoutDelimiterAsString() {
+        String tableNameString=getTableNameAsString();
+        if(tableNameString.startsWith("[") && tableNameString.endsWith("]")) {
+            return tableNameString.substring(1, tableNameString.length()-1);
+        }else if(tableNameString.startsWith("\"") && tableNameString.endsWith("\"")) {
+            return tableNameString.substring(1, tableNameString.length()-1);
+        }else {
+            return tableNameString;
+        }
+    }
+
+    public Token getFullName() {
+        Token tokenFullname=getDatabaseName();
+        if(tokenFullname==null) {
+            tokenFullname=getSchemaName();
+        }else {
+            tokenFullname.append(new SqlCharacter('.',-1,-1,-1));
+            tokenFullname.append(getSchemaName());
+        }
+        if(tokenFullname==null) {
+            tokenFullname=getTableName();
+        }else {
+            tokenFullname.append(new SqlCharacter('.',-1,-1,-1));
+            tokenFullname.append(getTableName());
+        }
+        return tokenFullname;
+    }
+
+    public String getFullNameAsString() {
+        StringBuffer sb=new StringBuffer();
+        if(databaseName!=null) {
+            sb.append(databaseName);
+            sb.append('.');
+        }
+        if(schemaName!=null) {
+            sb.append(schemaName);
+            sb.append('.');
+        }
+        sb.append(tableName);
+        return sb.toString();
+    }
 
 	public String getFullSchemaAndName() {
 		StringBuffer sb=new StringBuffer();
@@ -214,19 +271,36 @@ public class TableName {
 		return sb.toString();
 	}
 
-	public String getFullNameWithoutDelimiter() {
-		StringBuffer sb=new StringBuffer();
-		if(databaseName!=null) {
-			sb.append(getDatabaseNameWithoutDelimiterAsString());
-			sb.append('.');
-		}
-		if(schemaName!=null) {
-			sb.append(getSchemaNameWithoutDelimiterAsString());
-			sb.append('.');
-		}
-		sb.append(getTableNameWithoutDelimiterAsString());
-		return sb.toString();
-	}
+    public Token getFullNameWithoutDelimiter() {
+        Token tokenFullname=getDatabaseNameWithoutDelimiter();
+        if(tokenFullname==null) {
+            tokenFullname=getSchemaNameWithoutDelimiter();
+        }else {
+            tokenFullname.append(new SqlCharacter('.',-1,-1,-1));
+            tokenFullname.append(getSchemaNameWithoutDelimiter());
+        }
+        if(tokenFullname==null) {
+            tokenFullname=getTableNameWithoutDelimiter();
+        }else {
+            tokenFullname.append(new SqlCharacter('.',-1,-1,-1));
+            tokenFullname.append(getTableNameWithoutDelimiter());
+        }
+        return tokenFullname;
+    }
+
+    public String getFullNameWithoutDelimiterAsString() {
+        StringBuffer sb=new StringBuffer();
+        if(databaseName!=null) {
+            sb.append(getDatabaseNameWithoutDelimiterAsString());
+            sb.append('.');
+        }
+        if(schemaName!=null) {
+            sb.append(getSchemaNameWithoutDelimiterAsString());
+            sb.append('.');
+        }
+        sb.append(getTableNameWithoutDelimiterAsString());
+        return sb.toString();
+    }
 
 	public boolean isMySql() {
 		return mySql;

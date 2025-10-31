@@ -8,7 +8,8 @@ public enum Category {
 	COLUMN("purple","bold"),
 	COLUMNPARAMETER("#555555",null),
 	COMMENT("green",null),
-	PARAMETER("#643939","bold");
+	PARAMETER("#643939","bold"),
+	INSERTED("ffff88","bold");
 	
 	private final String color;
 	private final String fontWeight;
