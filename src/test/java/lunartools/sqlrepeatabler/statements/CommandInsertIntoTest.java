@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.commands;
+package lunartools.sqlrepeatabler.statements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

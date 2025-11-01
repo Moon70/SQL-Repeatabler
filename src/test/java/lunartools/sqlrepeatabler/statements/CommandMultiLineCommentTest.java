@@ -1,13 +1,16 @@
-package lunartools.sqlrepeatabler.commands;
+package lunartools.sqlrepeatabler.statements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 import lunartools.sqlrepeatabler.TestHelper;
 import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.statements.MultiLineCommentStatementFactory;
 import lunartools.sqlrepeatabler.statements.Statement;
 
@@ -23,7 +26,7 @@ class CommandMultiLineCommentTest {
 	}
 
 	@Test
-	void multiLineCommentIsAccepted() throws Exception{
+	void multiLineCommentIsAccepted_String() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"TwoMultiLineCommentLines_Testdata.txt";
 		String filenameExpecteddata=TESTDATAFOLDER+"TwoMultiLineCommentLines_Expected.txt";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
@@ -35,6 +38,21 @@ class CommandMultiLineCommentTest {
 		StringBuilder sb=new StringBuilder();
 		sqlSegment.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
+	}
+
+	@Test
+	void multiLineCommentIsAccepted() throws Exception{
+//		String filenameTestdata=	TESTDATAFOLDER+"TwoMultiLineCommentLines_Testdata.txt";
+//		String filenameExpecteddata=TESTDATAFOLDER+"TwoMultiLineCommentLines_Expected.txt";
+//		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+//
+//		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+//		assertTrue(factory.match(sqlScript.peekLineAsString()));
+//
+//		Statement sqlSegment=factory.createStatement(sqlScript);
+//		ArrayList<SqlString> sqlCharacters=new ArrayList<>();
+//		sqlSegment.toSqlCharacters(sqlCharacters);
+//		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
 }
