@@ -3,22 +3,28 @@ package lunartools.sqlrepeatabler.parser;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import lunartools.sqlrepeatabler.statements.CreateTableStatementFactory;
+
 public class Token {
+	private static Logger logger = LoggerFactory.getLogger(Token.class);
 	private ArrayList<SqlCharacter> charactersOfToken;
 
 	public Token(ArrayList<SqlCharacter> charactersOfToken) {
 		this.charactersOfToken=charactersOfToken;
 	}
 
-    public Token(String s,Category category) {
-        ArrayList<SqlCharacter> characters=new ArrayList<>();
-        for(int k=0;k<s.length();k++) {
-            SqlCharacter sqlCharacter=new SqlCharacter(s.charAt(k),-1,-1,-1);
-            sqlCharacter.setCategory(category);
-            characters.add(sqlCharacter);
-        }
-        this.charactersOfToken=characters;
-    }
+	public Token(String s,Category category) {
+		ArrayList<SqlCharacter> characters=new ArrayList<>();
+		for(int k=0;k<s.length();k++) {
+			SqlCharacter sqlCharacter=new SqlCharacter(s.charAt(k),-1,-1,-1);
+			sqlCharacter.setCategory(category);
+			characters.add(sqlCharacter);
+		}
+		this.charactersOfToken=characters;
+	}
 
 	public Token[] split(char c) {
 		ArrayList<Token> tokens=new ArrayList<>();
@@ -65,6 +71,13 @@ public class Token {
 		return new Token((ArrayList<SqlCharacter>)charactersOfToken.clone());
 	}
 
+	public Token cloneWithoutDelimiters() throws CloneNotSupportedException {
+		Token token=(Token)this.clone();
+		token.removeEnclosing('[',']');
+		token.removeEnclosing('"');
+		return token;
+	}
+	
 	public void trim() {
 		while(charactersOfToken.size()>0 && charactersOfToken.get(0).isWhiteSpace()) {
 			charactersOfToken.remove(0);
@@ -89,15 +102,55 @@ public class Token {
 		}
 	}
 
-    public ArrayList<SqlCharacter> getCharacters() {
-        return charactersOfToken;
-    }
+	public ArrayList<SqlCharacter> getCharacters() {
+		return charactersOfToken;
+	}
 
-    public void append(Token token) {
-        charactersOfToken.addAll(token.getCharacters());
-    }
+	public void append(Token token) {
+		charactersOfToken.addAll(token.getCharacters());
+	}
 
-    public void append(SqlCharacter character) {
-        charactersOfToken.add(character);
-    }
+	public void append(SqlCharacter character) {
+		charactersOfToken.add(character);
+	}
+
+	public boolean fixMySqlDelimiter(){
+		boolean isMySql=false;
+		isMySql=true;
+		boolean openBracket=false;
+		for(int i=0;i<charactersOfToken.size();i++) {
+			SqlCharacter sqlCharacter=charactersOfToken.get(i);
+			if(sqlCharacter.getChar()=='`') {
+				if(openBracket) {
+					sqlCharacter.setChar(']');
+				}else {
+					sqlCharacter.setChar('[');
+				}
+				openBracket=!openBracket;
+			}
+		}
+		if(replaceIfExists("auto_increment","identity")) {
+			logger.warn("Script is most likely MySql format! Replacing 'auto_increment' with 'identity'!");
+		}
+		//TODO: implement removing of engine parameter
+
+		
+		return isMySql;
+	}
+	
+	private boolean replaceIfExists(String search,String replace) {
+		int p=toString().toLowerCase().indexOf(search);
+		boolean isMySql=p!=-1;
+		if(isMySql) {
+			isMySql=true;
+			Category category=charactersOfToken.get(0).getCategory();
+			for(int i=0;i<search.length();i++) {
+				charactersOfToken.remove(p);
+			}
+			SqlString sqlString=SqlString.createSqlStringFromString(replace, category);
+			charactersOfToken.addAll(p, sqlString.getCharacters());
+		}
+		return isMySql;
+	}
+	
 }

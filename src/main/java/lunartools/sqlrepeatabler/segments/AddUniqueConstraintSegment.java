@@ -1,17 +1,19 @@
 package lunartools.sqlrepeatabler.segments;
 
+import java.util.ArrayList;
+
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlParser;
+import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public class AddUniqueConstraintSegment extends Segment{
-	private String action;
 	private Token name;
 	private Token referencesColumn;
 
-	public AddUniqueConstraintSegment(String action,Token name,Token referencesColumn) {
-		super(action,name);
-		this.action=action;
+	public AddUniqueConstraintSegment(Token name,Token referencesColumn) {
+		super(new Token("ADD",Category.COMMAND),name);
 		this.name=name;
 		this.referencesColumn=referencesColumn;
 	}
@@ -24,7 +26,16 @@ public class AddUniqueConstraintSegment extends Segment{
 		sb.append("END;").append(SqlParser.CRLF);
 	}
 
+	@Override
+	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,TableName tableName,boolean mySql) throws Exception {
+        sqlCharacterLines.add(SqlString.createSqlStringFromString("IF OBJECT_ID('%s','UQ') IS NULL", Category.INSERTED,getName().cloneWithoutDelimiters()));
+        sqlCharacterLines.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
+        sqlCharacterLines.add(SqlString.createSqlStringFromString("\tALTER TABLE %s", Category.INSERTED,tableName.getFullName()));
+        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\tADD CONSTRAINT %s unique %s;", Category.INSERTED,getName(),referencesColumn));
+        sqlCharacterLines.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
+	}
+	
 	public String toString() {
-		return String.format("AddUniqueConstraintSegment: %s CONSTRAINT %s %s", action,name,referencesColumn);
+		return String.format("AddUniqueConstraintSegment: %s CONSTRAINT %s %s", getAction().toString(),name,referencesColumn);
 	}
 }

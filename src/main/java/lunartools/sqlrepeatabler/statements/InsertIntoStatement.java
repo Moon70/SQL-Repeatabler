@@ -88,9 +88,9 @@ public class InsertIntoStatement implements Statement{
             //sb.append(String.format("\t\t\t%s;",columnValuesTokensList.get(i).toString())).append(SqlParser.CRLF);
             //sb.append(String.format("\tSET IDENTITY_INSERT %s OFF;",tableName.getFullSchemaAndName())).append(SqlParser.CRLF);
             //sb.append(String.format("END;")).append(SqlParser.CRLF);
-//            if(i<columnValuesTokensList.size()-1) {
-//                sb.append(SqlParser.CRLF);
-//            }
+            if(i<columnValuesTokensList.size()-1) {
+            	sqlCharacterLines.add(SqlString.EMPTY_LINE);
+            }
         }
     }
 

@@ -36,6 +36,9 @@ public class CreateTableStatementFactory extends StatementFactory{
 		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'TABLE' token
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
+		if(tableName.isMySql()) {
+			logger.warn("Script is most likely MySql format! Replacing backticks with square brackets!");
+		}
 		logger.debug(tableName.toString());
 
 		ArrayList<TableSegment> tableElements=new ArrayList<>();
@@ -44,6 +47,9 @@ public class CreateTableStatementFactory extends StatementFactory{
 		allCollumnsToken.removeEnclosing('(',')');
 		Token[] columns=allCollumnsToken.split(',');
 		for(int i=0;i<columns.length;i++) {
+			if(tableName.isMySql()) {
+				columns[i].fixMySqlDelimiter();
+			}
 			tableElements.add(new TableSegment(columns[i]));
 		}
 

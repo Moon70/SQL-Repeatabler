@@ -4,15 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 import lunartools.sqlrepeatabler.TestHelper;
 import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.statements.Statement;
-import lunartools.sqlrepeatabler.statements.WhitespaceLineStatementFactory;
+import lunartools.sqlrepeatabler.parser.SqlString;
+import lunartools.sqlrepeatabler.util.Tools;
 
 class WhitespaceLineStatementTest {
-	private static final String TESTDATAFOLDER="/CommandWhitespaceLine/";
+	private static final String TESTDATAFOLDER="/WhitespaceLineStatement/";
 	private WhitespaceLineStatementFactory factory=new WhitespaceLineStatementFactory();
 
 	@Test
@@ -31,9 +33,9 @@ class WhitespaceLineStatementTest {
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
-		Statement sqlSegment=factory.createStatement(sqlScript);
+		Statement statement=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
-		sqlSegment.toSql(sb);
+		statement.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -46,9 +48,10 @@ class WhitespaceLineStatementTest {
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
-		Statement sqlSegment=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		sqlSegment.toSql(sb);
+		Statement statement=factory.createStatement(sqlScript);
+		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
+		statement.toSqlCharacters(sqlCharacterLines);
+		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 

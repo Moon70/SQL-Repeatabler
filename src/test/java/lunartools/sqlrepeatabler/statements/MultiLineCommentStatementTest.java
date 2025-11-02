@@ -11,11 +11,10 @@ import org.junit.jupiter.api.Test;
 import lunartools.sqlrepeatabler.TestHelper;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.SqlString;
-import lunartools.sqlrepeatabler.statements.MultiLineCommentStatementFactory;
-import lunartools.sqlrepeatabler.statements.Statement;
+import lunartools.sqlrepeatabler.util.Tools;
 
-class CommandMultiLineCommentTest {
-	private static final String TESTDATAFOLDER="/CommandMultiLineComment/";
+class MultiLineCommentStatementTest {
+	private static final String TESTDATAFOLDER="/MultiLineCommentStatement/";
 	private MultiLineCommentStatementFactory factory=new MultiLineCommentStatementFactory();
 
 	@Test
@@ -34,25 +33,26 @@ class CommandMultiLineCommentTest {
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
-		Statement sqlSegment=factory.createStatement(sqlScript);
+		Statement statement=factory.createStatement(sqlScript);
 		StringBuilder sb=new StringBuilder();
-		sqlSegment.toSql(sb);
+		statement.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
 	@Test
 	void multiLineCommentIsAccepted() throws Exception{
-//		String filenameTestdata=	TESTDATAFOLDER+"TwoMultiLineCommentLines_Testdata.txt";
-//		String filenameExpecteddata=TESTDATAFOLDER+"TwoMultiLineCommentLines_Expected.txt";
-//		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-//
-//		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-//		assertTrue(factory.match(sqlScript.peekLineAsString()));
-//
-//		Statement sqlSegment=factory.createStatement(sqlScript);
-//		ArrayList<SqlString> sqlCharacters=new ArrayList<>();
-//		sqlSegment.toSqlCharacters(sqlCharacters);
-//		assertEquals(expected,TestHelper.removeCR(sb).toString());
+		String filenameTestdata=	TESTDATAFOLDER+"TwoMultiLineCommentLines_Testdata.txt";
+		String filenameExpecteddata=TESTDATAFOLDER+"TwoMultiLineCommentLines_Expected.txt";
+		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLineAsString()));
+
+		Statement statement=factory.createStatement(sqlScript);
+		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
+		statement.toSqlCharacters(sqlCharacterLines);
+		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
 }

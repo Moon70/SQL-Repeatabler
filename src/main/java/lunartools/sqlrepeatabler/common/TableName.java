@@ -170,9 +170,10 @@ public class TableName {
         return tableName.toString();
     }
 
-    public Token getDatabaseNameWithoutDelimiter() {
+    public Token getDatabaseNameWithoutDelimiter() throws CloneNotSupportedException {
         Token token=getDatabaseName();
         if(token!=null) {
+        	token=(Token)token.clone();
             token.removeEnclosing('[',']');
             token.removeEnclosing('\"');
         }
@@ -190,9 +191,10 @@ public class TableName {
         }
     }
 
-    public Token getSchemaNameWithoutDelimiter() {
+    public Token getSchemaNameWithoutDelimiter() throws CloneNotSupportedException {
         Token token=getSchemaName();
         if(token!=null) {
+        	token=(Token)token.clone();
             token.removeEnclosing('[', ']');
             token.removeEnclosing('\"');
         }
@@ -210,9 +212,10 @@ public class TableName {
         }
     }
 
-    public Token getTableNameWithoutDelimiter() {
+    public Token getTableNameWithoutDelimiter() throws CloneNotSupportedException {
         Token token=getTableName();
         if(token!=null) {
+        	token=(Token)token.clone();
             token.removeEnclosing('[', ']');
             token.removeEnclosing('\"');
         }
@@ -282,7 +285,7 @@ public class TableName {
         return tokenFullname;
     }
 
-    public Token getFullNameWithoutDelimiter() {
+    public Token getFullNameWithoutDelimiter() throws CloneNotSupportedException {
         Token tokenFullname=getDatabaseNameWithoutDelimiter();
         if(tokenFullname==null) {
             tokenFullname=getSchemaNameWithoutDelimiter();

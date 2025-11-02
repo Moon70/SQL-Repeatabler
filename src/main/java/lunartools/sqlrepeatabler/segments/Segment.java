@@ -1,13 +1,16 @@
 package lunartools.sqlrepeatabler.segments;
 
+import java.util.ArrayList;
+
 import lunartools.sqlrepeatabler.common.TableName;
+import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public abstract class Segment {
-	private String action;
+	private Token action;
 	private Token name;
 
-	public Segment(String action,Token name) {
+	public Segment(Token action,Token name) {
 		this.action=action;
 		this.name=name;
 	}
@@ -35,10 +38,15 @@ public abstract class Segment {
 		return s;
 	}
 
-	public String getAction() {
+	public Token getAction() {
 		return action;
+	}
+
+	public Token getName() {
+		return name;
 	}
 
 	public abstract void toSql(StringBuilder sb,TableName tableName,boolean mySql) throws Exception;
 
+    public abstract void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,TableName tableName,boolean mySql)throws Exception;
 }

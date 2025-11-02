@@ -95,13 +95,13 @@ public class AlterTableStatementFactory extends StatementFactory{
 					Token tokenReferencesTable=statementTokenizer.nextToken();
 					Token tokenReferencesColumn=statementTokenizer.nextToken();
 
-					Segment columnElement=new AddForeignKeyConstraintSegment("ADD",tokenConstraintName,tokenForeignKey,tokenReferencesTable,tokenReferencesColumn);
+					Segment columnElement=new AddForeignKeyConstraintSegment(tokenConstraintName,tokenForeignKey,tokenReferencesTable,tokenReferencesColumn);
 					columnElements.add(columnElement);
 
 				}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("UNIQUE")) {
 					Token tokenReferencesColumn=statementTokenizer.nextToken();
 
-					Segment columnElement=new AddUniqueConstraintSegment("ADD",tokenConstraintName,tokenReferencesColumn);
+					Segment columnElement=new AddUniqueConstraintSegment(tokenConstraintName,tokenReferencesColumn);
 					columnElements.add(columnElement);
 				}else {
 					throw new Exception("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword not found");
@@ -115,7 +115,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 				Token tokenColumParameter=statementTokenizer.nextTokenUntil(',');
 				tokenColumParameter.setCategory(Category.COLUMNPARAMETER);
 				
-				Segment columnElement=new AddColumnSegment("ADD",tokenColumName,tokenColumParameter);
+				Segment columnElement=new AddColumnSegment(tokenColumName,tokenColumParameter);
 				columnElements.add(columnElement);
 			}
 		}
@@ -133,7 +133,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 			while(true) {
 				Token tokenColumnName=statementTokenizer.nextToken();
 
-				Segment columnElement=new DropColumnSegment("DROP",tokenColumnName);
+				Segment columnElement=new DropColumnSegment(tokenColumnName);
 				columnElements.add(columnElement);
 
 				if(!statementTokenizer.hasNext()) {
@@ -146,7 +146,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		}else if(tokenTarget.toString().equalsIgnoreCase("CONSTRAINT")) {
 			Token tokenConstraintName=statementTokenizer.nextToken();
 
-			Segment columnElement=new DropConstraintSegment("DROP",tokenConstraintName);
+			Segment columnElement=new DropConstraintSegment(tokenConstraintName);
 			columnElements.add(columnElement);
 
 		}else {
@@ -162,7 +162,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 			Token tokenColumnName=statementTokenizer.nextToken();
 			Token tokenColumnParameter=statementTokenizer.nextTokenUntil(',');
 
-			Segment columnElement=new AlterColumnSegment("ALTER COLUMN",tokenColumnName,tokenColumnParameter);
+			Segment columnElement=new AlterColumnSegment(tokenColumnName,tokenColumnParameter);
 			columnElements.add(columnElement);
 
 			if(!statementTokenizer.hasNext()) {

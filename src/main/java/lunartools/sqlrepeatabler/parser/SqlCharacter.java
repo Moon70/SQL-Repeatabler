@@ -91,5 +91,9 @@ public class SqlCharacter {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
+
+	public void setChar(char c) {
+		this.c=c;
+	}
 	
 }

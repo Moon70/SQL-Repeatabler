@@ -12,23 +12,18 @@ import lunartools.sqlrepeatabler.parser.Token;
 public class SetIdentityInsertStatement implements Statement{
 	private static Logger logger = LoggerFactory.getLogger(SetIdentityInsertStatement.class);
 	public static final String COMMAND="SET IDENTITY_INSERT";
-//	private TableName tableName;
-//	private String parameters;
+	private TableName tableName;
+	private Token parameters;
 
 	public SetIdentityInsertStatement(TableName tableName,Token parameters) {
-//		this.tableName=tableName;
-//		this.parameters=parameters;
+		this.tableName=tableName;
+		this.parameters=parameters;
 	}
 
 	@Override
-	public void toSql(StringBuilder sb) throws Exception {
-		//sb.append(String.format("SET IDENTITY_INSERT %s %s;",tableName.getFullSchemaAndName(),parameters)).append(Parser.CRLF);
-	}
+	public void toSql(StringBuilder sb) throws Exception {}
 
     @Override
-    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
-        // TODO Auto-generated method stub
-        
-    }
+    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {}
 
 }
