@@ -1,7 +1,5 @@
 package lunartools.sqlrepeatabler;
 
-import java.io.File;
-
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;

@@ -16,9 +16,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import lunartools.ChangeListenerSupport;
 import lunartools.SwingTools;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
-import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.parser.SqlString;
 
 public class SqlRepeatablerModel implements ChangeListenerSupport{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerModel.class);

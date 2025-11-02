@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.parser.Category;
-import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
@@ -31,14 +30,6 @@ public class SpRenameStatement implements Statement{
 		tableNameWithoutBrackets.removeEnclosing('[',']');
 		this.newNameWithoutBrackets=(Token)newName.clone();
 		newNameWithoutBrackets.removeEnclosing('[',']');
-	}
-
-	public String removeBrackets(String s) {
-		if(s.charAt(0)=='[' && s.charAt(s.length()-1)==']') {
-			return s.substring(1,s.length()-1);
-		}else {
-			return s;
-		}
 	}
 
 	@Override

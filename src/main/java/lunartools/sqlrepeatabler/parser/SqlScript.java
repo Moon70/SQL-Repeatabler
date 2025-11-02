@@ -221,15 +221,6 @@ public class SqlScript {
 
 	}
 
-	private boolean endsWithSemicolon(ArrayList<SqlCharacter> characters) {
-		for(int i=characters.size()-1;i>=0;i--) {
-			if(characters.get(i).isSemicolon()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public String getLineAt(int index) {
 		return sqlStrings.get(index).toString();
 	}

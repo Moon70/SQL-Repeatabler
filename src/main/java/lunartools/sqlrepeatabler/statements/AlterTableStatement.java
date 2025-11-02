@@ -19,13 +19,11 @@ public class AlterTableStatement implements Statement{
 	private Token tokenStatement;
 	private TableName tableName;
 	private ArrayList<Segment> segments;
-	private boolean mySql;
 
 	public AlterTableStatement(Token statement,TableName tableName,ArrayList<Segment> segments) {
 		this.tokenStatement=statement;
 		this.tableName=tableName;
 		this.segments=segments;
-		this.mySql=tableName.isMySql();
 	}
 
 	@Override
@@ -58,10 +56,6 @@ public class AlterTableStatement implements Statement{
 				}
 			}
 		}
-	}
-
-	public boolean isMySql() {
-		return mySql;
 	}
 
 }

@@ -18,13 +18,11 @@ public class CreateTableStatement implements Statement{
 	private Token tokenStatement;
 	private TableName tableName;
 	private ArrayList<TableSegment> tableElements;
-	private boolean mySql;
 
 	public CreateTableStatement(Token statement,TableName tableName,ArrayList<TableSegment> tableElements) {
 		this.tokenStatement=statement;
 		this.tableName=tableName;
 		this.tableElements=tableElements;
-		this.mySql=tableName.isMySql();
 	}
 
 	@Override
@@ -44,10 +42,6 @@ public class CreateTableStatement implements Statement{
 
 		sqlCharacterLines.add(SqlString.createSqlStringFromString("\t);", Category.INSERTED));
 		sqlCharacterLines.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
-	}
-
-	public boolean isMySql() {
-		return mySql;
 	}
 
 }
