@@ -15,7 +15,9 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import lunartools.ChangeListenerSupport;
 import lunartools.SwingTools;
+import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.parser.SqlString;
 
 public class SqlRepeatablerModel implements ChangeListenerSupport{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerModel.class);
@@ -30,6 +32,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 	private ArrayList<File> sqlInputFiles=new ArrayList<>();
 	private ArrayList<SqlScript> sqlScripts=new ArrayList<>();
 	private ArrayList<StringBuffer> sqlConvertedScripts=new ArrayList<>();
+	private ArrayList<ArrayList<SqlString>> sqlConvertedScriptsCharacters=new ArrayList<>();
 
 	public static String getProgramVersion() {
 		return versionProgram;
@@ -70,6 +73,11 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
 
+	public void clearConvertedSqlScriptCharacters() {
+		sqlConvertedScriptsCharacters=new ArrayList<>();
+		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
+	}
+
 	public boolean hasSqlConvertedScripts() {
 		return sqlConvertedScripts.size()>0;
 	}
@@ -79,6 +87,13 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 			return new StringBuffer();
 		}
 		return sqlConvertedScripts.get(index);
+	}
+
+	public ArrayList<SqlString> getSingleConvertedSqlScriptCharacters(int index) {
+		if(index>=sqlConvertedScriptsCharacters.size()) {
+			return new ArrayList<SqlString>();
+		}
+		return sqlConvertedScriptsCharacters.get(index);
 	}
 	
 	public SqlScript getSqlScript(int index) {
@@ -94,6 +109,11 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
 
+	public void setConvertedSqlScriptsCharacters(ArrayList<ArrayList<SqlString>> sqlConvertedScripts) {
+		this.sqlConvertedScriptsCharacters=sqlConvertedScripts;
+		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
+	}
+
 	public StringBuffer getConvertedSqlScript() {
 		StringBuffer sbConvertedScripts=new StringBuffer();
 		sbConvertedScripts.append("-- "+SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion()+System.lineSeparator());
@@ -102,6 +122,22 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 			sbConvertedScripts.append("-- Original: "+sqlInputFiles.get(i).getName());
 			sbConvertedScripts.append(System.lineSeparator());
 			sbConvertedScripts.append(sqlConvertedScripts.get(i));
+		}
+		return sbConvertedScripts;
+	}
+
+	public StringBuffer getConvertedSqlScriptCharactersAsStringBuffer() {
+		StringBuffer sbConvertedScripts=new StringBuffer();
+		sbConvertedScripts.append("-- "+SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion()+System.lineSeparator());
+		for(int i=0;i<sqlConvertedScriptsCharacters.size();i++) {
+			sbConvertedScripts.append(System.lineSeparator());
+			sbConvertedScripts.append("-- Original: "+sqlInputFiles.get(i).getName());
+			sbConvertedScripts.append(System.lineSeparator());
+			ArrayList<SqlString> lines=sqlConvertedScriptsCharacters.get(i);
+			for(int k=0;k<lines.size();k++) {
+				SqlString sqlString=lines.get(k);
+				sbConvertedScripts.append(sqlString.toString());
+			}
 		}
 		return sbConvertedScripts;
 	}
@@ -135,6 +171,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 	public void reset() {
 		sqlInputFiles=new ArrayList<>();
 		sqlConvertedScripts=new ArrayList<>();
+		sqlConvertedScriptsCharacters=new ArrayList<>();
 		notifyListeners(SimpleEvents.MODEL_RESET);
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
