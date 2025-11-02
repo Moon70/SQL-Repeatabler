@@ -33,14 +33,6 @@ public class SpRenameStatement implements Statement{
 		newNameWithoutBrackets.removeEnclosing('[',']');
 	}
 
-	@Override
-	public void toSql(StringBuilder sb) throws Exception {
-		sb.append(String.format("IF COL_LENGTH ('%s','%s') IS NULL", removeBrackets(tableName.toString()),removeBrackets(newName.toString()))).append(SqlParser.CRLF);
-		sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
-		sb.append(String.format("\tEXEC sp_rename '%s.%s', %s, %s;", tableName,oldName,newName,type)).append(SqlParser.CRLF);
-		sb.append(String.format("END;")).append(SqlParser.CRLF);
-	}
-
 	public String removeBrackets(String s) {
 		if(s.charAt(0)=='[' && s.charAt(s.length()-1)==']') {
 			return s.substring(1,s.length()-1);

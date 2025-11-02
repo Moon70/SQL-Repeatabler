@@ -25,21 +25,6 @@ class AlterTableStatementTest {
 	}
 
 	@Test
-	void alterTable_Column_AddOne_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"Column_AddOne_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"Column_AddOne_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void alterTable_Column_AddOne() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"Column_AddOne_Testdata.txt";
 		String filenameExpecteddata=TESTDATAFOLDER+"Column_AddOne_Expected.txt";
@@ -52,21 +37,6 @@ class AlterTableStatementTest {
 		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
 		statement.toSqlCharacters(sqlCharacterLines);
 		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
-	void alterTable_Column_AddOne_OneLine_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"Column_AddOne_OneLine_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"Column_AddOne_OneLine_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -87,21 +57,6 @@ class AlterTableStatementTest {
 	}
 
 	@Test
-	void alterTable_Column_AddThree_String() throws Exception{
-		String filenameExpecteddata=TESTDATAFOLDER+"Column_AddThree_Expected.txt";
-		String filenameTestdata=	TESTDATAFOLDER+"Column_AddThree_Testdata.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void alterTable_Column_AddThree() throws Exception{
 		String filenameExpecteddata=TESTDATAFOLDER+"Column_AddThree_Expected.txt";
 		String filenameTestdata=	TESTDATAFOLDER+"Column_AddThree_Testdata.txt";
@@ -114,21 +69,6 @@ class AlterTableStatementTest {
 		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
 		statement.toSqlCharacters(sqlCharacterLines);
 		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
-	void alterTable_Constraint_FK_AddOne_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"Constraint_FK_AddOne_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_FK_AddOne_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -149,21 +89,6 @@ class AlterTableStatementTest {
 	}
 
 	@Test
-	void alterTable_Constraint_Unique_AddOne_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"Constraint_Unique_AddOne_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_Unique_AddOne_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void alterTable_Constraint_Unique_AddOne() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"Constraint_Unique_AddOne_Testdata.txt";
 		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_Unique_AddOne_Expected.txt";
@@ -176,21 +101,6 @@ class AlterTableStatementTest {
 		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
 		statement.toSqlCharacters(sqlCharacterLines);
 		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
-	void alterTable_Constraint_FK_AddTwo_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"Constraint_FK_AddTwo_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_FK_AddTwo_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -211,21 +121,6 @@ class AlterTableStatementTest {
 	}
 
 	@Test
-	void alterTable_DropOneColumnWorksAsExpected_String() throws Exception{
-		String filenameExpecteddata=TESTDATAFOLDER+"Column_DropOne_Expected.txt";
-		String filenameTestdata=	TESTDATAFOLDER+"Column_DropOne_Testdata.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void alterTable_DropOneColumnWorksAsExpected() throws Exception{
 		String filenameExpecteddata=TESTDATAFOLDER+"Column_DropOne_Expected.txt";
 		String filenameTestdata=	TESTDATAFOLDER+"Column_DropOne_Testdata.txt";
@@ -238,21 +133,6 @@ class AlterTableStatementTest {
 		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
 		statement.toSqlCharacters(sqlCharacterLines);
 		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
-	void alterTable_DropThreeColumnWorksAsExpected_String() throws Exception{
-		String filenameExpecteddata=TESTDATAFOLDER+"Column_DropThree_Expected.txt";
-		String filenameTestdata=	TESTDATAFOLDER+"Column_DropThree_Testdata.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -273,21 +153,6 @@ class AlterTableStatementTest {
 	}
 
 	@Test
-	void alterTable_DropOneConstraintWorksAsExpected_String() throws Exception{
-		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_DropOne_Expected.txt";
-		String filenameTestdata=	TESTDATAFOLDER+"Constraint_DropOne_Testdata.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void alterTable_DropOneConstraintWorksAsExpected() throws Exception{
 		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_DropOne_Expected.txt";
 		String filenameTestdata=	TESTDATAFOLDER+"Constraint_DropOne_Testdata.txt";
@@ -300,21 +165,6 @@ class AlterTableStatementTest {
 		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
 		statement.toSqlCharacters(sqlCharacterLines);
 		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
-	void alterTable_AlterColumn_OneColumn_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"AlterTable_AlterColumn_OneColumn_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_AlterColumn_OneColumn_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -335,21 +185,6 @@ class AlterTableStatementTest {
 	}
 
 	@Test
-	void alterTable_AlterColumn_ThreeColumns_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"AlterTable_AlterColumn_ThreeColumns_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_AlterColumn_ThreeColumns_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void alterTable_AlterColumn_ThreeColumns() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"AlterTable_AlterColumn_ThreeColumns_Testdata.txt";
 		String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_AlterColumn_ThreeColumns_Expected.txt";
@@ -362,21 +197,6 @@ class AlterTableStatementTest {
 		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
 		statement.toSqlCharacters(sqlCharacterLines);
 		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
-	void alterTable_unsupported_modify_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"AlterTable_ModifyColumn_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_ModifyColumn_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 

@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
-import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
@@ -24,43 +23,6 @@ public class InsertIntoStatement implements Statement{
 		this.tableName=tableName;
 		this.tokenColumnNames=tokenColumnNames;
 		this.columnValuesTokensList=columnValuesTokensList;
-	}
-
-	@Override
-	public void toSql(StringBuilder sb) throws Exception {
-		Token tokenColumnNamesClone=tokenColumnNames.clone();
-		tokenColumnNamesClone.removeEnclosing('(',')');
-		Token[] columnValuesTokenArray=tokenColumnNamesClone.split(',');
-		String nameId=columnValuesTokenArray[0].toString();
-		if(!nameId.equalsIgnoreCase("ID")){
-			logger.warn("INSERT INTO: First column name is '"+nameId+"', expected is 'ID' !");
-		}
-		for(int i=0;i<columnValuesTokensList.size();i++) {
-			sb.append(String.format("if (select COUNT(*) from %s where %s=%s)=0",tableName.getFullNameAsString(),nameId,getFirstValueFromCsvInParenthesis(columnValuesTokensList.get(i).toString()))).append(SqlParser.CRLF);
-			sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
-			sb.append(String.format("\tSET IDENTITY_INSERT %s ON;",tableName.getFullSchemaAndNameAsString())).append(SqlParser.CRLF);
-			sb.append(String.format("\t\tINSERT INTO %s %s VALUES",tableName.getFullNameAsString(),tokenColumnNames.toString())).append(SqlParser.CRLF);
-			sb.append(String.format("\t\t\t%s;",columnValuesTokensList.get(i).toString())).append(SqlParser.CRLF);
-			sb.append(String.format("\tSET IDENTITY_INSERT %s OFF;",tableName.getFullSchemaAndNameAsString())).append(SqlParser.CRLF);
-			sb.append(String.format("END;")).append(SqlParser.CRLF);
-			if(i<columnValuesTokensList.size()-1) {
-				sb.append(SqlParser.CRLF);
-			}
-		}
-	}
-
-	//TODO: remove method after parser refactoring
-	private String getFirstValueFromCsvInParenthesis(String s) {
-		int start=s.indexOf('(')+1;
-		int end=s.indexOf(',', start);
-		return s.substring(start,end);
-	}
-
-	private Token getFirstValueFromCsvToken(Token token) throws CloneNotSupportedException {
-		Token tokenClone=token.clone();
-		tokenClone.removeEnclosing('(',')');
-		Token[] tokenArray=tokenClone.split(',');
-		return tokenArray[0];
 	}
 
 	@Override
@@ -87,6 +49,13 @@ public class InsertIntoStatement implements Statement{
 				sqlCharacterLines.add(SqlString.EMPTY_LINE);
 			}
 		}
+	}
+
+	private Token getFirstValueFromCsvToken(Token token) throws CloneNotSupportedException {
+		Token tokenClone=token.clone();
+		tokenClone.removeEnclosing('(',')');
+		Token[] tokenArray=tokenClone.split(',');
+		return tokenArray[0];
 	}
 
 }

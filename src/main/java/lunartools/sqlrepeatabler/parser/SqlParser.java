@@ -1,12 +1,5 @@
 package lunartools.sqlrepeatabler.parser;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -41,7 +34,6 @@ public class SqlParser {
 //	}
 
 	public static SqlBlock parse(SqlScript sqlScript) throws Exception {
-		StringBuilder result=new StringBuilder();
 		SqlBlock sqlBlockResult=new SqlBlock();
 		ArrayList<StatementFactory> sqlSegmentFactories=new ArrayList<>();
 		ArrayList<Statement> sqlSegments=new ArrayList<>();
@@ -65,16 +57,11 @@ public class SqlParser {
 					statement=statementFactory.createStatement(sqlScript);
 					sqlSegments.add(statement);
 					System.out.println("##################################################");
-					StringBuilder sb=new StringBuilder();
 					ArrayList<SqlString> tempCharacters=new ArrayList<>();
-					statement.toSql(sb);
 					statement.toSqlCharacters(tempCharacters);
-					System.out.print(sb.toString());
-					result.append(sb);
 					sqlBlockResult.add(tempCharacters);
-                    System.out.println("--------------------------------------------------");
                     System.out.println(sqlBlockResult.toString());
-                    System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                    System.out.println("--------------------------------------------------");
                     System.out.println(sqlBlockResult.toHtml());
                     System.out.println("##################################################");
 					break;

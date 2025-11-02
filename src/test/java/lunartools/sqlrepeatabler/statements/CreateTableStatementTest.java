@@ -25,21 +25,6 @@ class CreateTableStatementTest {
 	}
 
 	@Test
-	void createTable_SquareBracketDelimiterIsAccepted_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"CreateOneTable_DelimiterSquareBrackets_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_DelimiterSquareBrackets_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void createTable_SquareBracketDelimiterIsAccepted() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"CreateOneTable_DelimiterSquareBrackets_Testdata.txt";
 		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_DelimiterSquareBrackets_Expected.txt";
@@ -52,21 +37,6 @@ class CreateTableStatementTest {
 		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
 		statement.toSqlCharacters(sqlCharacterLines);
 		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
-	void createTable_QuoteDelimiterIsAccepted_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"CreateOneTable_DelimiterQuotes_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_DelimiterQuotes_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -87,21 +57,6 @@ class CreateTableStatementTest {
 	}
 
 	@Test
-	void createTable_BacktickDelimiterIsAccepted_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"CreateOneTable_DelimiterBackticks_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_DelimiterBackticks_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void createTable_BacktickDelimiterIsAccepted() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"CreateOneTable_DelimiterBackticks_Testdata.txt";
 		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_DelimiterBackticks_Expected.txt";
@@ -114,21 +69,6 @@ class CreateTableStatementTest {
 		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
 		statement.toSqlCharacters(sqlCharacterLines);
 		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
-	void createTable_NoDelimiterIsAccepted_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"CreateOneTable_NoDelimiter_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_NoDelimiter_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 

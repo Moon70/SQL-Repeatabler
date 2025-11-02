@@ -3,7 +3,6 @@ package lunartools.sqlrepeatabler.statements;
 import java.util.ArrayList;
 
 import lunartools.sqlrepeatabler.parser.Category;
-import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.SqlString;
 
@@ -17,14 +16,6 @@ public class OneLineCommentStatement implements Statement{
 		this.sqlScript=sqlScript;
 		this.startIndex=startIndex;
 		this.endIndex=endIndex;
-	}
-
-	@Override
-	public void toSql(StringBuilder sb) {
-		for(int i=startIndex;i<endIndex;i++) {
-			sb.append(sqlScript.getLineAt(i));
-			sb.append(SqlParser.CRLF);
-		}
 	}
 
 	@Override

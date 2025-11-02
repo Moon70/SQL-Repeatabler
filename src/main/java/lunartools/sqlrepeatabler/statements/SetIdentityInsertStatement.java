@@ -23,9 +23,6 @@ public class SetIdentityInsertStatement implements Statement{
 	}
 
 	@Override
-	public void toSql(StringBuilder sb) throws Exception {}
-
-	@Override
 	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {}
 
 }

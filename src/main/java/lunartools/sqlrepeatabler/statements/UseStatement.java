@@ -9,9 +9,6 @@ public class UseStatement implements Statement{
 
 	public UseStatement() {}
 
-	@Override
-	public void toSql(StringBuilder sb) throws Exception {}
-
     @Override
     public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {}
 

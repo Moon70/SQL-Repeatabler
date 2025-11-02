@@ -25,21 +25,6 @@ class SpRenameStatementTest {
 	}
 
 	@Test
-	void spRename_RenameColumn_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"RenameColumn_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"RenameColumn_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void spRename_RenameColumn() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"RenameColumn_Testdata.txt";
 		String filenameExpecteddata=TESTDATAFOLDER+"RenameColumn_Expected.txt";

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
-import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 import lunartools.sqlrepeatabler.segments.TableSegment;
@@ -26,28 +25,6 @@ public class CreateTableStatement implements Statement{
 		this.tableName=tableName;
 		this.tableElements=tableElements;
 		this.mySql=tableName.isMySql();
-	}
-
-	@Override
-	public void toSql(StringBuilder sb) throws Exception {
-		sb.append(String.format("IF OBJECT_ID(N'%s', 'U') IS NULL", tableName.getFullNameWithoutDelimiterAsString())).append(SqlParser.CRLF);
-		sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
-		sb.append(String.format("\tCREATE TABLE %s (",tableName.getFullNameAsString())).append(SqlParser.CRLF);
-		if(tableName.isMySql()) {
-			logger.warn("Script is most likely in MySql format. Converting backtick delimiter to square brackets");
-		}
-
-		for(int i=0;i<tableElements.size();i++) {
-			sb.append("\t\t");
-			tableElements.get(i).toSql(sb,mySql);
-			if(i<tableElements.size()-1) {
-				sb.append(',');
-			}
-			sb.append(SqlParser.CRLF);
-		}
-
-		sb.append("\t);"+SqlParser.CRLF);
-		sb.append("END;").append(SqlParser.CRLF);
 	}
 
 	@Override

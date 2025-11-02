@@ -25,21 +25,6 @@ class MultiLineCommentStatementTest {
 	}
 
 	@Test
-	void multiLineCommentIsAccepted_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"TwoMultiLineCommentLines_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"TwoMultiLineCommentLines_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void multiLineCommentIsAccepted() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"TwoMultiLineCommentLines_Testdata.txt";
 		String filenameExpecteddata=TESTDATAFOLDER+"TwoMultiLineCommentLines_Expected.txt";

@@ -25,21 +25,6 @@ class InsertIntoStatementTest {
 	}
 
 	@Test
-	void insert_OneColumn_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_OneRow_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_OneRow_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void insert_OneColumn() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_OneRow_Testdata.txt";
 		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_OneRow_Expected.txt";
@@ -56,21 +41,6 @@ class InsertIntoStatementTest {
 	}
 
 	@Test
-	void insert_ThreeColumns_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_ThreeRows_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_ThreeRows_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
 	void insert_ThreeColumns() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_ThreeRows_Testdata.txt";
 		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_ThreeRows_Expected.txt";
@@ -83,21 +53,6 @@ class InsertIntoStatementTest {
 		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
 		statement.toSqlCharacters(sqlCharacterLines);
 		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
-	@Test
-	void insert_OneColumn_ColumnWithFunction_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_OneRow_ColumnWithFunction_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_OneRow_ColumnWithFunction_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 

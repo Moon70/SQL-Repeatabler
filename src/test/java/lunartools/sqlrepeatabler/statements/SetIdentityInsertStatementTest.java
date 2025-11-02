@@ -23,19 +23,6 @@ class SetIdentityInsertStatementTest {
 	}
 
 	@Test
-	void setIdentityInsert_On_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"SetIdentityInsert_On_Testdata.txt";
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertTrue(TestHelper.removeCR(sb).length()==0);
-	}
-
-	@Test
 	void setIdentityInsert_On() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"SetIdentityInsert_On_Testdata.txt";
 
@@ -46,19 +33,6 @@ class SetIdentityInsertStatementTest {
 		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
 		statement.toSqlCharacters(sqlCharacterLines);
 		assertTrue(sqlCharacterLines.size()==0);
-	}
-
-	@Test
-	void setIdentityInsert_Off_String() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"SetIdentityInsert_Off_Testdata.txt";
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		StringBuilder sb=new StringBuilder();
-		statement.toSql(sb);
-		assertTrue(TestHelper.removeCR(sb).length()==0);
 	}
 
 	@Test

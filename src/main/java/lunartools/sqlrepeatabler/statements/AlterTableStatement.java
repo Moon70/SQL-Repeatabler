@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
-import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
@@ -27,36 +26,6 @@ public class AlterTableStatement implements Statement{
 		this.tableName=tableName;
 		this.segments=segments;
 		this.mySql=tableName.isMySql();
-	}
-
-	@Override
-	public void toSql(StringBuilder sb) throws Exception {
-		boolean hasAlterColumnAction=false;
-		StringBuilder sbTemp=new StringBuilder();
-		for(int i=0;i<segments.size();i++) {
-			Segment columnelement=segments.get(i);
-			if(columnelement instanceof AlterColumnSegment) {
-				hasAlterColumnAction=true;
-				if(i>0) {
-					sbTemp.append(',').append(SqlParser.CRLF);
-				}
-				columnelement.toSql(sbTemp,tableName, mySql);
-			}
-		}
-		if(hasAlterColumnAction) {
-			sb.append(String.format("ALTER TABLE %s",tableName.getFullNameAsString())).append(SqlParser.CRLF);
-			sb.append(sbTemp).append(';').append(SqlParser.CRLF);
-		}
-
-		for(int i=0;i<segments.size();i++) {
-			Segment columnelement=segments.get(i);
-			if(!(columnelement instanceof AlterColumnSegment)) {
-				columnelement.toSql(sb,tableName, mySql);
-				if(i<segments.size()-1) {
-					sb.append(SqlParser.CRLF);
-				}
-			}
-		}
 	}
 
 	@Override
