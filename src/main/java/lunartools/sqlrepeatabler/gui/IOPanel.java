@@ -23,8 +23,8 @@ public class IOPanel extends JPanel{
 	private static Logger logger = LoggerFactory.getLogger(IOPanel.class);
 	private JTextArea inputTextarea;
 	private JTextArea outputTextarea;
-	private ScriptPanelEditorPanel inputPanel;
-	private ScriptPanelEditorPanel outputPanel;
+	private SqlScriptPanel inputPanel;
+	private SqlScriptPanel outputPanel;
 	private final SqlRepeatablerModel model;
 	private final int sqlFileIndex;
 
@@ -38,8 +38,8 @@ public class IOPanel extends JPanel{
 
 		Font font=new Font("Courier New", Font.PLAIN,12);
 		if(TEST) {
-			inputPanel=new ScriptPanelEditorPanel(model);
-			outputPanel=new ScriptPanelEditorPanel(model);
+			inputPanel=new SqlScriptPanel(model);
+			outputPanel=new SqlScriptPanel(model);
 		}else {
 			inputTextarea=new JTextArea(48,110);
 			inputTextarea.setEditable(false);

@@ -2,6 +2,7 @@ package lunartools.sqlrepeatabler.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Insets;
 
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
@@ -11,27 +12,29 @@ import javax.swing.ScrollPaneConstants;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.parser.Category;
 
-public class ScriptPanelEditorPanel extends JPanel{
-	private JEditorPane logEditorPane;
+public class SqlScriptPanel extends JPanel{
+	private JEditorPane sqlScriptEditorPane;
 	private final String htmlIntro;
 	private final String htmlOutro;
-	private StringBuffer sbHtmlLines;
 	private JScrollPane scrollPane;
 
 	private int width=750;
-	private int height=500;
+	private int height=500+160;
 	
-	public ScriptPanelEditorPanel(SqlRepeatablerModel model) {
+	public SqlScriptPanel(SqlRepeatablerModel model) {
 		Font font=new Font("Courier New", Font.PLAIN,12);
 		setPreferredSize(new Dimension(width, height));
-		logEditorPane=new JEditorPane();
-		logEditorPane.setEditable(false);
-		logEditorPane.setFont(font);
-		logEditorPane.setContentType("text/html");
-		logEditorPane.setPreferredSize(new Dimension(width, height));
-
-		scrollPane=new JScrollPane(logEditorPane);
+		sqlScriptEditorPane=new JEditorPane();
+		sqlScriptEditorPane.setEditable(false);
+		sqlScriptEditorPane.setFont(font);
+		sqlScriptEditorPane.setContentType("text/html");
+//		sqlScriptEditorPane.setPreferredSize(new Dimension(width, height));
+		sqlScriptEditorPane.setMargin(new Insets(10, 20, 10, 20));
+		
+		scrollPane=new JScrollPane(sqlScriptEditorPane);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setPreferredSize(new Dimension(width, height));
 		add(scrollPane);
 
 		StringBuffer sb=new StringBuffer();
@@ -57,8 +60,6 @@ public class ScriptPanelEditorPanel extends JPanel{
 		sb.append("</html>");
 		htmlOutro=sb.toString();
 
-		sbHtmlLines=new StringBuffer();
-
 		//model.addChangeListener(this::updateModelChanges);
 	}
 
@@ -67,7 +68,7 @@ public class ScriptPanelEditorPanel extends JPanel{
 		sb.append(htmlIntro);
 		sb.append(s);
 		sb.append(htmlOutro);
-		logEditorPane.setText(sb.toString());
+		sqlScriptEditorPane.setText(sb.toString());
 		repaint();
 	}
 	
