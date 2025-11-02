@@ -18,11 +18,11 @@ public class WhitespaceLineStatement implements Statement{
 		}
 	}
 
-    @Override
-    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
-        for(int i=0;i<numberOfEmptyLines;i++) {
-            sqlCharacterLines.add(SqlString.EMPTY_LINE);
-        }
-    }
+	@Override
+	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
+		for(int i=0;i<numberOfEmptyLines;i++) {
+			sqlCharacterLines.add(SqlString.EMPTY_LINE);
+		}
+	}
 
 }

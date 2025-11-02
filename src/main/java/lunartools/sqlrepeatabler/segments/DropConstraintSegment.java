@@ -31,7 +31,7 @@ public class DropConstraintSegment extends Segment{
 	}
 
 	@Override
-	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,TableName tableName,boolean mySql) throws Exception {
+	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
         sqlCharacterLines.add(SqlString.createSqlStringFromString("IF EXISTS (", Category.INSERTED));
         sqlCharacterLines.add(SqlString.createSqlStringFromString("\tSELECT 1", Category.INSERTED));
         sqlCharacterLines.add(SqlString.createSqlStringFromString("\tFROM sys.objects", Category.INSERTED));
@@ -40,7 +40,7 @@ public class DropConstraintSegment extends Segment{
         sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\tAND parent_object_id = OBJECT_ID(N'%s')", Category.INSERTED, tableName.getFullName()));
         sqlCharacterLines.add(SqlString.createSqlStringFromString(")", Category.INSERTED));
         sqlCharacterLines.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\tALTER TABLE %s", Category.INSERTED, tableName.getFullName()));
+        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t%s %s", Category.INSERTED,tokenStatement, tableName.getFullName()));
         sqlCharacterLines.add(SqlString.createSqlStringFromString("\t%s CONSTRAINT %s;", Category.INSERTED,getAction(),name));
         sqlCharacterLines.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
 	}

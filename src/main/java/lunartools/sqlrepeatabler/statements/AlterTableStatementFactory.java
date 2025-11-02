@@ -39,8 +39,9 @@ public class AlterTableStatementFactory extends StatementFactory{
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
 
-		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'ALTER' token	
-		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'TABLE' token
+		Token tokenStatement=statementTokenizer.nextToken(AlterTableStatement.COMMAND);
+		tokenStatement.setCategory(Category.STATEMENT);
+		tokenStatement=tokenStatement.toUpperCase();
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
@@ -59,10 +60,10 @@ public class AlterTableStatementFactory extends StatementFactory{
 			columnElements=parseAlterColumnAction(statementTokenizer);
 		}else {
 			//throw new Exception("unsupported ALTER TABLE action found");
-            throw new SqlParserException("unsupported ALTER TABLE action found",statementTokenizer.getFirstCharacter());
+			throw new SqlParserException("unsupported ALTER TABLE action found",statementTokenizer.getFirstCharacter());
 		}
 
-		return new AlterTableStatement(tableName,columnElements);
+		return new AlterTableStatement(tokenStatement,tableName,columnElements);
 	}
 
 	public ArrayList<Segment> parseAddAction(StatementTokenizer statementTokenizer) throws Exception {
@@ -114,7 +115,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 				tokenColumName.setCategory(Category.COLUMN);
 				Token tokenColumParameter=statementTokenizer.nextTokenUntil(',');
 				tokenColumParameter.setCategory(Category.COLUMNPARAMETER);
-				
+
 				Segment columnElement=new AddColumnSegment(tokenColumName,tokenColumParameter);
 				columnElements.add(columnElement);
 			}

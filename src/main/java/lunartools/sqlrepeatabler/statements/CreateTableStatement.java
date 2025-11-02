@@ -10,16 +10,19 @@ import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
+import lunartools.sqlrepeatabler.parser.Token;
 import lunartools.sqlrepeatabler.segments.TableSegment;
 
 public class CreateTableStatement implements Statement{
 	private static Logger logger = LoggerFactory.getLogger(CreateTableStatement.class);
 	public static final String COMMAND="CREATE TABLE";
+	private Token tokenStatement;
 	private TableName tableName;
 	private ArrayList<TableSegment> tableElements;
 	private boolean mySql;
 
-	public CreateTableStatement(TableName tableName,ArrayList<TableSegment> tableElements) {
+	public CreateTableStatement(Token statement,TableName tableName,ArrayList<TableSegment> tableElements) {
+		this.tokenStatement=statement;
 		this.tableName=tableName;
 		this.tableElements=tableElements;
 		this.mySql=tableName.isMySql();
@@ -51,7 +54,7 @@ public class CreateTableStatement implements Statement{
 	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
 		sqlCharacterLines.add(SqlString.createSqlStringFromString("IF OBJECT_ID(N'%s', 'U') IS NULL", Category.INSERTED, tableName.getFullNameWithoutDelimiter()));
 		sqlCharacterLines.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-		sqlCharacterLines.add(SqlString.createSqlStringFromString("\tCREATE TABLE %s (", Category.INSERTED,tableName.getFullName()));
+		sqlCharacterLines.add(SqlString.createSqlStringFromString("\t%s %s (",Category.INSERTED,tokenStatement,tableName.getFullName()));
 
 		SqlString sqlString;
 		for(int i=0;i<tableElements.size();i++) {

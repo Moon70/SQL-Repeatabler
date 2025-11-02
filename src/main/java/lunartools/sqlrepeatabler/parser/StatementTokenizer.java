@@ -78,7 +78,29 @@ public class StatementTokenizer {
 		}
 		return consumeNextToken(charactersOfStatement,' ');
 	}
+
+	public Token nextToken(String text) throws Exception {
+		if(charactersOfStatement.size()==0 || charactersOfStatement.get(0).isSemicolon()) {
+			return null;
+		}
+		stripWhiteSpaceLeft();
+		ArrayList<SqlCharacter> tokenCharacters=new ArrayList<>();
+		SqlCharacter sqlCharacter=getFirstCharacter();
+		for(int i=0;i<text.length();i++) {
+			if(compareCharIgnoreCase(text.charAt(i),getFirstCharacter().getChar())) {
+				tokenCharacters.add(getFirstCharacter());
+				deleteCharAt(0);
+			}else {
+				throw new SqlParserException(String.format("Expected '%s'", text),sqlCharacter);
+			}
+		}
+		return new Token(tokenCharacters);
+	}
 	
+	private boolean compareCharIgnoreCase(char c1,char c2) {
+		return Character.toLowerCase(c1)==Character.toLowerCase(c2);
+	}
+
 	public Token nextTokenUntil(char c) throws Exception {
 		if(charactersOfStatement.size()==0 || charactersOfStatement.get(0).isSemicolon()) {
 			return null;
@@ -185,5 +207,11 @@ public class StatementTokenizer {
         }
         return charactersOfStatement.get(0);
     }
+
+	public void setCategory(Category category) {
+		for(SqlCharacter sqlCharacter:charactersOfStatement) {
+			sqlCharacter.setCategory(category);
+		}
+	}
 	
 }

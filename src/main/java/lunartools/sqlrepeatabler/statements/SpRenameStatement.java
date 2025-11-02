@@ -13,6 +13,7 @@ import lunartools.sqlrepeatabler.parser.Token;
 public class SpRenameStatement implements Statement{
 	private static Logger logger = LoggerFactory.getLogger(SpRenameStatement.class);
 	public static final String COMMAND="SP_RENAME";
+	private Token tokenStatement;
 	private Token tableName;
 	private Token tableNameWithoutBrackets;
 	private Token oldName;
@@ -20,7 +21,8 @@ public class SpRenameStatement implements Statement{
 	private Token newNameWithoutBrackets;
 	private Token type;
 
-	public SpRenameStatement(Token table,Token oldName, Token newName, Token type) throws CloneNotSupportedException {
+	public SpRenameStatement(Token statement,Token table,Token oldName, Token newName, Token type) throws CloneNotSupportedException {
+		this.tokenStatement=statement;
 		this.tableName=table;
 		this.oldName=oldName;
 		this.newName=newName;
@@ -35,7 +37,7 @@ public class SpRenameStatement implements Statement{
 	public void toSql(StringBuilder sb) throws Exception {
 		sb.append(String.format("IF COL_LENGTH ('%s','%s') IS NULL", removeBrackets(tableName.toString()),removeBrackets(newName.toString()))).append(SqlParser.CRLF);
 		sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
-		sb.append(String.format("\texec sp_rename '%s.%s', %s, %s;", tableName,oldName,newName,type)).append(SqlParser.CRLF);
+		sb.append(String.format("\tEXEC sp_rename '%s.%s', %s, %s;", tableName,oldName,newName,type)).append(SqlParser.CRLF);
 		sb.append(String.format("END;")).append(SqlParser.CRLF);
 	}
 
@@ -51,7 +53,7 @@ public class SpRenameStatement implements Statement{
 	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
 		sqlCharacterLines.add(SqlString.createSqlStringFromString("IF COL_LENGTH ('%s','%s') IS NULL", Category.INSERTED, tableNameWithoutBrackets,newNameWithoutBrackets));
 		sqlCharacterLines.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-		sqlCharacterLines.add(SqlString.createSqlStringFromString("\texec sp_rename '%s.%s', %s, %s;", Category.INSERTED, tableName,oldName,newName,type));
+		sqlCharacterLines.add(SqlString.createSqlStringFromString("\tEXEC %s '%s.%s', %s, %s;", Category.INSERTED,tokenStatement, tableName,oldName,newName,type));
 		sqlCharacterLines.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
 	}
 

@@ -32,9 +32,10 @@ public class CreateTableStatementFactory extends StatementFactory{
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
 
-		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'CREATE' token	
-		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'TABLE' token
-
+		Token tokenStatement=statementTokenizer.nextToken(CreateTableStatement.COMMAND);
+		tokenStatement.setCategory(Category.STATEMENT);
+		tokenStatement=tokenStatement.toUpperCase();
+		
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		if(tableName.isMySql()) {
 			logger.warn("Script is most likely MySql format! Replacing backticks with square brackets!");
@@ -53,7 +54,11 @@ public class CreateTableStatementFactory extends StatementFactory{
 			tableElements.add(new TableSegment(columns[i]));
 		}
 
-		return new CreateTableStatement(tableName,tableElements);
+		Token tokenEngineParameters=statementTokenizer.nextTokenUntil(';');
+		if(tokenEngineParameters!=null) {
+			tokenEngineParameters.setCategory(Category.IGNORED);
+		}
+		return new CreateTableStatement(tokenStatement,tableName,tableElements);
 	}
 
 }

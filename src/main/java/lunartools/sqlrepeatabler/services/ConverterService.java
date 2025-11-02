@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 
@@ -24,9 +25,8 @@ public class ConverterService {
 		}
 	}
 
-	public StringBuffer parseFile(SqlScript sqlScript) throws Exception{
-		StringBuilder sb=SqlParser.parse(sqlScript);
-		return new StringBuffer(sb);
+	public SqlBlock parseFile(SqlScript sqlScript) throws Exception{
+		return SqlParser.parse(sqlScript);
 	}
 
 }

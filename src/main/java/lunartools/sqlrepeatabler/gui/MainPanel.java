@@ -49,9 +49,6 @@ public class MainPanel extends JPanel{
 			jSplitPaneVertical.setVisible(true);
 			
 			ArrayList<File> files=model.getSqlInputFiles();
-			for(File file:files) {
-				System.out.println(file);
-			}
 			if(ioPanels!=null) {
 				for(IOPanel iopanel:ioPanels) {
 					model.removeChangeListener(iopanel::updateModelChanges);

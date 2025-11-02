@@ -48,5 +48,5 @@ public abstract class Segment {
 
 	public abstract void toSql(StringBuilder sb,TableName tableName,boolean mySql) throws Exception;
 
-    public abstract void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,TableName tableName,boolean mySql)throws Exception;
+    public abstract void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,Token tokenStatement,TableName tableName,boolean mySql)throws Exception;
 }

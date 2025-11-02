@@ -1,12 +1,9 @@
 package lunartools.sqlrepeatabler.parser;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import lunartools.sqlrepeatabler.statements.CreateTableStatementFactory;
 
 public class Token {
 	private static Logger logger = LoggerFactory.getLogger(Token.class);
@@ -77,7 +74,7 @@ public class Token {
 		token.removeEnclosing('"');
 		return token;
 	}
-	
+
 	public void trim() {
 		while(charactersOfToken.size()>0 && charactersOfToken.get(0).isWhiteSpace()) {
 			charactersOfToken.remove(0);
@@ -132,12 +129,10 @@ public class Token {
 		if(replaceIfExists("auto_increment","identity")) {
 			logger.warn("Script is most likely MySql format! Replacing 'auto_increment' with 'identity'!");
 		}
-		//TODO: implement removing of engine parameter
 
-		
 		return isMySql;
 	}
-	
+
 	private boolean replaceIfExists(String search,String replace) {
 		int p=toString().toLowerCase().indexOf(search);
 		boolean isMySql=p!=-1;
@@ -145,6 +140,7 @@ public class Token {
 			isMySql=true;
 			Category category=charactersOfToken.get(0).getCategory();
 			for(int i=0;i<search.length();i++) {
+				charactersOfToken.get(p).setCategory(Category.IGNORED);
 				charactersOfToken.remove(p);
 			}
 			SqlString sqlString=SqlString.createSqlStringFromString(replace, category);
@@ -152,5 +148,14 @@ public class Token {
 		}
 		return isMySql;
 	}
-	
+
+	public Token toUpperCase() {
+		ArrayList<SqlCharacter> charactersUppercase=new ArrayList<>();
+		for(SqlCharacter sqlCharacter:charactersOfToken) {
+			SqlCharacter sqlCharacterUppercase=new SqlCharacter(Character.toUpperCase(sqlCharacter.getChar()),sqlCharacter.getRow(),sqlCharacter.getColumn(),sqlCharacter.getIndex(),sqlCharacter.getCategory());
+			charactersUppercase.add(sqlCharacterUppercase);
+		}
+		return new Token(charactersUppercase);
+	}
+
 }

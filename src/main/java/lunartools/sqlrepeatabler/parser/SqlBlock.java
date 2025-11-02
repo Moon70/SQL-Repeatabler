@@ -18,4 +18,13 @@ public class SqlBlock {
 		return sb.toString();
 	}
 	
+	public String toHtml() {
+		StringBuilder sb=new StringBuilder();
+		for(SqlString sqlString:sqlStrings) {
+			sb.append(sqlString.toHtml());
+			sb.append("<br>");
+		}
+		return sb.toString();
+	}
+	
 }

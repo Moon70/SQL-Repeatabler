@@ -28,13 +28,16 @@ public class SpRenameStatementFactory extends StatementFactory{
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
 
-		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'sp_rename' token	
+		Token tokenStatement=statementTokenizer.nextToken(SpRenameStatement.COMMAND);
+		statementTokenizer.stripWhiteSpaceLeft();
+		tokenStatement.setCategory(Category.STATEMENT);
+
 		Token source=statementTokenizer.nextToken();
 		Token newName=statementTokenizer.nextToken();
 		newName.setCategory(Category.COLUMN);
 		Token type=statementTokenizer.nextToken();
 		type.setCategory(Category.PARAMETER);
-		
+
 		source.removeEnclosing('\'');
 		Token[] subTokens=source.split('.');
 		Token tableName=subTokens[0];
@@ -42,6 +45,6 @@ public class SpRenameStatementFactory extends StatementFactory{
 		Token oldName=subTokens[1];
 		oldName.setCategory(Category.COLUMN);
 
-		return new SpRenameStatement(tableName,oldName,newName,type);
+		return new SpRenameStatement(tokenStatement,tableName,oldName,newName,type);
 	}
 }

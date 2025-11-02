@@ -22,7 +22,7 @@ public class AlterColumnSegment extends Segment{
 	}
 
 	@Override
-	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,TableName tableName,boolean mySql) throws Exception {
+	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
         sqlCharacterLines.add(SqlString.createSqlStringFromString("\t%s %s %s", Category.INSERTED,getAction(),name,parameters));
 	}
 	

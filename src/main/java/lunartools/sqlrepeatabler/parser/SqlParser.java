@@ -40,9 +40,8 @@ public class SqlParser {
 //		}
 //	}
 
-	public static StringBuilder parse(SqlScript sqlScript) throws Exception {
+	public static SqlBlock parse(SqlScript sqlScript) throws Exception {
 		StringBuilder result=new StringBuilder();
-//		ArrayList<SqlString> resultCharacters=new ArrayList<>();
 		SqlBlock sqlBlockResult=new SqlBlock();
 		ArrayList<StatementFactory> sqlSegmentFactories=new ArrayList<>();
 		ArrayList<Statement> sqlSegments=new ArrayList<>();
@@ -75,6 +74,8 @@ public class SqlParser {
 					sqlBlockResult.add(tempCharacters);
                     System.out.println("--------------------------------------------------");
                     System.out.println(sqlBlockResult.toString());
+                    System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                    System.out.println(sqlBlockResult.toHtml());
                     System.out.println("##################################################");
 					break;
 				}
@@ -83,7 +84,7 @@ public class SqlParser {
 				throw new SqlParserException("Unsupported content: "+sqlScriptLine.toString(),sqlScriptLine.getFirstCharacter());
 			}
 		}
-		return result;
+		return sqlBlockResult;
 	}
 
 }

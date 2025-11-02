@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.services.ConverterService;
 
@@ -16,6 +17,7 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, Void> {
 	private static Logger logger = LoggerFactory.getLogger(ConvertSqlFileWorker.class);
 	private SqlRepeatablerModel model;
 	private ArrayList<StringBuffer> convertedSqlScripts=new ArrayList<>();
+	private ArrayList<SqlBlock> convertedSqlScriptBlocks=new ArrayList<>();
 	private ArrayList<SqlScript> sqlScripts=new ArrayList<>();
 	
 	public ConvertSqlFileWorker(SqlRepeatablerModel model) {
@@ -35,7 +37,9 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, Void> {
 				ConverterService converterService=new ConverterService(model);
 				SqlScript sqlScript=converterService.createSqlScript(file);
 				sqlScripts.add(sqlScript);
-				convertedSqlScripts.add(converterService.parseFile(sqlScript));
+				SqlBlock sqlBlock=converterService.parseFile(sqlScript);
+				convertedSqlScripts.add(new StringBuffer(sqlBlock.toString()));
+				convertedSqlScriptBlocks.add(sqlBlock);
 			}
 		} catch (Exception e) {
 			logger.error("error converting sql files",e);
@@ -49,6 +53,7 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, Void> {
 		try {
 			model.setSqlScripts(sqlScripts);
 			model.setConvertedSqlScripts(convertedSqlScripts);
+			model.setConvertedSqlScriptBlocks(convertedSqlScriptBlocks);
 		} catch (Exception e) {
 			logger.error("error setting converted data",e);
 			throw e;

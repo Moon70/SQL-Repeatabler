@@ -24,10 +24,10 @@ public class UseStatementFactory extends StatementFactory{
 			logger.trace("parsing statement");
 		}
 
-		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
+		StatementTokenizer statementTokenizer=sqlScript.consumeOneLineStatement();
 		logger.info("statement: "+statementTokenizer.toString());
-        logger.warn("Ignoring statement "+UseStatement.COMMAND);
-        statementTokenizer.nextToken().setCategory(Category.STATEMENT);;
+		logger.warn("Ignoring statement "+UseStatement.COMMAND);
+		statementTokenizer.setCategory(Category.IGNORED);
 
 		return new UseStatement();
 	}

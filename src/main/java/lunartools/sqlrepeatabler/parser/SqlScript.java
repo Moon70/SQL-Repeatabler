@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class SqlScript {
 	private ArrayList<SqlString> sqlCharacterLinesOriginal=new ArrayList<>();
-	private ArrayList<SqlString> sqlCharacterLines;
+	private ArrayList<SqlString> sqlStrings;
 	private int index;
 
 	public static SqlScript createInstance(StringBuffer stringBuffer) throws Exception{
@@ -66,62 +66,62 @@ public class SqlScript {
 			}
 		}
 		sqlCharacterLinesOriginal.add(new SqlString(sqlCharacters));
-		sqlCharacterLines=(ArrayList<SqlString>)sqlCharacterLinesOriginal.clone();
+		sqlStrings=(ArrayList<SqlString>)sqlCharacterLinesOriginal.clone();
 	}
 
 	/**
 	 * @return true when index points to a valid line, false at eof
 	 */
 	public boolean hasCurrentLine() {
-		return index<sqlCharacterLines.size();
+		return index<sqlStrings.size();
 	}
 
 	/**
 	 * @return Index of current line, or -1 at eof
 	 */
 	public int getIndex() {
-		return index<sqlCharacterLines.size()?index:-1;
+		return index<sqlStrings.size()?index:-1;
 	}
 
 	/**
 	 * @return Current line
 	 */
 	public String peekLineAsString() {
-		if(index==sqlCharacterLines.size()) {
+		if(index==sqlStrings.size()) {
 			return null;
 		}
-		return sqlCharacterLines.get(index).toString();
+		return sqlStrings.get(index).toString();
 	}
 
 	/**
 	 * @return Current line
 	 */
 	public SqlString peekLine() {
-		if(index==sqlCharacterLines.size()) {
+		if(index==sqlStrings.size()) {
 			return null;
 		}
-		return sqlCharacterLines.get(index);
+		return sqlStrings.get(index);
 	}
 
     public String readLineAsString() {
-        if(index==sqlCharacterLines.size()) {
+        if(index==sqlStrings.size()) {
             return null;
         }
-        return sqlCharacterLines.get(index++).toString();
+        return sqlStrings.get(index++).toString();
     }
 
     public SqlString readLine() {
-        if(index==sqlCharacterLines.size()) {
+        if(index==sqlStrings.size()) {
             return null;
         }
-        return sqlCharacterLines.get(index++);
+        return sqlStrings.get(index++);
     }
 
 	public SqlCharacter getFirstCharacterOfCurrentLine() {
-		if(index==sqlCharacterLines.size()) {
+		if(index==sqlStrings.size()) {
 			return null;
 		}
-		SqlString sqlScriptLine=sqlCharacterLines.get(index);
+		SqlString sqlScriptLine=sqlStrings.get(index);
 		return sqlScriptLine.getFirstCharacter();
 	}
 
@@ -138,10 +138,10 @@ public class SqlScript {
 	}
 
 	private SqlString readLineCharacters() {
-		if(index==sqlCharacterLines.size()) {
+		if(index==sqlStrings.size()) {
 			return null;
 		}
-		return sqlCharacterLines.get(index++);
+		return sqlStrings.get(index++);
 	}
 
 	public StatementTokenizer consumeStatement() throws Exception {
@@ -160,6 +160,16 @@ public class SqlScript {
 				break;
 			}
 		}
+		return new StatementTokenizer(stripWhitespace(charactersOfStatement));
+	}
+
+	public StatementTokenizer consumeOneLineStatement() throws Exception {
+		SqlString sqlScriptLine=readLineCharacters();
+		if(sqlScriptLine==null) {
+			throw new EOFException("Unexpected end of script");
+		}
+		ArrayList<SqlCharacter> charactersOfStatement=new ArrayList<>();
+		charactersOfStatement.addAll(sqlScriptLine.getCharacters());
 		return new StatementTokenizer(stripWhitespace(charactersOfStatement));
 	}
 
@@ -221,13 +231,13 @@ public class SqlScript {
 	}
 
 	public String getLineAt(int index) {
-		return sqlCharacterLines.get(index).toString();
+		return sqlStrings.get(index).toString();
 	}
 	
 	public String toHtml() {
 		StringBuilder sb=new StringBuilder();
-		for(int line=0;line<sqlCharacterLines.size();line++) {
-			sb.append(sqlCharacterLines.get(line).toHtml());
+		for(int line=0;line<sqlStrings.size();line++) {
+			sb.append(sqlStrings.get(line).toHtml());
 			sb.append("<br>");
 		}
 		return sb.toString();
@@ -236,8 +246,8 @@ public class SqlScript {
 	@Override
 	public String toString() {
 		StringBuilder sb=new StringBuilder();
-		for(int line=0;line<sqlCharacterLines.size();line++) {
-			sb.append(sqlCharacterLines.get(line).toString());
+		for(int line=0;line<sqlStrings.size();line++) {
+			sb.append(sqlStrings.get(line).toString());
 			sb.append("\r\n");
 		}
 		return sb.toString();

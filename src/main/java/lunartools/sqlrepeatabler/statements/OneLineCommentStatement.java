@@ -27,12 +27,12 @@ public class OneLineCommentStatement implements Statement{
 		}
 	}
 
-    @Override
-    public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
-        for(int i=startIndex;i<endIndex;i++) {
-            SqlString sqlString=SqlString.createSqlStringFromString(sqlScript.getLineAt(i),Category.COMMENT);
-            sqlCharacterLines.add(sqlString);
-        }
-    }
+	@Override
+	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
+		for(int i=startIndex;i<endIndex;i++) {
+			SqlString sqlString=SqlString.createSqlStringFromString(sqlScript.getLineAt(i),Category.COMMENT);
+			sqlCharacterLines.add(sqlString);
+		}
+	}
 
 }

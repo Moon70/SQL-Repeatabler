@@ -28,9 +28,10 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
-		
-		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'SET' token	
-		statementTokenizer.nextToken().setCategory(Category.COMMAND);//skip 'IDENTITY_INSERT' token
+
+		Token tokenStatement=statementTokenizer.nextToken(SetIdentityInsertStatement.COMMAND);
+		tokenStatement.setCategory(Category.STATEMENT);
+		tokenStatement=tokenStatement.toUpperCase();
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
@@ -41,7 +42,7 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 		}
 		Token parameters=statementTokenizer.toToken();
 		parameters.setCategory(Category.PARAMETER);
-		return new SetIdentityInsertStatement(tableName,parameters);
+		return new SetIdentityInsertStatement(tokenStatement,tableName,parameters);
 	}
 
 }

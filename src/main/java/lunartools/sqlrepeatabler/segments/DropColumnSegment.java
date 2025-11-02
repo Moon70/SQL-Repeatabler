@@ -25,10 +25,10 @@ public class DropColumnSegment extends Segment{
 	}
 
 	@Override
-	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,TableName tableName,boolean mySql) throws Exception {
+	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
         sqlCharacterLines.add(SqlString.createSqlStringFromString("IF COL_LENGTH ('%s','%s') IS NOT NULL", Category.INSERTED,tableName.getFullNameWithoutDelimiter(),getName().cloneWithoutDelimiters()));
         sqlCharacterLines.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\tALTER TABLE %s", Category.INSERTED,tableName.getFullName()));
+        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
         sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\t%s COLUMN %s;", Category.INSERTED,getAction(),getName()));
         sqlCharacterLines.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
 	}

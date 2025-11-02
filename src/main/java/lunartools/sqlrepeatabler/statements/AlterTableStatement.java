@@ -10,17 +10,20 @@ import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
+import lunartools.sqlrepeatabler.parser.Token;
 import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
 import lunartools.sqlrepeatabler.segments.Segment;
 
 public class AlterTableStatement implements Statement{
 	private static Logger logger = LoggerFactory.getLogger(AlterTableStatement.class);
 	public static final String COMMAND="ALTER TABLE";
+	private Token tokenStatement;
 	private TableName tableName;
 	private ArrayList<Segment> segments;
 	private boolean mySql;
 
-	public AlterTableStatement(TableName tableName,ArrayList<Segment> segments) {
+	public AlterTableStatement(Token statement,TableName tableName,ArrayList<Segment> segments) {
+		this.tokenStatement=statement;
 		this.tableName=tableName;
 		this.segments=segments;
 		this.mySql=tableName.isMySql();
@@ -68,11 +71,11 @@ public class AlterTableStatement implements Statement{
 				if(i>0) {
 					sqlCharacterLinesTemp.get(sqlCharacterLinesTemp.size()-1).append(new SqlCharacter(',',Category.UNCATEGORIZED));
 				}
-				segment.toSqlCharacters(sqlCharacterLinesTemp, tableName, hasAlterColumnAction);
+				segment.toSqlCharacters(sqlCharacterLinesTemp,tokenStatement, tableName, hasAlterColumnAction);
 			}
 		}
 		if(hasAlterColumnAction) {
-			sqlCharacterLines.add(SqlString.createSqlStringFromString("ALTER TABLE %s", Category.INSERTED,tableName.getFullName()));
+			sqlCharacterLines.add(SqlString.createSqlStringFromString("%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
 			sqlCharacterLinesTemp.get(sqlCharacterLinesTemp.size()-1).append(new SqlCharacter(';',Category.UNCATEGORIZED));
 			sqlCharacterLines.addAll(sqlCharacterLinesTemp);
 		}
@@ -80,7 +83,7 @@ public class AlterTableStatement implements Statement{
 		for(int i=0;i<segments.size();i++) {
 			Segment columnelement=segments.get(i);
 			if(!(columnelement instanceof AlterColumnSegment)) {
-				columnelement.toSqlCharacters(sqlCharacterLines, tableName, hasAlterColumnAction);
+				columnelement.toSqlCharacters(sqlCharacterLines,tokenStatement, tableName, hasAlterColumnAction);
 				if(i<segments.size()-1) {
 					sqlCharacterLines.add(SqlString.EMPTY_LINE);
 				}

@@ -31,16 +31,17 @@ public class InsertIntoStatementFactory extends StatementFactory{
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("statement: "+statementTokenizer.toString());
 
-		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'INSERT' token	
-		statementTokenizer.nextToken().setCategory(Category.STATEMENT);//skip 'INTO' token
+		Token tokenStatement=statementTokenizer.nextToken(InsertIntoStatement.COMMAND);
+		tokenStatement.setCategory(Category.STATEMENT);
+		tokenStatement=tokenStatement.toUpperCase();
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug(tableName.toString());
 
 		Token tokenColumnNames=statementTokenizer.nextToken('(',')');
 		tokenColumnNames.setCategory(Category.COLUMN);
-		
-		
+
+
 		if(!statementTokenizer.consumePrefixIgnoreCaseAndSpace("VALUES")) {
 			throw new Exception("Keyword VALUES not found");
 		}
@@ -55,7 +56,7 @@ public class InsertIntoStatementFactory extends StatementFactory{
 			columnValuesTokensList.add(tokenValues);
 		}
 
-		return new InsertIntoStatement(tableName,tokenColumnNames,columnValuesTokensList);
+		return new InsertIntoStatement(tokenStatement,tableName,tokenColumnNames,columnValuesTokensList);
 	}
 
 }
