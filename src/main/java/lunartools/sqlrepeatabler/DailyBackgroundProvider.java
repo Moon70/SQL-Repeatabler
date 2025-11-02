@@ -32,7 +32,9 @@ public class DailyBackgroundProvider {
 			"First ape on the moon",
 			"Apeula",
 			"2001 An Ape Odyssey",
-			"Sphinx"
+			"Sphinx",
+			"ApeMaid",
+			"Ape3PO"
 			));
 	
 	public static Image getImage() {
