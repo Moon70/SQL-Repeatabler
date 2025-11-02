@@ -73,7 +73,7 @@ class SaveAsAction extends AbstractAction {
 	private void action_SaveProjectFile(File file) {
 		try {
 			try(FileOutputStream fileOutputStream=new FileOutputStream(file)){
-				fileOutputStream.write(controller.getModel().getConvertedSqlScript().toString().getBytes(StandardCharsets.UTF_8));
+				fileOutputStream.write(controller.getModel().getConvertedSqlScriptCharactersAsStringBuffer().toString().getBytes(StandardCharsets.UTF_8));
 			}
 		} catch (Exception e) {
 			logger.error("Error saving SQL file",e);

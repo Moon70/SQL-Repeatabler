@@ -30,7 +30,6 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 
 	private ArrayList<File> sqlInputFiles=new ArrayList<>();
 	private ArrayList<SqlScript> sqlScripts=new ArrayList<>();
-	private ArrayList<StringBuffer> sqlConvertedScripts=new ArrayList<>();
 	private ArrayList<SqlBlock> sqlConvertedScriptBlocks=new ArrayList<>();
 
 	public static String getProgramVersion() {
@@ -67,25 +66,13 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		}
 	}
 
-	public void clearConvertedSqlScript() {
-		sqlConvertedScripts=new ArrayList<>();
-		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
-	}
-
 	public void clearConvertedSqlScriptBlocks() {
 		sqlConvertedScriptBlocks=new ArrayList<>();
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
 
 	public boolean hasSqlConvertedScripts() {
-		return sqlConvertedScripts.size()>0;
-	}
-
-	public StringBuffer getSingleConvertedSqlScript(int index) {
-		if(index>=sqlConvertedScripts.size()) {
-			return new StringBuffer();
-		}
-		return sqlConvertedScripts.get(index);
+		return sqlConvertedScriptBlocks.size()>0;
 	}
 
 	public SqlBlock getSingleConvertedSqlScriptBlock(int index) {
@@ -103,28 +90,11 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		this.sqlScripts=sqlScripts;
 	}
 
-	public void setConvertedSqlScripts(ArrayList<StringBuffer> sqlConvertedScripts) {
-		this.sqlConvertedScripts=sqlConvertedScripts;
-		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
-	}
-
 	public void setConvertedSqlScriptBlocks(ArrayList<SqlBlock> sqlBlocks) {
 		this.sqlConvertedScriptBlocks=sqlBlocks;
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
 	
-	public StringBuffer getConvertedSqlScript() {
-		StringBuffer sbConvertedScripts=new StringBuffer();
-		sbConvertedScripts.append("-- "+SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion()+System.lineSeparator());
-		for(int i=0;i<sqlConvertedScripts.size();i++) {
-			sbConvertedScripts.append(System.lineSeparator());
-			sbConvertedScripts.append("-- Original: "+sqlInputFiles.get(i).getName());
-			sbConvertedScripts.append(System.lineSeparator());
-			sbConvertedScripts.append(sqlConvertedScripts.get(i));
-		}
-		return sbConvertedScripts;
-	}
-
 	public StringBuffer getConvertedSqlScriptCharactersAsStringBuffer() {
 		StringBuffer sbConvertedScripts=new StringBuffer();
 		sbConvertedScripts.append("-- "+SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion()+System.lineSeparator());
@@ -166,7 +136,6 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 
 	public void reset() {
 		sqlInputFiles=new ArrayList<>();
-		sqlConvertedScripts=new ArrayList<>();
 		sqlConvertedScriptBlocks=new ArrayList<>();
 		notifyListeners(SimpleEvents.MODEL_RESET);
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);

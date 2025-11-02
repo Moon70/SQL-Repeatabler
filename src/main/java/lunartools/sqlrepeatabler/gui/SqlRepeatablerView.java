@@ -81,7 +81,7 @@ public class SqlRepeatablerView extends JFrame{
 	}
 
 	public void refreshView() {
-		boolean convertedDataAvailable=model.getConvertedSqlScript().length()>0;
+		boolean convertedDataAvailable=model.hasSqlConvertedScripts();
 		menuModel.getMenuFileItemSaveAs().setEnabled(convertedDataAvailable);
 		menuModel.getMenuFileItemReset().setEnabled(convertedDataAvailable);
 	}

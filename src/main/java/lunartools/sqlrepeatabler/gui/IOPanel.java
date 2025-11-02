@@ -97,7 +97,7 @@ public class IOPanel extends JPanel{
 					
 					this.repaint();
 				}else {
-					outputTextarea.setText(model.getSingleConvertedSqlScript(sqlFileIndex).toString());
+					outputTextarea.setText(model.getSingleConvertedSqlScriptBlock(sqlFileIndex).toString());
 				}
 			}
 		}else if(object==SimpleEvents.MODEL_RESET) {
