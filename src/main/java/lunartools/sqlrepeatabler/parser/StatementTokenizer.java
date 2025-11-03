@@ -3,7 +3,11 @@ package lunartools.sqlrepeatabler.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class StatementTokenizer {
+    private static Logger logger = LoggerFactory.getLogger(StatementTokenizer.class);
 	private ArrayList<SqlCharacter> charactersOfStatement;
 	
 	public StatementTokenizer(ArrayList<SqlCharacter> charactersOfStatement) {
@@ -15,7 +19,7 @@ public class StatementTokenizer {
 		boolean singleQuoteOpen=false;
 		int parenthesisOpen=0;
 		
-		ArrayList<SqlCharacter> token=new ArrayList<>();
+		ArrayList<SqlCharacter> tokenCharacters=new ArrayList<>();
 		
 		while(charactersOfStatement.size()>0) {
 			SqlCharacter character=charactersOfStatement.get(0);
@@ -32,16 +36,18 @@ public class StatementTokenizer {
 			}else if(parenthesisOpen!=0) {
 				//characters inside parenthesis
 			}else if(character.isSemicolon()) {
-				return new Token(token);
+				return new Token(tokenCharacters);
 			}else if(character.getChar()==tokenDelimiter || character.getChar()==',') {
 				charactersOfStatement.remove(0);
 				stripWhiteSpaceLeft(charactersOfStatement);
-				return new Token(token);
+				return new Token(tokenCharacters);
 			}
-			token.add(character);
+			tokenCharacters.add(character);
 			charactersOfStatement.remove(0);
 		}
-		throw new Exception("Unexpected end of buffer");
+//		throw new Exception("Unexpected end of buffer");
+		logger.warn("Reached end of file while scanning for statement terminating semicolon. Treating eof as semicolon!");
+		return new Token(tokenCharacters);
 	}
 	
 	public void stripWhiteSpaceLeft() {

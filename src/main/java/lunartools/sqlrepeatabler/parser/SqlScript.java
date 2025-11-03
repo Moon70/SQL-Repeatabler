@@ -150,10 +150,11 @@ public class SqlScript {
 		while(true) {
 			SqlString sqlScriptLine=readLineCharacters();
 			if(sqlScriptLine==null) {
-				throw new EOFException("Unexpected end of script");
+//				throw new EOFException("Unexpected end of script");
+			    break;
 			}
 			if(charactersOfStatement.size()>0 && !charactersOfStatement.get(charactersOfStatement.size()-1).isWhiteSpace()) {
-				charactersOfStatement.add(sqlCharacterInsertedSpace);
+                charactersOfStatement.add(sqlCharacterInsertedSpace);
 			}
 			charactersOfStatement.addAll(sqlScriptLine.getCharacters());
 			if(sqlScriptLine.endsWithSemicolonIgnoreWhiteSpace()) {

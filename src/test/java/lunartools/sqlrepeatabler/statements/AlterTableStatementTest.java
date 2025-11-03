@@ -200,20 +200,36 @@ class AlterTableStatementTest {
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
-	@Test
-	void alterTable_unsupported_modify() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"AlterTable_ModifyColumn_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_ModifyColumn_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+    @Test
+    void alterTable_unsupported_modify() throws Exception{
+        String filenameTestdata=    TESTDATAFOLDER+"AlterTable_ModifyColumn_Testdata.txt";
+        String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_ModifyColumn_Expected.txt";
+        String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
+        SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+        assertTrue(factory.match(sqlScript.peekLineAsString()));
 
-		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
+        Statement statement=factory.createStatement(sqlScript);
+        ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
+        statement.toSqlCharacters(sqlCharacterLines);
+        StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+        assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_missingSemicolon() throws Exception{
+        String filenameTestdata=    TESTDATAFOLDER+"AlterTable_AlterColumn_MissingSemicolon_Testdata.txt";
+        String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_AlterColumn_MissingSemicolon_Expected.txt";
+        String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+        SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+        assertTrue(factory.match(sqlScript.peekLineAsString()));
+
+        Statement statement=factory.createStatement(sqlScript);
+        ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
+        statement.toSqlCharacters(sqlCharacterLines);
+        StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+        assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
 
 }

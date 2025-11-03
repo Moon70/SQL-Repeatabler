@@ -11,6 +11,7 @@ public class Token {
 
 	public Token(ArrayList<SqlCharacter> charactersOfToken) {
 		this.charactersOfToken=charactersOfToken;
+		trim();
 	}
 
 	public Token(String s,Category category) {
@@ -75,7 +76,7 @@ public class Token {
 		return token;
 	}
 
-	public void trim() {
+	private void trim() {
 		while(charactersOfToken.size()>0 && charactersOfToken.get(0).isWhiteSpace()) {
 			charactersOfToken.remove(0);
 		}
