@@ -22,6 +22,7 @@ public class Token {
 			characters.add(sqlCharacter);
 		}
 		this.charactersOfToken=characters;
+		trim();
 	}
 
 	public Token[] split(char c) {
@@ -45,13 +46,7 @@ public class Token {
 	}
 
 	public void removeEnclosing(char c) {
-		if(
-				charactersOfToken.get(0).getChar()==c &&
-				charactersOfToken.get(charactersOfToken.size()-1).getChar()==c
-				) {
-			charactersOfToken.remove(charactersOfToken.size()-1);
-			charactersOfToken.remove(0);
-		}
+		removeEnclosing(c, c);
 	}
 
 	public void removeEnclosing(char cLeft, char cRight) {
@@ -64,6 +59,7 @@ public class Token {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Token clone() throws CloneNotSupportedException {
 		return new Token((ArrayList<SqlCharacter>)charactersOfToken.clone());
