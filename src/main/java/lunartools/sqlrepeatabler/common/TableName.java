@@ -2,16 +2,12 @@ package lunartools.sqlrepeatabler.common;
 
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public class TableName {
-	private static Logger logger = LoggerFactory.getLogger(TableName.class);
 	private Token databaseName;
 	private Token schemaName;
 	//private String schemaName="[dbo]";

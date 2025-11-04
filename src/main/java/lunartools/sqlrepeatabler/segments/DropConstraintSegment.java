@@ -1,9 +1,8 @@
 package lunartools.sqlrepeatabler.segments;
 
-import java.util.ArrayList;
-
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -31,18 +30,18 @@ public class DropConstraintSegment extends Segment{
 	}
 
 	@Override
-	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("IF EXISTS (", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\tSELECT 1", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\tFROM sys.objects", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\tWHERE object_id = OBJECT_ID(N'%s.%s')", Category.INSERTED,tableName.getFullName(),name));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\tAND type IN ('C', 'D', 'F', 'PK', 'UQ')", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\tAND parent_object_id = OBJECT_ID(N'%s')", Category.INSERTED, tableName.getFullName()));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString(")", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t%s %s", Category.INSERTED,tokenStatement, tableName.getFullName()));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t%s CONSTRAINT %s;", Category.INSERTED,getAction(),name));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
+	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
+        sqlBlock.add(SqlString.createSqlStringFromString("IF EXISTS (", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("\tSELECT 1", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("\tFROM sys.objects", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("\tWHERE object_id = OBJECT_ID(N'%s.%s')", Category.INSERTED,tableName.getFullName(),name));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t\tAND type IN ('C', 'D', 'F', 'PK', 'UQ')", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t\tAND parent_object_id = OBJECT_ID(N'%s')", Category.INSERTED, tableName.getFullName()));
+        sqlBlock.add(SqlString.createSqlStringFromString(")", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t%s %s", Category.INSERTED,tokenStatement, tableName.getFullName()));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t%s CONSTRAINT %s;", Category.INSERTED,getAction(),name));
+        sqlBlock.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
 	}
 	
 	public String toString() {

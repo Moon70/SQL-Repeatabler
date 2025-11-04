@@ -1,9 +1,7 @@
 package lunartools.sqlrepeatabler.segments;
 
-import java.util.ArrayList;
-
 import lunartools.sqlrepeatabler.common.TableName;
-import lunartools.sqlrepeatabler.parser.SqlString;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public abstract class Segment {
@@ -46,7 +44,5 @@ public abstract class Segment {
 		return name;
 	}
 
-	public abstract void toSql(StringBuilder sb,TableName tableName,boolean mySql) throws Exception;
-
-    public abstract void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,Token tokenStatement,TableName tableName,boolean mySql)throws Exception;
+    public abstract void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName,boolean mySql)throws Exception;
 }

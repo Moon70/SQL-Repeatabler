@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
@@ -26,7 +27,7 @@ public class InsertIntoStatement implements Statement{
 	}
 
 	@Override
-	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
 		Token tokenFirstColumnName=getFirstValueFromCsvToken(tokenColumnNames);
 		if(!tokenFirstColumnName.toString().equalsIgnoreCase("ID")){
 			logger.warn("INSERT INTO: First column name is '"+tokenFirstColumnName.toString()+"', expected is 'ID' !");
@@ -37,16 +38,16 @@ public class InsertIntoStatement implements Statement{
 			tokenAllValues.removeEnclosing('(',')');
 			Token[] columnValues=tokenAllValues.split(',');
 			Token tokenFirstColumnValue=columnValues[0];
-			sqlCharacterLines.add(SqlString.createSqlStringFromString("if (select COUNT(*) from %s where %s=%s)=0", Category.INSERTED,tableName.getFullName(),tokenFirstColumnName,tokenFirstColumnValue));
-			sqlCharacterLines.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-			sqlCharacterLines.add(SqlString.createSqlStringFromString("\tSET IDENTITY_INSERT %s ON;",Category.INSERTED,tableName.getFullSchemaAndName()));
-			sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\t%s %s %s VALUES", Category.INSERTED,tokenStatement,tableName.getFullName(),tokenColumnNames));
-			sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\t\t%s;", Category.INSERTED,columnValuesTokensList.get(i)));
-			sqlCharacterLines.add(SqlString.createSqlStringFromString("\tSET IDENTITY_INSERT %s OFF;", Category.INSERTED,tableName.getFullSchemaAndName()));
-			sqlCharacterLines.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
+			sqlBlock.add(SqlString.createSqlStringFromString("if (select COUNT(*) from %s where %s=%s)=0", Category.INSERTED,tableName.getFullName(),tokenFirstColumnName,tokenFirstColumnValue));
+			sqlBlock.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
+			sqlBlock.add(SqlString.createSqlStringFromString("\tSET IDENTITY_INSERT %s ON;",Category.INSERTED,tableName.getFullSchemaAndName()));
+			sqlBlock.add(SqlString.createSqlStringFromString("\t\t%s %s %s VALUES", Category.INSERTED,tokenStatement,tableName.getFullName(),tokenColumnNames));
+			sqlBlock.add(SqlString.createSqlStringFromString("\t\t\t%s;", Category.INSERTED,columnValuesTokensList.get(i)));
+			sqlBlock.add(SqlString.createSqlStringFromString("\tSET IDENTITY_INSERT %s OFF;", Category.INSERTED,tableName.getFullSchemaAndName()));
+			sqlBlock.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
 
 			if(i<columnValuesTokensList.size()-1) {
-				sqlCharacterLines.add(SqlString.EMPTY_LINE);
+				sqlBlock.add(SqlString.EMPTY_LINE);
 			}
 		}
 	}

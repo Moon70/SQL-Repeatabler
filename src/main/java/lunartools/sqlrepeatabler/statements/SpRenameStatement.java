@@ -1,16 +1,11 @@
 package lunartools.sqlrepeatabler.statements;
 
-import java.util.ArrayList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public class SpRenameStatement implements Statement{
-	private static Logger logger = LoggerFactory.getLogger(SpRenameStatement.class);
 	public static final String COMMAND="SP_RENAME";
 	private Token tokenStatement;
 	private Token tableName;
@@ -33,11 +28,11 @@ public class SpRenameStatement implements Statement{
 	}
 
 	@Override
-	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
-		sqlCharacterLines.add(SqlString.createSqlStringFromString("IF COL_LENGTH ('%s','%s') IS NULL", Category.INSERTED, tableNameWithoutBrackets,newNameWithoutBrackets));
-		sqlCharacterLines.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-		sqlCharacterLines.add(SqlString.createSqlStringFromString("\tEXEC %s '%s.%s', %s, %s;", Category.INSERTED,tokenStatement, tableName,oldName,newName,type));
-		sqlCharacterLines.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
+	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
+		sqlBlock.add(SqlString.createSqlStringFromString("IF COL_LENGTH ('%s','%s') IS NULL", Category.INSERTED, tableNameWithoutBrackets,newNameWithoutBrackets));
+		sqlBlock.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
+		sqlBlock.add(SqlString.createSqlStringFromString("\tEXEC %s '%s.%s', %s, %s;", Category.INSERTED,tokenStatement, tableName,oldName,newName,type));
+		sqlBlock.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
 	}
 
 }

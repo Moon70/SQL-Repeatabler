@@ -31,6 +31,7 @@ public class SqlScript {
 		return new SqlScript(bufferedReader);
 	}
 
+	@SuppressWarnings("unchecked")
 	private SqlScript(BufferedReader bufferedReader) throws IOException {
 		ArrayList<Integer> scriptAsIntegerArray=new ArrayList<>();
 		int iChar;
@@ -148,16 +149,16 @@ public class SqlScript {
 		SqlCharacter sqlCharacterInsertedSpace=new SqlCharacter(' ',-1,-1,-1);
 		ArrayList<SqlCharacter> charactersOfStatement=new ArrayList<>();
 		while(true) {
-			SqlString sqlScriptLine=readLineCharacters();
-			if(sqlScriptLine==null) {
+			SqlString sqlString=readLineCharacters();
+			if(sqlString==null) {
 //				throw new EOFException("Unexpected end of script");
 			    break;
 			}
 			if(charactersOfStatement.size()>0 && !charactersOfStatement.get(charactersOfStatement.size()-1).isWhiteSpace()) {
                 charactersOfStatement.add(sqlCharacterInsertedSpace);
 			}
-			charactersOfStatement.addAll(sqlScriptLine.getCharacters());
-			if(sqlScriptLine.endsWithSemicolonIgnoreWhiteSpace()) {
+			charactersOfStatement.addAll(sqlString.getCharacters());
+			if(sqlString.endsWithSemicolonIgnoreWhiteSpace()) {
 				break;
 			}
 		}
@@ -165,12 +166,12 @@ public class SqlScript {
 	}
 
 	public StatementTokenizer consumeOneLineStatement() throws Exception {
-		SqlString sqlScriptLine=readLineCharacters();
-		if(sqlScriptLine==null) {
+		SqlString sqlString=readLineCharacters();
+		if(sqlString==null) {
 			throw new EOFException("Unexpected end of script");
 		}
 		ArrayList<SqlCharacter> charactersOfStatement=new ArrayList<>();
-		charactersOfStatement.addAll(sqlScriptLine.getCharacters());
+		charactersOfStatement.addAll(sqlString.getCharacters());
 		return new StatementTokenizer(stripWhitespace(charactersOfStatement));
 	}
 

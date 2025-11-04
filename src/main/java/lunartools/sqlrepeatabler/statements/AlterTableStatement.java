@@ -2,11 +2,9 @@ package lunartools.sqlrepeatabler.statements;
 
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -14,7 +12,6 @@ import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
 import lunartools.sqlrepeatabler.segments.Segment;
 
 public class AlterTableStatement implements Statement{
-	private static Logger logger = LoggerFactory.getLogger(AlterTableStatement.class);
 	public static final String COMMAND="ALTER TABLE";
 	private Token tokenStatement;
 	private TableName tableName;
@@ -27,32 +24,32 @@ public class AlterTableStatement implements Statement{
 	}
 
 	@Override
-	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
 		boolean hasAlterColumnAction=false;
 
-		ArrayList<SqlString> sqlCharacterLinesTemp=new ArrayList<>();
+		SqlBlock sqlblockTemp=new SqlBlock();
 		for(int i=0;i<segments.size();i++) {
 			Segment segment=segments.get(i);
 			if(segment instanceof AlterColumnSegment) {
 				hasAlterColumnAction=true;
 				if(i>0) {
-					sqlCharacterLinesTemp.get(sqlCharacterLinesTemp.size()-1).append(new SqlCharacter(',',Category.UNCATEGORIZED));
+					sqlblockTemp.getLastLine().append(new SqlCharacter(',',Category.UNCATEGORIZED));
 				}
-				segment.toSqlCharacters(sqlCharacterLinesTemp,tokenStatement, tableName, hasAlterColumnAction);
+				segment.toSqlCharacters(sqlblockTemp,tokenStatement, tableName, hasAlterColumnAction);
 			}
 		}
 		if(hasAlterColumnAction) {
-			sqlCharacterLines.add(SqlString.createSqlStringFromString("%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
-			sqlCharacterLinesTemp.get(sqlCharacterLinesTemp.size()-1).append(new SqlCharacter(';',Category.UNCATEGORIZED));
-			sqlCharacterLines.addAll(sqlCharacterLinesTemp);
+			sqlBlock.add(SqlString.createSqlStringFromString("%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
+			sqlblockTemp.getLastLine().append(new SqlCharacter(';',Category.UNCATEGORIZED));
+			sqlBlock.add(sqlblockTemp);
 		}
 
 		for(int i=0;i<segments.size();i++) {
 			Segment columnelement=segments.get(i);
 			if(!(columnelement instanceof AlterColumnSegment)) {
-				columnelement.toSqlCharacters(sqlCharacterLines,tokenStatement, tableName, hasAlterColumnAction);
+				columnelement.toSqlCharacters(sqlBlock,tokenStatement, tableName, hasAlterColumnAction);
 				if(i<segments.size()-1) {
-					sqlCharacterLines.add(SqlString.EMPTY_LINE);
+					sqlBlock.add(SqlString.EMPTY_LINE);
 				}
 			}
 		}

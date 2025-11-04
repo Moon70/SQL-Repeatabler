@@ -1,9 +1,8 @@
 package lunartools.sqlrepeatabler.segments;
 
-import java.util.ArrayList;
-
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -27,12 +26,12 @@ public class AddUniqueConstraintSegment extends Segment{
 	}
 
 	@Override
-	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("IF OBJECT_ID('%s','UQ') IS NULL", Category.INSERTED,getName().cloneWithoutDelimiters()));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\tADD CONSTRAINT %s unique %s;", Category.INSERTED,getName(),referencesColumn));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
+	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
+        sqlBlock.add(SqlString.createSqlStringFromString("IF OBJECT_ID('%s','UQ') IS NULL", Category.INSERTED,getName().cloneWithoutDelimiters()));
+        sqlBlock.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t\tADD CONSTRAINT %s unique %s;", Category.INSERTED,getName(),referencesColumn));
+        sqlBlock.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
 	}
 	
 	public String toString() {

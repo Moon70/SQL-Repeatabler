@@ -48,27 +48,22 @@ public class SqlParser {
         sqlSegmentFactories.add(new UseStatementFactory());
 
 		while(sqlScript.hasCurrentLine()) {
-			SqlString sqlScriptLine=sqlScript.peekLine();
+			SqlString sqlString=sqlScript.peekLine();
 			
-			logger.debug("processing line "+(sqlScript.getIndex()+1)+"\t:"+sqlScriptLine.toString());
+			logger.debug("processing line "+(sqlScript.getIndex()+1)+"\t:"+sqlString.toString());
 			Statement statement=null;
 			for(StatementFactory statementFactory:sqlSegmentFactories) {
-				if(statementFactory.match(sqlScriptLine.toString())) {
+				if(statementFactory.match(sqlString.toString())) {
 					statement=statementFactory.createStatement(sqlScript);
 					sqlSegments.add(statement);
-					System.out.println("##################################################");
-					ArrayList<SqlString> tempCharacters=new ArrayList<>();
+					SqlBlock tempCharacters=new SqlBlock();
 					statement.toSqlCharacters(tempCharacters);
 					sqlBlockResult.add(tempCharacters);
-                    System.out.println(sqlBlockResult.toString());
-                    System.out.println("--------------------------------------------------");
-                    System.out.println(sqlBlockResult.toHtml());
-                    System.out.println("##################################################");
 					break;
 				}
 			}
 			if(statement==null) {
-				throw new SqlParserException("Unsupported content: "+sqlScriptLine.toString(),sqlScriptLine.getFirstCharacter());
+				throw new SqlParserException("Unsupported content: "+sqlString.toString(),sqlString.getFirstCharacter());
 			}
 		}
 		return sqlBlockResult;

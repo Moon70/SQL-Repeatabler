@@ -1,9 +1,8 @@
 package lunartools.sqlrepeatabler.segments;
 
-import java.util.ArrayList;
-
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -39,18 +38,18 @@ public class AddForeignKeyConstraintSegment extends Segment{
 	}
 
 	@Override
-	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("IF NOT EXISTS (", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\tSELECT 1", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\tFROM sys.foreign_keys", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\tWHERE name = '%s' AND parent_object_id = OBJECT_ID('%s')", Category.INSERTED,getName().cloneWithoutDelimiters(),tableName.getFullNameWithoutDelimiter()));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString(")", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\t%s CONSTRAINT %s", Category.INSERTED,getAction(),getName()));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\tFOREIGN KEY %s", Category.INSERTED,foreignKey));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\tREFERENCES %s %s;", Category.INSERTED,referencesTable,referencesColumn));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
+	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
+        sqlBlock.add(SqlString.createSqlStringFromString("IF NOT EXISTS (", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("\tSELECT 1", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("\tFROM sys.foreign_keys", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("\tWHERE name = '%s' AND parent_object_id = OBJECT_ID('%s')", Category.INSERTED,getName().cloneWithoutDelimiters(),tableName.getFullNameWithoutDelimiter()));
+        sqlBlock.add(SqlString.createSqlStringFromString(")", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t\t%s CONSTRAINT %s", Category.INSERTED,getAction(),getName()));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t\tFOREIGN KEY %s", Category.INSERTED,foreignKey));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t\tREFERENCES %s %s;", Category.INSERTED,referencesTable,referencesColumn));
+        sqlBlock.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
 	}
 	
 	public String toString() {

@@ -5,8 +5,6 @@ import java.awt.Font;
 import java.awt.Insets;
 
 import javax.swing.JEditorPane;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.parser.Category;

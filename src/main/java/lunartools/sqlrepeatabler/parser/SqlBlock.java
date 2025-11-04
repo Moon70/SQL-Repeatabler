@@ -13,13 +13,21 @@ public class SqlBlock {
 		this.sqlStrings.addAll(sqlStrings);
 	}
 	
-	public String toString() {
+	public void add(SqlBlock sqlBlock) {
+		this.sqlStrings.addAll(sqlBlock.getSqlStrings());
+	}
+	
+	public StringBuilder toStringBuilder() {
 		StringBuilder sb=new StringBuilder();
 		for(SqlString sqlString:sqlStrings) {
 			sb.append(sqlString.toString());
 			sb.append("\n");
 		}
-		return sb.toString();
+		return sb;
+	}
+	
+	public String toString() {
+		return toStringBuilder().toString();
 	}
 	
 	public String toHtml() {
@@ -31,4 +39,15 @@ public class SqlBlock {
 		return sb.toString();
 	}
 	
+	public ArrayList<SqlString> getSqlStrings(){
+		return sqlStrings;
+	}
+	
+	public SqlString getLastLine() {
+		return sqlStrings.get(sqlStrings.size()-1);
+	}
+	
+	public int size() {
+		return sqlStrings.size();
+	}
 }

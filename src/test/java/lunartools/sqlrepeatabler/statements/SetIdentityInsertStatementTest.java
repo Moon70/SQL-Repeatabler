@@ -3,13 +3,11 @@ package lunartools.sqlrepeatabler.statements;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Test;
 
 import lunartools.sqlrepeatabler.TestHelper;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.parser.SqlString;
 
 class SetIdentityInsertStatementTest {
 	private static final String TESTDATAFOLDER="/SetIdentityInsertStatement/";
@@ -30,7 +28,7 @@ class SetIdentityInsertStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
+		SqlBlock sqlCharacterLines=new SqlBlock();
 		statement.toSqlCharacters(sqlCharacterLines);
 		assertTrue(sqlCharacterLines.size()==0);
 	}
@@ -43,9 +41,9 @@ class SetIdentityInsertStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		assertTrue(sqlCharacterLines.size()==0);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		assertTrue(sqlBlock.size()==0);
 	}
 
 }

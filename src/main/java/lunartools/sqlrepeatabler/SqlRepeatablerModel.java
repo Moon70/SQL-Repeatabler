@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import lunartools.ChangeListenerSupport;
 import lunartools.SwingTools;
@@ -19,7 +16,6 @@ import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 
 public class SqlRepeatablerModel implements ChangeListenerSupport{
-	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerModel.class);
 	public static final String PROGRAMNAME = "SQL-Repeatabler";
 	private static String versionProgram=SwingTools.determineProgramVersion();
 	private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>();

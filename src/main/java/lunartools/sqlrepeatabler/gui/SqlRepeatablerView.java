@@ -52,6 +52,7 @@ public class SqlRepeatablerView extends JFrame{
 			public synchronized void drop(DropTargetDropEvent evt) {
 				try {
 					evt.acceptDrop(DnDConstants.ACTION_COPY);
+					@SuppressWarnings("unchecked")
 					List<File> droppedFiles = (List<File>)evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
 					ArrayList<File> arraylistAcceptedFiles=new ArrayList<>();
 					for (File file : droppedFiles) {

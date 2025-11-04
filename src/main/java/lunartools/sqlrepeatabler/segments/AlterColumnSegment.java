@@ -1,9 +1,8 @@
 package lunartools.sqlrepeatabler.segments;
 
-import java.util.ArrayList;
-
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
@@ -22,8 +21,8 @@ public class AlterColumnSegment extends Segment{
 	}
 
 	@Override
-	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t%s %s %s", Category.INSERTED,getAction(),name,parameters));
+	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
+        sqlBlock.add(SqlString.createSqlStringFromString("\t%s %s %s", Category.INSERTED,getAction(),name,parameters));
 	}
 	
 	public String toString() {

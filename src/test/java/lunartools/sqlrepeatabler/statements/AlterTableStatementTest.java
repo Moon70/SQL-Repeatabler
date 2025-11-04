@@ -4,14 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Test;
 
 import lunartools.sqlrepeatabler.TestHelper;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.parser.SqlString;
-import lunartools.sqlrepeatabler.util.Tools;
 
 class AlterTableStatementTest {
 	private static final String TESTDATAFOLDER="/AlterTableStatement/";
@@ -34,9 +31,9 @@ class AlterTableStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -50,9 +47,9 @@ class AlterTableStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -66,9 +63,9 @@ class AlterTableStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -82,9 +79,9 @@ class AlterTableStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -98,9 +95,9 @@ class AlterTableStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -114,9 +111,9 @@ class AlterTableStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -130,9 +127,9 @@ class AlterTableStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -146,9 +143,9 @@ class AlterTableStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		SqlBlock sqlBlocks=new SqlBlock();
+		statement.toSqlCharacters(sqlBlocks);
+		StringBuilder sb=sqlBlocks.toStringBuilder();
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -162,9 +159,9 @@ class AlterTableStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -178,9 +175,9 @@ class AlterTableStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -194,9 +191,9 @@ class AlterTableStatementTest {
 		assertTrue(factory.match(sqlScript.peekLineAsString()));
 
 		Statement statement=factory.createStatement(sqlScript);
-		ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-		statement.toSqlCharacters(sqlCharacterLines);
-		StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
@@ -210,9 +207,9 @@ class AlterTableStatementTest {
         assertTrue(factory.match(sqlScript.peekLineAsString()));
 
         Statement statement=factory.createStatement(sqlScript);
-        ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-        statement.toSqlCharacters(sqlCharacterLines);
-        StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+        SqlBlock sqlBlock=new SqlBlock();
+        statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
         assertEquals(expected,TestHelper.removeCR(sb).toString());
     }
 
@@ -226,9 +223,9 @@ class AlterTableStatementTest {
         assertTrue(factory.match(sqlScript.peekLineAsString()));
 
         Statement statement=factory.createStatement(sqlScript);
-        ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-        statement.toSqlCharacters(sqlCharacterLines);
-        StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+        SqlBlock sqlBlock=new SqlBlock();
+        statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
         assertEquals(expected,TestHelper.removeCR(sb).toString());
     }
     
@@ -242,9 +239,9 @@ class AlterTableStatementTest {
         assertTrue(factory.match(sqlScript.peekLineAsString()));
 
         Statement statement=factory.createStatement(sqlScript);
-        ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
-        statement.toSqlCharacters(sqlCharacterLines);
-        StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+        SqlBlock sqlBlock=new SqlBlock();
+        statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
         assertEquals(expected,TestHelper.removeCR(sb).toString());
     }
 

@@ -1,9 +1,8 @@
 package lunartools.sqlrepeatabler.segments;
 
-import java.util.ArrayList;
-
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -25,12 +24,12 @@ public class DropColumnSegment extends Segment{
 	}
 
 	@Override
-	public void toSqlCharacters(ArrayList<SqlString> sqlCharacterLines,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("IF COL_LENGTH ('%s','%s') IS NOT NULL", Category.INSERTED,tableName.getFullNameWithoutDelimiter(),getName().cloneWithoutDelimiters()));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("\t\t%s COLUMN %s;", Category.INSERTED,getAction(),getName()));
-        sqlCharacterLines.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
+	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
+        sqlBlock.add(SqlString.createSqlStringFromString("IF COL_LENGTH ('%s','%s') IS NOT NULL", Category.INSERTED,tableName.getFullNameWithoutDelimiter(),getName().cloneWithoutDelimiters()));
+        sqlBlock.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
+        sqlBlock.add(SqlString.createSqlStringFromString("\t\t%s COLUMN %s;", Category.INSERTED,getAction(),getName()));
+        sqlBlock.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
 	}
 	
 	public String toString() {
