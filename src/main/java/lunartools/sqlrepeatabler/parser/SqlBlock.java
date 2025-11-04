@@ -5,6 +5,10 @@ import java.util.ArrayList;
 public class SqlBlock {
 	private ArrayList<SqlString> sqlStrings=new ArrayList<>();
 	
+	public void add(SqlString sqlString) {
+		this.sqlStrings.add(sqlString);
+	}
+	
 	public void add(ArrayList<SqlString> sqlStrings) {
 		this.sqlStrings.addAll(sqlStrings);
 	}

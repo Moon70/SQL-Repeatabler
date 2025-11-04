@@ -104,4 +104,12 @@ class TokenTest {
 		assertEquals("[ABC].[XYZ].[123]",token.toString());
 	}
 	
+	@Test
+	void toUpperCaseWorksCorrectly() throws CloneNotSupportedException {
+		Token token=new Token("foo",Category.STATEMENT);
+		Token tokenUpperCase=token.toUpperCase();
+		assertEquals("foo",token.toString());
+		assertEquals("FOO",tokenUpperCase.toString());
+	}
+	
 }
