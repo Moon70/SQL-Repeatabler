@@ -1,5 +1,7 @@
 package lunartools.sqlrepeatabler.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -21,7 +23,7 @@ public class MainPanel extends JPanel{
 	private static Logger logger = LoggerFactory.getLogger(MainPanel.class);
 	private SqlRepeatablerModel model;
 	private IOPanel[] ioPanels;
-	private JTabbedPane tabPanel = new JTabbedPane();
+	private JTabbedPane tabbedPane = new JTabbedPane();
 	private Image imageBackground;
 	private JSplitPane jSplitPaneVertical;
 	
@@ -29,15 +31,22 @@ public class MainPanel extends JPanel{
 		this.model=model;
 		jSplitPaneVertical=new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		jSplitPaneVertical.setOpaque(false);
-		jSplitPaneVertical.setTopComponent(tabPanel);
+		jSplitPaneVertical.setTopComponent(tabbedPane);
 		
 		LogPanelTextarea logPanel=new LogPanelTextarea(model,logTextArea);
+		logPanel.setMinimumSize(new Dimension(0,100));
 		jSplitPaneVertical.setBottomComponent(logPanel);
 
-		imageBackground=DailyBackgroundProvider.getImage();		
+		jSplitPaneVertical.setDividerLocation(700);
+		jSplitPaneVertical.setResizeWeight(1.0);
 		
-		add(jSplitPaneVertical);
+//		add(jSplitPaneVertical);
+
+		setLayout(new BorderLayout());
+		add(jSplitPaneVertical,BorderLayout.CENTER);
+		
 		jSplitPaneVertical.setVisible(false);
+		imageBackground=DailyBackgroundProvider.getImage();		
 		model.addChangeListener(this::updateModelChanges);
 	}
 
@@ -55,11 +64,11 @@ public class MainPanel extends JPanel{
 				}
 			}
 			ioPanels=new IOPanel[files.size()];
-			tabPanel.removeAll();
+			tabbedPane.removeAll();
 			for(int i=0;i<files.size();i++) {
 				ioPanels[i]=new IOPanel(model,i);
 				//model.addObserver(ioPanels[i]);
-				tabPanel.addTab(files.get(i).getName(), ioPanels[i]);
+				tabbedPane.addTab(files.get(i).getName(), ioPanels[i]);
 			}
 			this.revalidate();
 			this.repaint();
