@@ -42,7 +42,7 @@ public class SqlScript {
 		int lineIndex=0;
 		int column=0;
 		int characterIndex=-1;
-		ArrayList<SqlCharacter> sqlCharacters=new ArrayList<>();
+		SqlString sqlString=new SqlString();
 		for(int i=0;i<scriptAsIntegerArray.size();i++) {
 			characterIndex++;
 			iChar=scriptAsIntegerArray.get(i);
@@ -50,23 +50,23 @@ public class SqlScript {
 			if(c==0x0a) {//LF
 				lineIndex++;
 				column=0;
-				sqlCharacterLinesOriginal.add(new SqlString(sqlCharacters));
-				sqlCharacters=new ArrayList<>();
+				sqlCharacterLinesOriginal.add(sqlString);
+				sqlString=new SqlString();
 			}else if(c==0x0d) {//CR
 				lineIndex++;
 				column=0;
-				sqlCharacterLinesOriginal.add(new SqlString(sqlCharacters));
-				sqlCharacters=new ArrayList<>();
+				sqlCharacterLinesOriginal.add(sqlString);
+				sqlString=new SqlString();
 				if(i<scriptAsIntegerArray.size()-1 && (scriptAsIntegerArray.get(i+1))==0x0a){
 					characterIndex++;
 					i++;
 				}
 			}else {
 				SqlCharacter sqlCharacter=new SqlCharacter(c,lineIndex,column,characterIndex);
-				sqlCharacters.add(sqlCharacter);
+				sqlString.add(sqlCharacter);
 			}
 		}
-		sqlCharacterLinesOriginal.add(new SqlString(sqlCharacters));
+		sqlCharacterLinesOriginal.add(sqlString);
 		sqlStrings=(ArrayList<SqlString>)sqlCharacterLinesOriginal.clone();
 	}
 
@@ -146,23 +146,22 @@ public class SqlScript {
 	}
 
 	public StatementTokenizer consumeStatement() throws Exception {
-		SqlCharacter sqlCharacterInsertedSpace=new SqlCharacter(' ',-1,-1,-1);
-		ArrayList<SqlCharacter> charactersOfStatement=new ArrayList<>();
+		ArrayList<SqlCharacter> sqlStringStatement=new ArrayList<>();
 		while(true) {
-			SqlString sqlString=readLineCharacters();
-			if(sqlString==null) {
+			SqlString sqlStringLine=readLineCharacters();
+			if(sqlStringLine==null) {
 //				throw new EOFException("Unexpected end of script");
 			    break;
 			}
-			if(charactersOfStatement.size()>0 && !charactersOfStatement.get(charactersOfStatement.size()-1).isWhiteSpace()) {
-                charactersOfStatement.add(sqlCharacterInsertedSpace);
+			if(sqlStringStatement.size()>0 && !sqlStringStatement.get(sqlStringStatement.size()-1).isWhiteSpace()) {
+                sqlStringStatement.add(SqlCharacter.SEPARATOR);
 			}
-			charactersOfStatement.addAll(sqlString.getCharacters());
-			if(sqlString.endsWithSemicolonIgnoreWhiteSpace()) {
+			sqlStringStatement.addAll(sqlStringLine.getCharacters());
+			if(sqlStringLine.endsWithSemicolonIgnoreWhiteSpace()) {
 				break;
 			}
 		}
-		return new StatementTokenizer(stripWhitespace(charactersOfStatement));
+		return new StatementTokenizer(stripWhitespace(sqlStringStatement));
 	}
 
 	public StatementTokenizer consumeOneLineStatement() throws Exception {
@@ -216,11 +215,9 @@ public class SqlScript {
 			if(sqlCharacter.getChar()=='"'){
 				doubleQuoteOpen=!doubleQuoteOpen;
 			}
-
 			strippedCharacterList.add(sqlCharacter);
 		}
 		return strippedCharacterList;
-
 	}
 
 	public String getLineAt(int index) {

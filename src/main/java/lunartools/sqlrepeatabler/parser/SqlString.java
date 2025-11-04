@@ -47,6 +47,13 @@ public class SqlString {
 		return sqlCharacters.get(0);
 	}
 
+	public SqlCharacter getLastCharacter() {
+		if(sqlCharacters.size()==0) {
+			return null;
+		}
+		return sqlCharacters.get(sqlCharacters.size()-1);
+	}
+
 	public ArrayList<SqlCharacter> getCharacters(){
 		return sqlCharacters;
 	}
@@ -134,5 +141,12 @@ public class SqlString {
 	public void add(SqlCharacter sqlCharacter) {
 		sqlCharacters.add(sqlCharacter);
 	}
+
+	public void add(SqlString sqlString) {
+		sqlCharacters.addAll(sqlString.getCharacters());
+	}
 	
+	public int size() {
+		return sqlCharacters.size();
+	}
 }

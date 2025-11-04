@@ -1,7 +1,7 @@
 package lunartools.sqlrepeatabler.parser;
 
 public class SqlCharacter {
-	public static final SqlCharacter SEPARATOR=new SqlCharacter(' ',-1,-1,-1);
+	public static final SqlCharacter SEPARATOR=new SqlCharacter(' ');
 	private char c;
 	private int row;
 	private int column;
