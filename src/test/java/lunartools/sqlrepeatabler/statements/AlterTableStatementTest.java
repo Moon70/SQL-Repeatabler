@@ -231,5 +231,21 @@ class AlterTableStatementTest {
         StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
         assertEquals(expected,TestHelper.removeCR(sb).toString());
     }
+    
+    @Test
+    void alterTable_invalidAddCommandIsIgnoredWhenAddingTwoColumns() throws Exception {
+        String filenameTestdata=    TESTDATAFOLDER+"Column_InvalidAddTwoColumnsThrowsAnException_Testdata.txt";
+        String filenameExpecteddata=TESTDATAFOLDER+"Column_InvalidAddTwoColumnsThrowsAnException_Expected.txt";
+        String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+        SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+        assertTrue(factory.match(sqlScript.peekLineAsString()));
+
+        Statement statement=factory.createStatement(sqlScript);
+        ArrayList<SqlString> sqlCharacterLines=new ArrayList<>();
+        statement.toSqlCharacters(sqlCharacterLines);
+        StringBuilder sb=Tools.toStringBuilder(sqlCharacterLines);
+        assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
 
 }

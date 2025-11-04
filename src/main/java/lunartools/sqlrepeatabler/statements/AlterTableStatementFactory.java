@@ -109,7 +109,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 				}
 			}else {
 				if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("COLUMN")){
-					logger.warn("Script is most likely in MySql format. Ignoring COLUMN keyword which is not allowed in T_SQL");
+					logger.warn("Script is most likely in MySql format. Ignoring COLUMN keyword which is not allowed in T-SQL");
 				}
 				Token tokenColumName=statementTokenizer.nextToken();
 				tokenColumName.setCategory(Category.COLUMN);
@@ -118,6 +118,11 @@ public class AlterTableStatementFactory extends StatementFactory{
 
 				Segment columnElement=new AddColumnSegment(tokenColumName,tokenColumParameter);
 				columnElements.add(columnElement);
+                if(statementTokenizer.startsWithIgnoreCase("ADD")) {
+                    logger.warn("Ignoring illegal ADD command. In T-SQL, when adding multiple columns in a single ALTER TABLE...ADD statement, do not repeat the ADD keyword!");
+                    Token tokenIllegal=statementTokenizer.nextToken();
+                    tokenIllegal.setCategory(Category.IGNORED);
+                }
 			}
 		}
 		return columnElements;
