@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
+import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
 
@@ -60,12 +61,12 @@ public class TableName {
 	}
 
 	private static Token createBracketSegmentByConsuming(StatementTokenizer statementTokenizer) {
-		ArrayList<SqlCharacter> sbSegment=new ArrayList<>();
-		sbSegment.add(statementTokenizer.charAt(0));
+		SqlString sqlString=new SqlString();
+		sqlString.add(statementTokenizer.charAt(0));
 		statementTokenizer.deleteCharAt(0);
 		while(true) {
 			if(statementTokenizer.charAt(0).getChar()==']') {
-				sbSegment.add(statementTokenizer.charAt(0));
+				sqlString.add(statementTokenizer.charAt(0));
 				statementTokenizer.deleteCharAt(0);
 				if(statementTokenizer.charAt(0).getChar()==']') {
 					continue;
@@ -73,19 +74,19 @@ public class TableName {
 					break;
 				}
 			}
-			sbSegment.add(statementTokenizer.charAt(0));
+			sqlString.add(statementTokenizer.charAt(0));
 			statementTokenizer.deleteCharAt(0);
 		}
-		return new Token(sbSegment);
+		return new Token(sqlString);
 	}
 
 	private static Token createQuoteSegmentByConsuming(StatementTokenizer statementTokenizer) {
-		ArrayList<SqlCharacter> sbSegment=new ArrayList<>();
-		sbSegment.add(statementTokenizer.charAt(0));
+		SqlString sqlString=new SqlString();
+		sqlString.add(statementTokenizer.charAt(0));
 		statementTokenizer.deleteCharAt(0);
 		while(true) {
 			if(statementTokenizer.charAt(0).getChar()=='"') {
-				sbSegment.add(statementTokenizer.charAt(0));
+				sqlString.add(statementTokenizer.charAt(0));
 				statementTokenizer.deleteCharAt(0);
 				if(statementTokenizer.charAt(0).getChar()=='"') {
 					continue;
@@ -93,39 +94,39 @@ public class TableName {
 					break;
 				}
 			}
-			sbSegment.add(statementTokenizer.charAt(0));
+			sqlString.add(statementTokenizer.charAt(0));
 			statementTokenizer.deleteCharAt(0);
 		}
-		return new Token(sbSegment);
+		return new Token(sqlString);
 	}
 
 	private static Token createBacktickSegmentByConsuming(StatementTokenizer statementTokenizer) {
-		ArrayList<SqlCharacter> sbSegment=new ArrayList<>();
-		sbSegment.add(new SqlCharacter('[',-1,-1,-1));
+		SqlString sqlString=new SqlString();
+		sqlString.add(new SqlCharacter('['));
 		statementTokenizer.deleteCharAt(0);
 		while(true) {
 			if(statementTokenizer.charAt(0).getChar()=='`') {
 				if(statementTokenizer.charAt(1).getChar()=='`') {
-					sbSegment.add(statementTokenizer.charAt(0));
-					sbSegment.add(statementTokenizer.charAt(1));
+					sqlString.add(statementTokenizer.charAt(0));
+					sqlString.add(statementTokenizer.charAt(1));
 					statementTokenizer.deleteCharAt(0);
 					statementTokenizer.deleteCharAt(0);
 					continue;
 				}else {
-					sbSegment.add(new SqlCharacter(']',-1,-1,-1));
+					sqlString.add(new SqlCharacter(']'));
 					statementTokenizer.deleteCharAt(0);
 					break;
 				}
 			}
-			sbSegment.add(statementTokenizer.charAt(0));
+			sqlString.add(statementTokenizer.charAt(0));
 			statementTokenizer.deleteCharAt(0);
 		}
-		return new Token(sbSegment);
+		return new Token(sqlString);
 	}
 
 	private static Token createSpaceSegmentByConsuming(StatementTokenizer statementTokenizer) {
-		ArrayList<SqlCharacter> sbSegment=new ArrayList<>();
-		sbSegment.add(statementTokenizer.charAt(0));
+		SqlString sqlString=new SqlString();
+		sqlString.add(statementTokenizer.charAt(0));
 		statementTokenizer.deleteCharAt(0);
 		while(true) {
 			if(statementTokenizer.charAt(0).isSpace()) {
@@ -136,10 +137,10 @@ public class TableName {
 					break;
 				}
 			}
-			sbSegment.add(statementTokenizer.charAt(0));
+			sqlString.add(statementTokenizer.charAt(0));
 			statementTokenizer.deleteCharAt(0);
 		}
-		return new Token(sbSegment);
+		return new Token(sqlString);
 	}
 
     public Token getDatabaseName() {

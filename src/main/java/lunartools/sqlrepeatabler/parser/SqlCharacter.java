@@ -5,27 +5,31 @@ public class SqlCharacter {
 	private char c;
 	private int row;
 	private int column;
-	private int indexInFile;
+	private int index;
 	private Category category=Category.UNCATEGORIZED;
 	
-	public SqlCharacter(char c, int row, int column, int indexInFile) {
+	public SqlCharacter(char c, int row, int column, int index) {
 		this.c=c;
 		this.row=row;
 		this.column=column;
-		this.indexInFile=indexInFile;
+		this.index=index;
 	}
     
     public SqlCharacter(char c, int row, int column, int indexInFile,Category category) {
         this.c=c;
         this.row=row;
         this.column=column;
-        this.indexInFile=indexInFile;
+        this.index=indexInFile;
         this.category=category;
     }
     
     public SqlCharacter(char c,Category category) {
         this(c,-1,-1,-1);
         this.category=category;
+    }
+    
+    public SqlCharacter(char c) {
+        this(c,-1,-1,-1);
     }
 	
 	public char getChar() {
@@ -41,7 +45,7 @@ public class SqlCharacter {
 	}
 
 	public int getIndex() {
-		return indexInFile;
+		return index;
 	}
 
 	public boolean isSpace() {

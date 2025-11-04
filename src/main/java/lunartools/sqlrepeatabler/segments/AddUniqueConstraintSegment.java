@@ -3,7 +3,6 @@ package lunartools.sqlrepeatabler.segments;
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
-import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
@@ -15,14 +14,6 @@ public class AddUniqueConstraintSegment extends Segment{
 		super(new Token("ADD",Category.COMMAND),name);
 		this.name=name;
 		this.referencesColumn=referencesColumn;
-	}
-
-	public void toSql(StringBuilder sb,TableName tableName,boolean mySql) throws Exception {
-		sb.append(String.format("IF OBJECT_ID('%s','UQ') IS NULL", stripDelimiters(name.toString()))).append(SqlParser.CRLF);
-		sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
-		sb.append(String.format("\tALTER TABLE %s",tableName.getFullNameAsString())).append(SqlParser.CRLF);
-		sb.append(String.format("\t\tADD CONSTRAINT %s unique %s;",name,referencesColumn)).append(SqlParser.CRLF);
-		sb.append("END;").append(SqlParser.CRLF);
 	}
 
 	@Override

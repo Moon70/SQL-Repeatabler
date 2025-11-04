@@ -3,7 +3,6 @@ package lunartools.sqlrepeatabler.segments;
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
-import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
@@ -13,14 +12,6 @@ public class DropColumnSegment extends Segment{
 	public DropColumnSegment(Token name) {
 		super(new Token("DROP",Category.COMMAND),name);
 		this.name=name;
-	}
-
-	public void toSql(StringBuilder sb,TableName tableName,boolean mySql) throws Exception {
-		sb.append(String.format("IF COL_LENGTH ('%s','%s') IS NOT NULL", tableName.getFullNameWithoutDelimiterAsString(),getColumnNameWithoutDelimiters())).append(SqlParser.CRLF);
-		sb.append(String.format("BEGIN")).append(SqlParser.CRLF);
-		sb.append(String.format("\tALTER TABLE %s",tableName.getFullNameAsString())).append(SqlParser.CRLF);
-		sb.append(String.format("\t\t%s COLUMN %s;",getAction().toString(),name)).append(SqlParser.CRLF);
-		sb.append(String.format("END;")).append(SqlParser.CRLF);
 	}
 
 	@Override

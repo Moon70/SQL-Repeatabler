@@ -13,29 +13,6 @@ public abstract class Segment {
 		this.name=name;
 	}
 
-	public String getColumnNameWithoutDelimiters(){
-		String s=name.toString();
-		int len=s.length();
-		if(
-				(s.charAt(0)=='[' && s.charAt(len-1)==']') ||
-				(s.charAt(0)=='"' && s.charAt(len-1)=='"')
-				) {
-			return s.substring(1, len-1);
-		}
-		return s;
-	}
-
-	public String stripDelimiters(String s) {
-		int len=s.length();
-		if(
-				(s.charAt(0)=='[' && s.charAt(len-1)==']') ||
-				(s.charAt(0)=='"' && s.charAt(len-1)=='"')
-				) {
-			return s.substring(1, len-1);
-		}
-		return s;
-	}
-
 	public Token getAction() {
 		return action;
 	}

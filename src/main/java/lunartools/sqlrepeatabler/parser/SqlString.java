@@ -22,7 +22,7 @@ public class SqlString {
         for(int i=0;i<stringFragments.length;i++) {
             String s=stringFragments[i];
             for(int k=0;k<s.length();k++) {
-                SqlCharacter sqlCharacter=new SqlCharacter(s.charAt(k),-1,-1,-1);
+                SqlCharacter sqlCharacter=new SqlCharacter(s.charAt(k));
                 sqlCharacter.setCategory(category);
                 characters.add(sqlCharacter);
             }
@@ -33,6 +33,8 @@ public class SqlString {
         }
         return  new SqlString(characters);
     }
+    
+	public SqlString() {}
     
 	public SqlString(ArrayList<SqlCharacter> sqlCharacters) {
 		this.sqlCharacters=sqlCharacters;
@@ -127,6 +129,10 @@ public class SqlString {
 			sb.append(sqlCharacters.get(i).getChar());
 		}
 		return sb.toString();
+	}
+
+	public void add(SqlCharacter sqlCharacter) {
+		sqlCharacters.add(sqlCharacter);
 	}
 	
 }
