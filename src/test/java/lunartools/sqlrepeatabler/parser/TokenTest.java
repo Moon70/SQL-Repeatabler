@@ -9,6 +9,13 @@ import org.junit.jupiter.api.Test;
 class TokenTest {
 
 	@Test
+	void sqlStringConstructorIgnoresWhitespaceCorrectly() {
+		SqlString sqlString=SqlString.createSqlStringFromString(" ABC ",Category.STATEMENT);
+		Token token=new Token(sqlString);
+		assertEquals("ABC",token.toString());
+	}
+
+	@Test
 	void charactersConstructorIgnoresWhitespaceCorrectly() {
 		ArrayList<SqlCharacter> characters=new ArrayList<>();
 		characters.add(new SqlCharacter(' ', Category.STATEMENT));

@@ -14,6 +14,7 @@
 		<ch.qos.logback.logback-classic.version>1.2.10</ch.qos.logback.logback-classic.version>
 		<ch.qos.logback.logback-core.version>1.2.10</ch.qos.logback.logback-core.version>
 		<org.junit.jupiter.junit-jupiter.version>5.10.2</org.junit.jupiter.junit-jupiter.version>
+		<maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
 	</properties>
 	<build>
 		<resources>
@@ -61,7 +62,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.2.5</version>
+				<version>${maven-surefire-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>

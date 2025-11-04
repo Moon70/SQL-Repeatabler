@@ -9,6 +9,11 @@ public class Token {
 	private static Logger logger = LoggerFactory.getLogger(Token.class);
 	private ArrayList<SqlCharacter> charactersOfToken;
 
+	public Token(SqlString sqlString) {
+		this.charactersOfToken=sqlString.getCharacters();
+		trim();
+	}
+
 	public Token(ArrayList<SqlCharacter> charactersOfToken) {
 		this.charactersOfToken=charactersOfToken;
 		trim();
