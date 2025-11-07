@@ -15,6 +15,7 @@ import lunartools.sqlrepeatabler.statements.SpRenameStatementFactory;
 import lunartools.sqlrepeatabler.statements.Statement;
 import lunartools.sqlrepeatabler.statements.StatementFactory;
 import lunartools.sqlrepeatabler.statements.UseStatementFactory;
+import lunartools.sqlrepeatabler.statements.WhitespaceLineStatement;
 import lunartools.sqlrepeatabler.statements.WhitespaceLineStatementFactory;
 
 public class SqlParser {
@@ -36,7 +37,7 @@ public class SqlParser {
 	public static SqlBlock parse(SqlScript sqlScript) throws Exception {
 		SqlBlock sqlBlockResult=new SqlBlock();
 		ArrayList<StatementFactory> sqlSegmentFactories=new ArrayList<>();
-		ArrayList<Statement> sqlSegments=new ArrayList<>();
+		ArrayList<Statement> statements=new ArrayList<>();
 		sqlSegmentFactories.add(new AlterTableStatementFactory());
 		sqlSegmentFactories.add(new CreateTableStatementFactory());
 		sqlSegmentFactories.add(new InsertIntoStatementFactory());
@@ -55,7 +56,11 @@ public class SqlParser {
 			for(StatementFactory statementFactory:sqlSegmentFactories) {
 				if(statementFactory.match(sqlString.toString())) {
 					statement=statementFactory.createStatement(sqlScript);
-					sqlSegments.add(statement);
+					if(statements.size()==0 && statement instanceof WhitespaceLineStatement) {
+					    logger.warn("ignoring leading whitespace lines");
+					    break;
+					}
+					statements.add(statement);
 					SqlBlock tempCharacters=new SqlBlock();
 					statement.toSqlCharacters(tempCharacters);
 					sqlBlockResult.add(tempCharacters);

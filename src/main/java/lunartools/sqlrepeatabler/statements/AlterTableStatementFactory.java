@@ -86,6 +86,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 				break;
 			}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("CONSTRAINT")) {
 				Token tokenConstraintName=statementTokenizer.nextToken();
+				tokenConstraintName.setCategory(Category.PARAMETER);
 
 				if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("FOREIGN KEY")) {
 					Token tokenForeignKey=statementTokenizer.nextToken();
