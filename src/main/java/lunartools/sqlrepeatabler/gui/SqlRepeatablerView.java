@@ -7,6 +7,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,7 @@ public class SqlRepeatablerView extends JFrame{
 		this.setIconImages(SwingTools.getDefaultIconImages());
 
 		setLayout(new BorderLayout());
+		setBackground(Color.black);
 
 		mainPanel=new MainPanel(model,logTextArea);
 		add(mainPanel);
@@ -72,8 +75,12 @@ public class SqlRepeatablerView extends JFrame{
 			}
 		});
 		
-		setBackground(Color.black);
-		//pack();
+		addComponentListener(new ComponentAdapter() {
+		    @Override
+		    public void componentShown(ComponentEvent e) {
+		        repaint();
+		    }
+		});
 	}
 
 	public MenuModel getMenuModel() {
