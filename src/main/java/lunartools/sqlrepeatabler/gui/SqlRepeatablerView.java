@@ -1,7 +1,6 @@
 package lunartools.sqlrepeatabler.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
@@ -44,11 +43,10 @@ public class SqlRepeatablerView extends JFrame{
 		this.setIconImages(SwingTools.getDefaultIconImages());
 
 		setLayout(new BorderLayout());
-		setBackground(Color.black);
 
 		mainPanel=new MainPanel(model,logTextArea);
 		add(mainPanel);
-		
+
 		JPanel glass=(JPanel)getGlassPane();
 		glass.setVisible(true);
 		glass.setOpaque(false);
@@ -74,12 +72,12 @@ public class SqlRepeatablerView extends JFrame{
 				}
 			}
 		});
-		
+
 		addComponentListener(new ComponentAdapter() {
-		    @Override
-		    public void componentShown(ComponentEvent e) {
-		        repaint();
-		    }
+			@Override
+			public void componentShown(ComponentEvent e) {
+				repaint(100);
+			}
 		});
 	}
 
@@ -103,5 +101,9 @@ public class SqlRepeatablerView extends JFrame{
 		logger.debug("opening about dialogue...");
 		About.showAboutDialog(this);
 	}
-	
+
+	public MainPanel getMainPanel() {
+		return mainPanel;
+	}
+
 }

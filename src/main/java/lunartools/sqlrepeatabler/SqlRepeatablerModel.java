@@ -67,6 +67,10 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
 
+	public boolean hasSqlInputFiles() {
+		return sqlInputFiles.size()>0;
+	}
+
 	public boolean hasSqlConvertedScripts() {
 		return sqlConvertedScriptBlocks.size()>0;
 	}
@@ -77,11 +81,14 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		}
 		return sqlConvertedScriptBlocks.get(index);
 	}
-	
+
 	public SqlScript getSqlScript(int index) {
+		if(index>=sqlScripts.size()) {
+			return null;
+		}
 		return sqlScripts.get(index);
 	}
-	
+
 	public void setSqlScripts(ArrayList<SqlScript> sqlScripts) {
 		this.sqlScripts=sqlScripts;
 	}
@@ -90,7 +97,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		this.sqlConvertedScriptBlocks=sqlBlocks;
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
-	
+
 	public StringBuffer getConvertedSqlScriptCharactersAsStringBuffer() {
 		StringBuffer sbConvertedScripts=new StringBuffer();
 		sbConvertedScripts.append("-- "+SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion()+System.lineSeparator());

@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.File;
-import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -57,25 +55,12 @@ public class MainPanel extends JPanel{
 			logger.trace("update: "+object);
 		}
 		if(object==SimpleEvents.MODEL_SQLINPUTFILESCHANGED) {
-			jSplitPaneVertical.setVisible(true);
-
-			ArrayList<File> files=model.getSqlInputFiles();
-			if(ioPanels!=null) {
-				for(IOPanel iopanel:ioPanels) {
-					model.removeChangeListener(iopanel::updateModelChanges);
-				}
-			}
-			ioPanels=new IOPanel[files.size()];
-			tabbedPane.removeAll();
-			for(int i=0;i<files.size();i++) {
-				ioPanels[i]=new IOPanel(model,i);
-				//model.addObserver(ioPanels[i]);
-				tabbedPane.addTab(files.get(i).getName(), ioPanels[i]);
-			}
-			this.revalidate();
-			this.repaint();
+			jSplitPaneVertical.setVisible(model.hasSqlInputFiles());
+			revalidate();
+			repaint();
 		}else if(object==SimpleEvents.MODEL_RESET) {
 			jSplitPaneVertical.setVisible(false);
+			revalidate();
 			repaint();
 		}
 	}
@@ -97,4 +82,21 @@ public class MainPanel extends JPanel{
 			}
 		}
 	}
+
+	public JTabbedPane getTabbedPane() {
+		return tabbedPane;
+	}
+
+	public void addTab(String title, IOPanel ioPanel) {
+		tabbedPane.addTab(title, ioPanel);
+	}
+
+	public IOPanel[] getIoPanels() {
+		return ioPanels;
+	}
+
+	public void setIoPanels(IOPanel[] ioPanels) {
+		this.ioPanels = ioPanels;
+	}
+
 }

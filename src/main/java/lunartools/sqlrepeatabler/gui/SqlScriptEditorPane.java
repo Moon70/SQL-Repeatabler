@@ -16,19 +16,13 @@ public class SqlScriptEditorPane extends JEditorPane{
 	private int width=750;
 	private int height=500+160;
 
-	public SqlScriptEditorPane(SqlRepeatablerModel model) {
+	public SqlScriptEditorPane(SqlRepeatablerModel model, int sqlFileIndex, boolean isOutputPane) {
 		Font font=new Font("Courier New", Font.PLAIN,12);
 		setPreferredSize(new Dimension(width, height));
 		setEditable(false);
 		setFont(font);
 		setContentType("text/html");
 		setMargin(new Insets(10, 20, 10, 20));
-		
-//		scrollPane=new JScrollPane(sqlScriptEditorPane);
-//		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-//		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-//		scrollPane.setPreferredSize(new Dimension(width, height));
-//		add(scrollPane);
 
 		StringBuffer sb=new StringBuffer();
 		sb.append("<html>");

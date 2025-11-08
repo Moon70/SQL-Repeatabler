@@ -6,12 +6,17 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.Settings;
+import lunartools.sqlrepeatabler.gui.IOPanel;
+import lunartools.sqlrepeatabler.gui.IOPanelController;
+import lunartools.sqlrepeatabler.gui.MainPanel;
 import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
 import lunartools.sqlrepeatabler.worker.ConvertSqlFileWorker;
@@ -77,15 +82,42 @@ public class SqlRepeatablerController{
 		if(object==SimpleEvents.EXIT) {
 			shutdown();
 		}else if(object==SimpleEvents.MODEL_SQLINPUTFILESCHANGED) {
+			MainPanel mainPanel=view.getMainPanel();
+			IOPanel[] ioPanels=mainPanel.getIoPanels();
+			if(ioPanels!=null) {
+				for(IOPanel iopanel:ioPanels) {
+					model.removeChangeListener(iopanel::updateModelChanges);
+				}
+			}
+			ArrayList<File> files=model.getSqlInputFiles();
+			mainPanel.getTabbedPane().removeAll();
+			ioPanels=new IOPanel[files.size()];
+			for(int i=0;i<files.size();i++) {
+				ioPanels[i]=new IOPanel(model,i);
+				new IOPanelController(model, ioPanels[i]);
+				mainPanel.addTab(files.get(i).getName(), ioPanels[i]);
+			}
+			mainPanel.revalidate();
+			mainPanel.repaint();
+
 			ConvertSqlFileWorker worker=new ConvertSqlFileWorker(model);
 			worker.execute();
 			view.refreshView();
 		}else if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
 			view.refreshView();
+		}else if(object==SimpleEvents.MODEL_RESET) {
+			MainPanel mainPanel=view.getMainPanel();
+			IOPanel[] ioPanels=mainPanel.getIoPanels();
+			if(ioPanels!=null) {
+				for(IOPanel iopanel:ioPanels) {
+					model.removeChangeListener(iopanel::updateModelChanges);
+				}
+			}
+			mainPanel.setIoPanels(null);
 		}
 	}
 
-	public void shutdown() {
+ 	public void shutdown() {
 		Settings settings=SqlRepeatablerSettings.getSettings();
 		settings.setRectangle(SqlRepeatablerSettings.VIEW_BOUNDS, view.getBounds());
 		try {
@@ -100,5 +132,6 @@ public class SqlRepeatablerController{
 	public void openAboutDialogue() {
 		view.showMessageboxAbout();
 	}
+
 
 }

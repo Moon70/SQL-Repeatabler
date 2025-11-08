@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import javax.swing.Action;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
@@ -17,9 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.FileTools;
+import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.parser.SqlScript;
 
 public class IOPanel extends JPanel{
 	private static Logger logger = LoggerFactory.getLogger(IOPanel.class);
@@ -44,10 +47,8 @@ public class IOPanel extends JPanel{
 		
 		Font font=new Font("Courier New", Font.PLAIN,12);
 		if(TEST) {
-//			inputPanel=new SqlScriptPanel(model);
-//			outputPanel=new SqlScriptPanel(model);
-			inputPanel=new SqlScriptEditorPane(model);
-			outputPanel=new SqlScriptEditorPane(model);
+			inputPanel=new SqlScriptEditorPane(model,sqlFileIndex,false);
+			outputPanel=new SqlScriptEditorPane(model,sqlFileIndex,true);
 		}else {
 			inputTextarea=new JTextArea(48,110);
 			inputTextarea.setEditable(false);
@@ -57,8 +58,6 @@ public class IOPanel extends JPanel{
 			outputTextarea.setFont(font);
 		}
 		
-		
-
 		JSplitPane jSplitPaneHorizontal = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
 		jSplitPaneHorizontal.setResizeWeight(0.5);
 		jSplitPaneHorizontal.setOneTouchExpandable(true);
@@ -83,12 +82,6 @@ public class IOPanel extends JPanel{
 			ArrayList<File> files=model.getSqlInputFiles();
 			StringBuffer sbContent=FileTools.readFileToStringBuffer(files.get(sqlFileIndex), StandardCharsets.UTF_8.name());
 			if(TEST) {
-//				String s=sbContent.toString().replaceAll("\n","<br>");
-//				s=s.replaceAll("\r","");
-//				s=s.replaceAll(" ","&nbsp;");
-//				s=s.replaceAll("\t","&nbsp;&nbsp;&nbsp;&nbsp;");
-//				s=s.replaceAll("CREATED","WAMBO");
-//				inputPanel.setText(s);
 			}else {
 				inputTextarea.setText(sbContent.toString());
 			}
@@ -108,20 +101,20 @@ public class IOPanel extends JPanel{
 		}else if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
 			if(model.hasSqlConvertedScripts()) {
 				if(TEST) {
-					SqlScript sqlScript=model.getSqlScript(sqlFileIndex);
-					inputPanel.setText(sqlScript.toHtml());
-					
-					outputPanel.setText(model.getSingleConvertedSqlScriptBlock(sqlFileIndex).toHtml());
-					
-					this.repaint();
+//					SqlScript sqlScript=model.getSqlScript(sqlFileIndex);
+//					inputPanel.setText(sqlScript.toHtml());
+//					
+//					outputPanel.setText(model.getSingleConvertedSqlScriptBlock(sqlFileIndex).toHtml());
+//					
+//					this.repaint();
 				}else {
 					outputTextarea.setText(model.getSingleConvertedSqlScriptBlock(sqlFileIndex).toString());
 				}
 			}
 		}else if(object==SimpleEvents.MODEL_RESET) {
 			if(TEST) {
-				inputPanel.setText("");
-				outputPanel.setText("");
+//				inputPanel.setText("");
+//				outputPanel.setText("");
 			}else {
 				inputTextarea.setText("");
 				outputTextarea.setText("");
@@ -129,4 +122,24 @@ public class IOPanel extends JPanel{
 		}
 	}
 
+	public void installPopup(Action copyAll) {
+		JPopupMenu popupMenu = new JPopupMenu();
+		JMenuItem jMenuItem=new JMenuItem(copyAll);
+		jMenuItem.setIcon(ImageTools.createImageIcon("/icons/content_copy_16.png"));
+		popupMenu.add(jMenuItem);
+        
+        outputPanel.setComponentPopupMenu(popupMenu);
+	}
+
+	public int getSqlFileIndex() {
+		return sqlFileIndex;
+	}
+
+	public SqlScriptEditorPane getInputPane() {
+		return inputPanel;
+	}
+	
+	public SqlScriptEditorPane getOutputPane() {
+		return outputPanel;
+	}
 }
