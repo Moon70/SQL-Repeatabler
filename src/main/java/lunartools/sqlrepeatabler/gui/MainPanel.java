@@ -21,7 +21,6 @@ import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 public class MainPanel extends JPanel{
 	private static Logger logger = LoggerFactory.getLogger(MainPanel.class);
 	private SqlRepeatablerModel model;
-	private IOPanel[] ioPanels;
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	private Image imageBackground;
 	private JSplitPane jSplitPaneVertical;
@@ -89,14 +88,6 @@ public class MainPanel extends JPanel{
 
 	public void addTab(String title, IOPanel ioPanel) {
 		tabbedPane.addTab(title, ioPanel);
-	}
-
-	public IOPanel[] getIoPanels() {
-		return ioPanels;
-	}
-
-	public void setIoPanels(IOPanel[] ioPanels) {
-		this.ioPanels = ioPanels;
 	}
 
 }

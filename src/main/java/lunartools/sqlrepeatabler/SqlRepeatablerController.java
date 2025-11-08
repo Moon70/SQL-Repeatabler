@@ -25,6 +25,7 @@ public class SqlRepeatablerController{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerController.class);
 	private SqlRepeatablerModel model;
 	private SqlRepeatablerView view;
+	private ArrayList<IOPanelController> ioPanelControllers=new ArrayList<>();
 
 	public SqlRepeatablerController(SqlRepeatablerModel model,SqlRepeatablerView view) {
 		Settings settings=SqlRepeatablerSettings.getSettings();
@@ -83,19 +84,16 @@ public class SqlRepeatablerController{
 			shutdown();
 		}else if(object==SimpleEvents.MODEL_SQLINPUTFILESCHANGED) {
 			MainPanel mainPanel=view.getMainPanel();
-			IOPanel[] ioPanels=mainPanel.getIoPanels();
-			if(ioPanels!=null) {
-				for(IOPanel iopanel:ioPanels) {
-					model.removeChangeListener(iopanel::updateModelChanges);
-				}
+			for(IOPanelController ioPanelController:ioPanelControllers) {
+				model.removeChangeListener(ioPanelController::updateModelChanges);
 			}
+			ioPanelControllers.clear();
 			ArrayList<File> files=model.getSqlInputFiles();
 			mainPanel.getTabbedPane().removeAll();
-			ioPanels=new IOPanel[files.size()];
 			for(int i=0;i<files.size();i++) {
-				ioPanels[i]=new IOPanel(model,i);
-				new IOPanelController(model, ioPanels[i]);
-				mainPanel.addTab(files.get(i).getName(), ioPanels[i]);
+				IOPanel ioPanel=new IOPanel(model,i);
+				ioPanelControllers.add(new IOPanelController(model, ioPanel));
+				mainPanel.addTab(files.get(i).getName(), ioPanel);
 			}
 			mainPanel.revalidate();
 			mainPanel.repaint();
@@ -106,18 +104,14 @@ public class SqlRepeatablerController{
 		}else if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
 			view.refreshView();
 		}else if(object==SimpleEvents.MODEL_RESET) {
-			MainPanel mainPanel=view.getMainPanel();
-			IOPanel[] ioPanels=mainPanel.getIoPanels();
-			if(ioPanels!=null) {
-				for(IOPanel iopanel:ioPanels) {
-					model.removeChangeListener(iopanel::updateModelChanges);
-				}
+			for(IOPanelController ioPanelController:ioPanelControllers) {
+				model.removeChangeListener(ioPanelController::updateModelChanges);
 			}
-			mainPanel.setIoPanels(null);
+			ioPanelControllers.clear();
 		}
 	}
 
- 	public void shutdown() {
+	public void shutdown() {
 		Settings settings=SqlRepeatablerSettings.getSettings();
 		settings.setRectangle(SqlRepeatablerSettings.VIEW_BOUNDS, view.getBounds());
 		try {
