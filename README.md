@@ -26,8 +26,8 @@ In case of a 'create table ...' statement, this tool puts a 'if not exists table
 
 <u>Examples:</u>
 
-![Example_CreateTable](B:\GitHub\SQL-Repeatabler\SQL-Repeatabler\readme\Example_CreateTable.jpg)
+![Example_CreateTable](readme/Example_CreateTable.jpg)
 
-![Example_AlterTable](B:\GitHub\SQL-Repeatabler\SQL-Repeatabler\readme\Example_AlterTable.jpg)
+![Example_AlterTable](readme/Example_AlterTable.jpg)
 
-![Example_SpRename](B:\GitHub\SQL-Repeatabler\SQL-Repeatabler\readme\Example_SpRename.jpg)
+![Example_SpRename](readme/Example_SpRename.jpg)
