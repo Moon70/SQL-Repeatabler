@@ -7,9 +7,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,23 +25,24 @@ public class MainPanel extends JPanel{
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	private Image imageBackground;
 	private JSplitPane jSplitPaneVertical;
+	private LogEditorPane logPanel;
 
-	public MainPanel(SqlRepeatablerModel model,JTextArea logTextArea) {
+	public MainPanel(SqlRepeatablerModel model) {
 		this.model=model;
+		setLayout(new BorderLayout());
 		jSplitPaneVertical=new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		jSplitPaneVertical.setOpaque(false);
 		jSplitPaneVertical.setTopComponent(tabbedPane);
 
-		LogPanelTextarea logPanel=new LogPanelTextarea(model,logTextArea);
+		logPanel=new LogEditorPane(model);
 		logPanel.setMinimumSize(new Dimension(0,100));
-		jSplitPaneVertical.setBottomComponent(logPanel);
+		JScrollPane scrollPaneLog=new JScrollPane(logPanel);
+		scrollPaneLog.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
+		jSplitPaneVertical.setBottomComponent(scrollPaneLog);
 		jSplitPaneVertical.setDividerLocation(700);
 		jSplitPaneVertical.setResizeWeight(1.0);
 
-		//		add(jSplitPaneVertical);
-
-		setLayout(new BorderLayout());
 		add(jSplitPaneVertical,BorderLayout.CENTER);
 
 		jSplitPaneVertical.setVisible(false);
@@ -88,6 +90,10 @@ public class MainPanel extends JPanel{
 
 	public void addTab(String title, IOPanel ioPanel) {
 		tabbedPane.addTab(title, ioPanel);
+	}
+
+	public LogEditorPane getLogPanel() {
+		return logPanel;
 	}
 
 }

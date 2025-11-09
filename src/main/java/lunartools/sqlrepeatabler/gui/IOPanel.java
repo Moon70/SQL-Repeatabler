@@ -14,8 +14,8 @@ import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 
 public class IOPanel extends JPanel{
-	private SqlScriptEditorPane inputPane;
-	private SqlScriptEditorPane outputPane;
+	private SqlEditorPane inputPane;
+	private SqlEditorPane outputPane;
 	private final int sqlFileIndex;
 
 	public IOPanel(SqlRepeatablerModel model, int sqlFileIndex) {
@@ -23,8 +23,8 @@ public class IOPanel extends JPanel{
 
 		setLayout(new BorderLayout());
 
-		inputPane=new SqlScriptEditorPane(model,sqlFileIndex,false);
-		outputPane=new SqlScriptEditorPane(model,sqlFileIndex,true);
+		inputPane=new SqlEditorPane(model,sqlFileIndex,false);
+		outputPane=new SqlEditorPane(model,sqlFileIndex,true);
 
 		JSplitPane jSplitPaneHorizontal = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
 		jSplitPaneHorizontal.setResizeWeight(0.5);
@@ -56,11 +56,11 @@ public class IOPanel extends JPanel{
 		return sqlFileIndex;
 	}
 
-	public SqlScriptEditorPane getInputPane() {
+	public SqlEditorPane getInputPane() {
 		return inputPane;
 	}
 
-	public SqlScriptEditorPane getOutputPane() {
+	public SqlEditorPane getOutputPane() {
 		return outputPane;
 	}
 }

@@ -14,8 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.Settings;
+import lunartools.sqlrepeatabler.common.SwingBufferingLogBackAppender;
 import lunartools.sqlrepeatabler.gui.IOPanel;
 import lunartools.sqlrepeatabler.gui.IOPanelController;
+import lunartools.sqlrepeatabler.gui.LogEditorPane;
 import lunartools.sqlrepeatabler.gui.MainPanel;
 import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
@@ -27,7 +29,7 @@ public class SqlRepeatablerController{
 	private SqlRepeatablerView view;
 	private ArrayList<IOPanelController> ioPanelControllers=new ArrayList<>();
 
-	public SqlRepeatablerController(SqlRepeatablerModel model,SqlRepeatablerView view) {
+	public SqlRepeatablerController(SqlRepeatablerModel model,SqlRepeatablerView view,SwingBufferingLogBackAppender swingAppender) {
 		Settings settings=SqlRepeatablerSettings.getSettings();
 		this.model=model;
 		this.view=view;
@@ -36,6 +38,11 @@ public class SqlRepeatablerController{
 			public void windowClosing(WindowEvent event){
 				shutdown();
 			}
+		});
+
+		LogEditorPane logPanelEditorpane=view.getMainPanel().getLogPanel();
+		swingAppender.attachConsumer(event ->{
+			logPanelEditorpane.consumeLogEvent(event);
 		});
 
 		Rectangle frameBounds=fixScreenBounds(settings.getRectangle(SqlRepeatablerSettings.VIEW_BOUNDS, SqlRepeatablerModel.getDefaultFrameBounds()),SqlRepeatablerModel.getDefaultFrameSize());
@@ -126,6 +133,5 @@ public class SqlRepeatablerController{
 	public void openAboutDialogue() {
 		view.showMessageboxAbout();
 	}
-
 
 }

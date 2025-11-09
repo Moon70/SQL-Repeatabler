@@ -2,7 +2,6 @@ package lunartools.sqlrepeatabler;
 
 import java.io.File;
 
-import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -10,8 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.filter.ThresholdFilter;
-import lunartools.sqlrepeatabler.common.TextAreaAppender;
+import lunartools.sqlrepeatabler.common.SwingBufferingLogBackAppender;
 import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
 
 public class MainSqlRepeatabler {
@@ -21,11 +21,11 @@ public class MainSqlRepeatabler {
 		SwingUtilities.invokeLater(() -> {
 			try{
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				JTextArea jTextAreaLog=new JTextArea(14,220);
-				configureLogger(jTextAreaLog);
+				SwingBufferingLogBackAppender swingAppender = setupLogger(Level.INFO);
+				
 				SqlRepeatablerModel model=new SqlRepeatablerModel();
-				SqlRepeatablerView view=new SqlRepeatablerView(model,jTextAreaLog);
-				new SqlRepeatablerController(model,view);
+				SqlRepeatablerView view=new SqlRepeatablerView(model);
+				new SqlRepeatablerController(model,view,swingAppender);
 				view.setVisible(true);
 				logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
 //model.addSqlInputFile(new File("c:/temp/test3.sql"));
@@ -39,19 +39,24 @@ public class MainSqlRepeatabler {
 		});
 	}
 
-	private static void configureLogger(JTextArea logTextArea) {
+	public static SwingBufferingLogBackAppender setupLogger(Level level) {
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        SwingBufferingLogBackAppender swingBufferingAppender = new SwingBufferingLogBackAppender();
+        swingBufferingAppender.setContext(loggerContext);
+        swingBufferingAppender.setName(SqlRepeatablerModel.PROGRAMNAME);
+
+        ThresholdFilter tresholdFilter = new ThresholdFilter();
+        tresholdFilter.setLevel(level.toString());
+        tresholdFilter.setContext(loggerContext);
+        tresholdFilter.start();
+
+        swingBufferingAppender.addFilter(tresholdFilter);
+        swingBufferingAppender.start();
+
 		ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		TextAreaAppender textAreaAppender = new TextAreaAppender();
-		textAreaAppender.setJTextArea(logTextArea);
+        rootLogger.addAppender(swingBufferingAppender);
 
-		ThresholdFilter thresholdFilter = new ThresholdFilter();
-		thresholdFilter.setLevel(Level.INFO.toString());
-		thresholdFilter.start();
-
-		textAreaAppender.addFilter(thresholdFilter);
-		textAreaAppender.start();
-
-		rootLogger.addAppender(textAreaAppender);
-	}
-
+        return swingBufferingAppender;
+    }
+	
 }

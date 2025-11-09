@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import ch.qos.logback.classic.spi.ILoggingEvent;
 import lunartools.ChangeListenerSupport;
 import lunartools.SwingTools;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
@@ -142,10 +141,6 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		sqlConvertedScriptBlocks=new ArrayList<>();
 		notifyListeners(SimpleEvents.MODEL_RESET);
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
-	}
-
-	public void fireLogEvent(ILoggingEvent loggingEvent) {
-		notifyListeners(loggingEvent);
 	}
 
 	public void clearInputPanel() {

@@ -1,7 +1,5 @@
 package lunartools.sqlrepeatabler.gui;
 
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Insets;
 
 import javax.swing.JEditorPane;
@@ -9,55 +7,42 @@ import javax.swing.JEditorPane;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.parser.Category;
 
-public class SqlScriptEditorPane extends JEditorPane{
+public class SqlEditorPane extends JEditorPane{
 	private final String htmlIntro;
 	private final String htmlOutro;
 
-	private int width=750;
-	private int height=500+160;
-
-	public SqlScriptEditorPane(SqlRepeatablerModel model, int sqlFileIndex, boolean isOutputPane) {
-		Font font=new Font("Courier New", Font.PLAIN,12);
-		setPreferredSize(new Dimension(width, height));
+	public SqlEditorPane(SqlRepeatablerModel model, int sqlFileIndex, boolean isOutputPane) {
 		setEditable(false);
-		setFont(font);
 		setContentType("text/html");
-		setMargin(new Insets(10, 20, 10, 20));
+		setMargin(new Insets(8, 16, 8, 16));
 
-		StringBuffer sb=new StringBuffer();
+		StringBuilder sb=new StringBuilder();
 		sb.append("<html>");
 		sb.append("<head>");
 		sb.append("<meta charset=\"UTF-8\">");
 		sb.append("<style>");
-		sb.append("body {");
-		sb.append("font-family: \"Courier New\", Courier, monospace;");
-		sb.append("}");
-
+		sb.append("body {font-family: \"Courier New\", Courier, monospace;}");
 		for(Category category:Category.values()) {
 			sb.append(category.getCss());
 		}
-
 		sb.append("</style>");
 		sb.append("</head>");
 		sb.append("<body>");
 		htmlIntro=sb.toString();
 
-		sb=new StringBuffer();
+		sb=new StringBuilder();
 		sb.append("</body>");
 		sb.append("</html>");
 		htmlOutro=sb.toString();
-
-		//model.addChangeListener(this::updateModelChanges);
 	}
 
 	@Override
-	public void setText(String s) {
+	public void setText(String text) {
 		StringBuilder sb=new StringBuilder();
 		sb.append(htmlIntro);
-		sb.append(s);
+		sb.append(text);
 		sb.append(htmlOutro);
 		super.setText(sb.toString());
-		repaint();
 	}
 
 }

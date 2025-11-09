@@ -14,7 +14,6 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,7 @@ public class SqlRepeatablerView extends JFrame{
 	private MainPanel mainPanel;
 	private MenuModel menuModel;
 
-	public SqlRepeatablerView(SqlRepeatablerModel model,JTextArea logTextArea) {
+	public SqlRepeatablerView(SqlRepeatablerModel model) {
 		super.setTitle(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
 		setBounds(model.getFrameBounds());
 		//setMinimumSize(new Dimension(WINDOW_MINIMUM_WIDTH,WINDOW_MINIMUM_HEIGHT));
@@ -44,7 +43,7 @@ public class SqlRepeatablerView extends JFrame{
 
 		setLayout(new BorderLayout());
 
-		mainPanel=new MainPanel(model,logTextArea);
+		mainPanel=new MainPanel(model);
 		add(mainPanel);
 
 		JPanel glass=(JPanel)getGlassPane();
