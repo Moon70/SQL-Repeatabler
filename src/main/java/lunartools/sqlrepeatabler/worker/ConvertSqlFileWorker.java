@@ -32,7 +32,7 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, Void> {
 			
 			for(int i=0;i<files.size();i++) {
 				File file=files.get(i);
-				logger.info("converting: "+file);
+				logger.info("Processing: "+file);
 				ConverterService converterService=new ConverterService(model);
 				SqlScript sqlScript=converterService.createSqlScript(file);
 				sqlScripts.add(sqlScript);
@@ -40,7 +40,7 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, Void> {
 				convertedSqlScriptBlocks.add(sqlBlock);
 			}
 		} catch (Exception e) {
-			logger.error("error converting sql files",e);
+			logger.error("Error processing sql files",e);
 		}
 		return null;
 	}

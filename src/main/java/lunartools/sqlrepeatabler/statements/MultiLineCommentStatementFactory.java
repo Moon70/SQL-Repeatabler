@@ -27,7 +27,7 @@ public class MultiLineCommentStatementFactory extends StatementFactory{
 		}
 
 		sqlScriptLine.setCategory(Category.COMMENT);
-		logger.info("statement: comment");
+		logger.info("Statement: comment");
 		int endIndex=sqlScript.getIndex();
 		int startIndex=endIndex-1;
 		if(!line.endsWith("*/")) {

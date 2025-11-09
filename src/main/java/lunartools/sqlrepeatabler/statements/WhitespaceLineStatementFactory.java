@@ -22,7 +22,7 @@ public class WhitespaceLineStatementFactory extends StatementFactory{
 			logger.trace("parsing statement");
 		}
 
-		logger.info("statement: whitespace");
+		logger.debug("Statement: whitespace");
 		int linecount=1;
 		String line;
 		while((line=sqlScript.readNextLineAsString())!=null) {

@@ -45,7 +45,6 @@ public class StatementTokenizer {
 			tokenCharacters.add(character);
 			charactersOfStatement.remove(0);
 		}
-//		throw new Exception("Unexpected end of buffer");
 		logger.warn("Reached end of file while scanning for statement terminating semicolon. Treating eof as semicolon!");
 		return new Token(tokenCharacters);
 	}

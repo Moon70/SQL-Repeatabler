@@ -129,7 +129,7 @@ public class Token {
 			}
 		}
 		if(replaceIfExists("auto_increment","identity")) {
-			logger.warn("Script is most likely MySql format! Replacing 'auto_increment' with 'identity'!");
+			logger.warn("Script is most likely MySql flavour! Replacing 'auto_increment' with 'identity'!");
 		}
 
 		return isMySql;

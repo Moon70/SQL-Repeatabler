@@ -26,7 +26,7 @@ public class SpRenameStatementFactory extends StatementFactory{
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
-		logger.info("statement: "+statementTokenizer.toString());
+		logger.info("Statement: "+statementTokenizer.toString());
 
 		Token tokenStatement=statementTokenizer.nextToken(SpRenameStatement.COMMAND);
 		statementTokenizer.stripWhiteSpaceLeft();

@@ -32,7 +32,7 @@ public class CopyToClipboardAction extends AbstractAction {
 		StringSelection stringSelection = new StringSelection(sqlBlock.toString());
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.setContents(stringSelection, null);
-		logger.info("copied script to clipboard");
+		logger.info("Copied script to clipboard");
 	}
 
 }

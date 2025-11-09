@@ -57,7 +57,7 @@ public class SqlRepeatablerView extends JFrame{
 						if(file.getName().toLowerCase().endsWith(".sql")) {
 							arraylistAcceptedFiles.add(file);
 						}else {
-							logger.warn("ignoring unsupported file: "+file);
+							logger.warn("Ignoring unsupported file: "+file);
 						}
 					}
 					if(arraylistAcceptedFiles.size()>0) {
@@ -94,7 +94,7 @@ public class SqlRepeatablerView extends JFrame{
 	}
 
 	public void showMessageboxAbout() {
-		logger.debug("opening about dialogue...");
+		logger.debug("Opening 'About' dialogue...");
 		About.showAboutDialog(this);
 	}
 

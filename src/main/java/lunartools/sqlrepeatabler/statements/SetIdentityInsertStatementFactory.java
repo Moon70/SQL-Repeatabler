@@ -27,14 +27,14 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
-		logger.info("statement: "+statementTokenizer.toString());
+		logger.info("Statement: "+statementTokenizer.toString());
 
 		Token tokenStatement=statementTokenizer.nextToken(SetIdentityInsertStatement.COMMAND);
 		tokenStatement.setCategory(Category.STATEMENT);
 		tokenStatement=tokenStatement.toUpperCase();
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
-		logger.debug(tableName.toString());
+		logger.debug("Table: "+tableName.toString());
 
 		statementTokenizer.stripWhiteSpaceRight();
 		if(statementTokenizer.charAt(statementTokenizer.length()-1).getChar()==';') {

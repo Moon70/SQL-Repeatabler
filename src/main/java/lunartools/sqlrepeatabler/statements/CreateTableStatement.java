@@ -8,18 +8,17 @@ import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
-import lunartools.sqlrepeatabler.segments.TableSegment;
 
 public class CreateTableStatement implements Statement{
 	public static final String COMMAND="CREATE TABLE";
 	private Token tokenStatement;
 	private TableName tableName;
-	private ArrayList<TableSegment> tableElements;
+	private ArrayList<Token> tokens;
 
-	public CreateTableStatement(Token statement,TableName tableName,ArrayList<TableSegment> tableElements) {
+	public CreateTableStatement(Token statement,TableName tableName,ArrayList<Token> tokens) {
 		this.tokenStatement=statement;
 		this.tableName=tableName;
-		this.tableElements=tableElements;
+		this.tokens=tokens;
 	}
 
 	@Override
@@ -29,9 +28,9 @@ public class CreateTableStatement implements Statement{
 		sqlBlock.add(SqlString.createSqlStringFromString("\t%s %s (",Category.INSERTED,tokenStatement,tableName.getFullName()));
 
 		SqlString sqlString;
-		for(int i=0;i<tableElements.size();i++) {
-			sqlString=SqlString.createSqlStringFromString("\t\t%s", Category.INSERTED,tableElements.get(i).getToken());
-			if(i<tableElements.size()-1) {
+		for(int i=0;i<tokens.size();i++) {
+			sqlString=SqlString.createSqlStringFromString("\t\t%s", Category.INSERTED,tokens.get(i));
+			if(i<tokens.size()-1) {
 				sqlString.append(new SqlCharacter(',',Category.INSERTED));
 			}
 			sqlBlock.add(sqlString);

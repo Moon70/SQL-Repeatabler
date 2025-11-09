@@ -51,13 +51,13 @@ public class SqlParser {
 		while(sqlScript.hasCurrentLine()) {
 			SqlString sqlString=sqlScript.peekLine();
 			
-			logger.debug("processing line "+(sqlScript.getIndex()+1)+"\t:"+sqlString.toString());
+			logger.debug("Processing line "+(sqlScript.getIndex()+1)+"\t:"+sqlString.toString());
 			Statement statement=null;
 			for(StatementFactory statementFactory:sqlSegmentFactories) {
 				if(statementFactory.match(sqlString.toString())) {
 					statement=statementFactory.createStatement(sqlScript);
 					if(statements.size()==0 && statement instanceof WhitespaceLineStatement) {
-					    logger.warn("ignoring leading whitespace lines");
+					    logger.info("Ignoring leading whitespace lines");
 					    break;
 					}
 					statements.add(statement);

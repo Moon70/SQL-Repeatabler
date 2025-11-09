@@ -10,7 +10,6 @@ import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
-import lunartools.sqlrepeatabler.segments.TableSegment;
 
 public class CreateTableStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(CreateTableStatementFactory.class);
@@ -30,7 +29,7 @@ public class CreateTableStatementFactory extends StatementFactory{
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
-		logger.info("statement: "+statementTokenizer.toString());
+		logger.info("Statement: "+statementTokenizer.toString());
 
 		Token tokenStatement=statementTokenizer.nextToken(CreateTableStatement.COMMAND);
 		tokenStatement.setCategory(Category.STATEMENT);
@@ -38,11 +37,11 @@ public class CreateTableStatementFactory extends StatementFactory{
 		
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		if(tableName.isMySql()) {
-			logger.warn("Script is most likely MySql format! Replacing backticks with square brackets!");
+			logger.warn("Script is most likely MySql flavour! Replacing backticks with square brackets!");
 		}
-		logger.debug(tableName.toString());
+		logger.debug("Table: "+tableName.toString());
 
-		ArrayList<TableSegment> tableElements=new ArrayList<>();
+		ArrayList<Token> tokens=new ArrayList<>();
 
 		Token allCollumnsToken=statementTokenizer.nextToken('(',')');
 		allCollumnsToken.removeEnclosing('(',')');
@@ -51,14 +50,14 @@ public class CreateTableStatementFactory extends StatementFactory{
 			if(tableName.isMySql()) {
 				columns[i].fixMySqlDelimiter();
 			}
-			tableElements.add(new TableSegment(columns[i]));
+			tokens.add(columns[i]);
 		}
 
 		Token tokenEngineParameters=statementTokenizer.nextTokenUntil(';');
 		if(tokenEngineParameters!=null) {
 			tokenEngineParameters.setCategory(Category.IGNORED);
 		}
-		return new CreateTableStatement(tokenStatement,tableName,tableElements);
+		return new CreateTableStatement(tokenStatement,tableName,tokens);
 	}
 
 }

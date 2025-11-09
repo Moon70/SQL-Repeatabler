@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 
@@ -25,8 +26,10 @@ public class UseStatementFactory extends StatementFactory{
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeOneLineStatement();
-		logger.info("statement: "+statementTokenizer.toString());
+		logger.info("Statement: "+statementTokenizer.toString());
 		logger.warn("Ignoring statement "+UseStatement.COMMAND);
+		SqlCharacter sqlCharacter=statementTokenizer.getFirstCharacter();
+		logger.warn(String.format("Location: row=%d, column=%d, index=%d",sqlCharacter.getRow(),sqlCharacter.getColumn(),sqlCharacter.getIndex()));
 		statementTokenizer.setCategory(Category.IGNORED);
 
 		return new UseStatement();

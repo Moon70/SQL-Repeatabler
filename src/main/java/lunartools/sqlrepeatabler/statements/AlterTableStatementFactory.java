@@ -37,14 +37,14 @@ public class AlterTableStatementFactory extends StatementFactory{
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
-		logger.info("statement: "+statementTokenizer.toString());
+		logger.info("Statement: "+statementTokenizer.toString());
 
 		Token tokenStatement=statementTokenizer.nextToken(AlterTableStatement.COMMAND);
 		tokenStatement.setCategory(Category.STATEMENT);
 		tokenStatement=tokenStatement.toUpperCase();
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
-		logger.debug(tableName.toString());
+		logger.debug("Table: "+tableName.toString());
 
 		statementTokenizer.stripWhiteSpaceLeft();
 
@@ -56,11 +56,10 @@ public class AlterTableStatementFactory extends StatementFactory{
 		}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("ALTER COLUMN")) {
 			columnElements=parseAlterColumnAction(statementTokenizer);
 		}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("MODIFY COLUMN")) {//invalid
-			logger.warn("found MODIFY COLUMN action which is most likely MySql and not supported on T-SQL. Processing as ALTER COLUMN...");
+			logger.warn("Found MODIFY COLUMN action which is most likely MySql flavour and not supported in T-SQL. Processing as ALTER COLUMN.");
 			columnElements=parseAlterColumnAction(statementTokenizer);
 		}else {
-			//throw new Exception("unsupported ALTER TABLE action found");
-			throw new SqlParserException("unsupported ALTER TABLE action found",statementTokenizer.getFirstCharacter());
+			throw new SqlParserException("Unsupported ALTER TABLE action found",statementTokenizer.getFirstCharacter());
 		}
 
 		return new AlterTableStatement(tokenStatement,tableName,columnElements);
@@ -78,7 +77,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		 * foreign key ([COLUMNNAME_ID])
 		 * references [T_FOO] ([ID]);
 		 */
-		logger.debug("parsing ADD action: ");
+		logger.debug("Parsing ADD action: ");
 		ArrayList<Segment> columnElements=new ArrayList<>();
 
 		while(statementTokenizer.hasNext()) {
@@ -110,7 +109,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 				}
 			}else {
 				if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("COLUMN")){
-					logger.warn("Script is most likely in MySql format. Ignoring COLUMN keyword which is not allowed in T-SQL");
+					logger.warn("Script is most likely in MySql flavour. Ignoring COLUMN keyword which is not allowed in T-SQL.");
 				}
 				Token tokenColumName=statementTokenizer.nextToken();
 				tokenColumName.setCategory(Category.COLUMN);
@@ -132,7 +131,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 	public ArrayList<Segment> parseDropAction(StatementTokenizer statementTokenizer) throws Exception {
 		//column targets
 		//constraint targets
-		logger.debug("parsing DROP action");
+		logger.debug("Parsing DROP action");
 		ArrayList<Segment> columnElements=new ArrayList<>();
 		Token tokenTarget=statementTokenizer.nextToken();
 
@@ -163,7 +162,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 	}
 
 	public ArrayList<Segment> parseAlterColumnAction(StatementTokenizer statementTokenizer) throws Exception {
-		logger.debug("parsing ALTER COLUMN action");
+		logger.debug("Parsing ALTER COLUMN action");
 		ArrayList<Segment> columnElements=new ArrayList<>();
 		while(true) {
 			Token tokenColumnName=statementTokenizer.nextToken();

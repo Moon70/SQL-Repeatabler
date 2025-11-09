@@ -25,7 +25,7 @@ public class OneLineCommentStatementFactory extends StatementFactory{
 			logger.trace("parsing statement");
 		}
         sqlScriptLine.setCategory(Category.COMMENT);
-		logger.info("statement: comment");
+		logger.info("Statement: comment");
 		int endIndex=sqlScript.getIndex();
 		int startIndex=endIndex-1;
 		while((sqlScriptLine=sqlScript.peekLine())!=null) {

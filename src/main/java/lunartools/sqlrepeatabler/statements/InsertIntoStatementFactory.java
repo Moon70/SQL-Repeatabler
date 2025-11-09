@@ -29,14 +29,14 @@ public class InsertIntoStatementFactory extends StatementFactory{
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
-		logger.info("statement: "+statementTokenizer.toString());
+		logger.info("Statement: "+statementTokenizer.toString());
 
 		Token tokenStatement=statementTokenizer.nextToken(InsertIntoStatement.COMMAND);
 		tokenStatement.setCategory(Category.STATEMENT);
 		tokenStatement=tokenStatement.toUpperCase();
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
-		logger.debug(tableName.toString());
+		logger.debug("Table: "+tableName.toString());
 
 		Token tokenColumnNames=statementTokenizer.nextToken('(',')');
 		tokenColumnNames.setCategory(Category.COLUMN);
