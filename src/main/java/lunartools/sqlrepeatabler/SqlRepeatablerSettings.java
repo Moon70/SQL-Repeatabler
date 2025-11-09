@@ -1,19 +1,42 @@
 package lunartools.sqlrepeatabler;
 
-import lunartools.Settings;
+import java.awt.Dimension;
+import java.awt.Rectangle;
 
-public class SqlRepeatablerSettings {
+import lunartools.Settings;
+import lunartools.SwingTools;
+import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
+
+public class SqlRepeatablerSettings extends Settings{
+	private static SqlRepeatablerSettings instance;
+
 	public static final String VIEW_BOUNDS =		"ViewBounds";
 	public static final String FILE_LOADFOLDER =	"LoadFolder";
 	public static final String FILE_SAVEFOLDER =	"SaveFolder";
 
-	private static Settings settings;
-
-	public static Settings getSettings() {
-		if(settings==null) {
-			settings=new Settings(SqlRepeatablerModel.PROGRAMNAME,SqlRepeatablerModel.getProgramVersion());
+	public static SqlRepeatablerSettings getInstance() {
+		if(instance==null) {
+			instance=new SqlRepeatablerSettings(SqlRepeatablerModel.PROGRAMNAME,SqlRepeatablerModel.getProgramVersion());
 		}
-		return settings;
+		return instance;
+	}
+
+	private SqlRepeatablerSettings(String programName, String version) {
+		super(programName, version);
+	}
+
+	public Dimension getDefaultViewSize() {
+		return SqlRepeatablerView.MINIMUM_FRAME_SIZE;
+	}
+
+	public Rectangle getViewBounds() {
+		if(!containsKey(VIEW_BOUNDS)) {
+			return SwingTools.getBoundsForCenteredDimension(getDefaultViewSize());
+		}
+		Rectangle rectangleViewBounds=getRectangle(VIEW_BOUNDS);
+		Rectangle fixedViewBounds=SwingTools.fixScreenBounds(rectangleViewBounds, getDefaultViewSize());
+
+		return fixedViewBounds;
 	}
 
 }

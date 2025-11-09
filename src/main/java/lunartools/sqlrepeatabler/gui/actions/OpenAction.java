@@ -6,6 +6,7 @@ import java.io.File;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 
+import lunartools.Settings;
 import lunartools.sqlrepeatabler.SqlRepeatablerController;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.SqlRepeatablerSettings;
@@ -33,7 +34,8 @@ class OpenAction extends AbstractAction {
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new TextFileFilter());
 		File file=null;
-		String loadFolder=SqlRepeatablerSettings.getSettings().getString(SqlRepeatablerSettings.FILE_LOADFOLDER);
+		Settings settings=SqlRepeatablerSettings.getInstance();
+		String loadFolder=settings.getString(SqlRepeatablerSettings.FILE_LOADFOLDER);
 		if(loadFolder!=null) {
 			file=new File(loadFolder);
 			if(file.exists()) {
@@ -42,7 +44,7 @@ class OpenAction extends AbstractAction {
 		}
 		if(fileChooser.showOpenDialog(controller.getView())==JFileChooser.APPROVE_OPTION) {
 			file=fileChooser.getSelectedFile();
-			SqlRepeatablerSettings.getSettings().setString(SqlRepeatablerSettings.FILE_LOADFOLDER, file.getParent());
+			settings.setString(SqlRepeatablerSettings.FILE_LOADFOLDER, file.getParent());
 			model.addSqlInputFile(file);
 		}
 	}

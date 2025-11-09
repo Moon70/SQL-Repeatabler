@@ -64,8 +64,7 @@ class SaveAsAction extends AbstractAction {
 			if(file.exists() && userCanceledFileExistsDialogue(file)) {
 				return;
 			}
-			//			model.setFile(file);
-			SqlRepeatablerSettings.getSettings().setString(SqlRepeatablerSettings.FILE_SAVEFOLDER, file.getParent());
+			SqlRepeatablerSettings.getInstance().setString(SqlRepeatablerSettings.FILE_SAVEFOLDER, file.getParent());
 			action_SaveProjectFile(file);
 		}
 	}

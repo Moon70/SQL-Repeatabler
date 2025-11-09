@@ -31,6 +31,8 @@ public class MainPanel extends JPanel{
 		this.model=model;
 		setLayout(new BorderLayout());
 		jSplitPaneVertical=new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		jSplitPaneVertical.setOneTouchExpandable(true);
+		jSplitPaneVertical.setDividerSize(8);
 		jSplitPaneVertical.setOpaque(false);
 		jSplitPaneVertical.setTopComponent(tabbedPane);
 
@@ -40,7 +42,7 @@ public class MainPanel extends JPanel{
 		scrollPaneLog.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		jSplitPaneVertical.setBottomComponent(scrollPaneLog);
-		jSplitPaneVertical.setDividerLocation(700);
+		jSplitPaneVertical.setDividerLocation(550);
 		jSplitPaneVertical.setResizeWeight(1.0);
 
 		add(jSplitPaneVertical,BorderLayout.CENTER);

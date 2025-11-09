@@ -25,23 +25,20 @@ import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
 
 public class SqlRepeatablerView extends JFrame{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerView.class);
-	public static final int WINDOW_MINIMUM_WIDTH=1600;
-	public static final int WINDOW_MINIMUM_HEIGHT=(int)(WINDOW_MINIMUM_WIDTH/SwingTools.SECTIOAUREA);
-
+	private static final int WINDOW_MINIMUM_WIDTH=1280;
+	private static final int WINDOW_MINIMUM_HEIGHT=(int)(WINDOW_MINIMUM_WIDTH/SwingTools.SECTIOAUREA);
+	public static final Dimension MINIMUM_FRAME_SIZE=new Dimension(WINDOW_MINIMUM_WIDTH,WINDOW_MINIMUM_HEIGHT);
+	
 	private SqlRepeatablerModel model;
 	private MainPanel mainPanel;
 	private MenuModel menuModel;
 
 	public SqlRepeatablerView(SqlRepeatablerModel model) {
 		super.setTitle(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
-		setBounds(model.getFrameBounds());
-		//setMinimumSize(new Dimension(WINDOW_MINIMUM_WIDTH,WINDOW_MINIMUM_HEIGHT));
-		setSize(new Dimension(WINDOW_MINIMUM_WIDTH,WINDOW_MINIMUM_HEIGHT));
-		setResizable(true);
 		this.model=model;
-		this.setIconImages(SwingTools.getDefaultIconImages());
-
 		setLayout(new BorderLayout());
+		setResizable(true);
+		this.setIconImages(SwingTools.getDefaultIconImages());
 
 		mainPanel=new MainPanel(model);
 		add(mainPanel);

@@ -29,6 +29,7 @@ public class IOPanel extends JPanel{
 		JSplitPane jSplitPaneHorizontal = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
 		jSplitPaneHorizontal.setResizeWeight(0.5);
 		jSplitPaneHorizontal.setOneTouchExpandable(true);
+		jSplitPaneHorizontal.setDividerSize(8);
 
 		JScrollPane scrollPaneLeft=new JScrollPane(inputPane);
 		scrollPaneLeft.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);

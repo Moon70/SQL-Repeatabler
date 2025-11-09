@@ -1,9 +1,5 @@
 package lunartools.sqlrepeatabler;
 
-import java.awt.Dimension;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +14,6 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 	public static final String PROGRAMNAME = "SQL-Repeatabler";
 	private static String versionProgram=SwingTools.determineProgramVersion();
 	private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>();
-
-	public static final int DEFAULT_FRAME_WIDTH=1290;
-	public static final int DEFAULT_FRAME_HEIGHT=(int)(DEFAULT_FRAME_WIDTH/SwingTools.SECTIOAUREA);
-	private Rectangle frameBounds=new Rectangle(0,0,DEFAULT_FRAME_WIDTH,DEFAULT_FRAME_HEIGHT);
 
 	private ArrayList<File> sqlInputFiles=new ArrayList<>();
 	private ArrayList<SqlScript> sqlScripts=new ArrayList<>();
@@ -108,28 +100,6 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 			sbConvertedScripts.append(sqlBlock.toString());
 		}
 		return sbConvertedScripts;
-	}
-
-	public static Rectangle getDefaultFrameBounds() {
-		GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();  
-		GraphicsDevice defaultGraphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
-		Rectangle graphicsDeviceBounds = defaultGraphicsDevice.getDefaultConfiguration().getBounds();
-		int marginX=(graphicsDeviceBounds.width-DEFAULT_FRAME_WIDTH)>>1;
-		int marginY=(graphicsDeviceBounds.height-DEFAULT_FRAME_HEIGHT)>>1;
-		return new Rectangle(graphicsDeviceBounds.x+marginX,graphicsDeviceBounds.y+marginY,DEFAULT_FRAME_WIDTH,DEFAULT_FRAME_HEIGHT);
-	}
-
-	public static Dimension getDefaultFrameSize() {
-		return new Dimension(DEFAULT_FRAME_WIDTH,DEFAULT_FRAME_HEIGHT);
-	}
-
-	public void setFrameBounds(Rectangle frameBounds) {
-		this.frameBounds = frameBounds;
-		notifyListeners(SimpleEvents.MODEL_FRAMESIZECHANGED);
-	}
-
-	public Rectangle getFrameBounds() {
-		return frameBounds;
 	}
 
 	public void reload() {

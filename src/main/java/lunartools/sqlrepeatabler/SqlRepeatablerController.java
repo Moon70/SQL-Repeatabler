@@ -1,9 +1,5 @@
 package lunartools.sqlrepeatabler;
 
-import java.awt.Dimension;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -30,9 +26,10 @@ public class SqlRepeatablerController{
 	private ArrayList<IOPanelController> ioPanelControllers=new ArrayList<>();
 
 	public SqlRepeatablerController(SqlRepeatablerModel model,SqlRepeatablerView view,SwingBufferingLogBackAppender swingAppender) {
-		Settings settings=SqlRepeatablerSettings.getSettings();
+		SqlRepeatablerSettings settings=SqlRepeatablerSettings.getInstance();
 		this.model=model;
 		this.view=view;
+		view.setBounds(settings.getViewBounds());
 		this.view.setActionFactory(new ActionFactory(this));
 		this.view.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent event){
@@ -45,34 +42,7 @@ public class SqlRepeatablerController{
 			logPanelEditorpane.consumeLogEvent(event);
 		});
 
-		Rectangle frameBounds=fixScreenBounds(settings.getRectangle(SqlRepeatablerSettings.VIEW_BOUNDS, SqlRepeatablerModel.getDefaultFrameBounds()),SqlRepeatablerModel.getDefaultFrameSize());
-		model.setFrameBounds(frameBounds);
 		model.addChangeListener(this::updateModelChanges);
-	}
-
-	private Rectangle fixScreenBounds(Rectangle screenBounds, Dimension defaultFrameSize) {
-		int centerX=screenBounds.x+screenBounds.width>>1;
-		int centerY=screenBounds.y+screenBounds.height>>1;
-		GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();  
-		GraphicsDevice[] graphicsDevices = graphicsEnvironment.getScreenDevices();
-		int numberOfGraphicsDevices=graphicsDevices.length;
-		for(int i=0;i<numberOfGraphicsDevices;i++){
-			GraphicsDevice graphicsDevice=graphicsDevices[i];
-			Rectangle graphicsDeviceBounds = graphicsDevice.getDefaultConfiguration().getBounds();
-			if(
-					centerX>=graphicsDeviceBounds.x &&
-					centerY>=graphicsDeviceBounds.y &&
-					centerX<=graphicsDeviceBounds.x+graphicsDeviceBounds.width &&
-					centerY<=graphicsDeviceBounds.y+graphicsDeviceBounds.height
-					) {
-				return screenBounds;
-			}
-		}
-		GraphicsDevice graphicsDevice=graphicsDevices[0];
-		Rectangle graphicsDeviceBounds = graphicsDevice.getDefaultConfiguration().getBounds();
-		int marginX=(graphicsDeviceBounds.width-defaultFrameSize.width)>>1;
-					int marginY=(graphicsDeviceBounds.height-defaultFrameSize.height)>>1;
-					return new Rectangle(graphicsDeviceBounds.x+marginX,graphicsDeviceBounds.y+marginY,defaultFrameSize.width,defaultFrameSize.height);
 	}
 
 	public SqlRepeatablerModel getModel() {
@@ -119,7 +89,7 @@ public class SqlRepeatablerController{
 	}
 
 	public void shutdown() {
-		Settings settings=SqlRepeatablerSettings.getSettings();
+		Settings settings=SqlRepeatablerSettings.getInstance();
 		settings.setRectangle(SqlRepeatablerSettings.VIEW_BOUNDS, view.getBounds());
 		try {
 			settings.saveSettings();
