@@ -104,19 +104,19 @@ public class SqlScript {
 		return sqlStrings.get(index);
 	}
 
-    public String readLineAsString() {
-        if(index==sqlStrings.size()) {
-            return null;
-        }
-        return sqlStrings.get(index++).toString();
-    }
+	public String readLineAsString() {
+		if(index==sqlStrings.size()) {
+			return null;
+		}
+		return sqlStrings.get(index++).toString();
+	}
 
-    public SqlString readLine() {
-        if(index==sqlStrings.size()) {
-            return null;
-        }
-        return sqlStrings.get(index++);
-    }
+	public SqlString readLine() {
+		if(index==sqlStrings.size()) {
+			return null;
+		}
+		return sqlStrings.get(index++);
+	}
 
 	public SqlCharacter getFirstCharacterOfCurrentLine() {
 		if(index==sqlStrings.size()) {
@@ -150,11 +150,11 @@ public class SqlScript {
 		while(true) {
 			SqlString sqlStringLine=readLineCharacters();
 			if(sqlStringLine==null) {
-//				throw new EOFException("Unexpected end of script");
-			    break;
+				//				throw new EOFException("Unexpected end of script");
+				break;
 			}
 			if(sqlStringStatement.size()>0 && !sqlStringStatement.get(sqlStringStatement.size()-1).isWhiteSpace()) {
-                sqlStringStatement.add(SqlCharacter.SEPARATOR);
+				sqlStringStatement.add(SqlCharacter.SEPARATOR);
 			}
 			sqlStringStatement.addAll(sqlStringLine.getCharacters());
 			if(sqlStringLine.endsWithSemicolonIgnoreWhiteSpace()) {
@@ -223,14 +223,9 @@ public class SqlScript {
 	public String getLineAt(int index) {
 		return sqlStrings.get(index).toString();
 	}
-	
-	public String toHtml() {
-		StringBuilder sb=new StringBuilder();
-		for(int line=0;line<sqlStrings.size();line++) {
-			sb.append(sqlStrings.get(line).toHtml());
-			sb.append("<br>");
-		}
-		return sb.toString();
+
+	public ArrayList<SqlString> getSqlStrings(){
+		return sqlStrings;
 	}
 
 	@Override
@@ -242,5 +237,5 @@ public class SqlScript {
 		}
 		return sb.toString();
 	}
-	
+
 }

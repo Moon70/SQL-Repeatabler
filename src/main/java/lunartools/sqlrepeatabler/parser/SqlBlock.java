@@ -4,19 +4,19 @@ import java.util.ArrayList;
 
 public class SqlBlock {
 	private ArrayList<SqlString> sqlStrings=new ArrayList<>();
-	
+
 	public void add(SqlString sqlString) {
 		this.sqlStrings.add(sqlString);
 	}
-	
+
 	public void add(ArrayList<SqlString> sqlStrings) {
 		this.sqlStrings.addAll(sqlStrings);
 	}
-	
+
 	public void add(SqlBlock sqlBlock) {
 		this.sqlStrings.addAll(sqlBlock.getSqlStrings());
 	}
-	
+
 	public StringBuilder toStringBuilder() {
 		StringBuilder sb=new StringBuilder();
 		for(SqlString sqlString:sqlStrings) {
@@ -25,28 +25,19 @@ public class SqlBlock {
 		}
 		return sb;
 	}
-	
+
 	public String toString() {
 		return toStringBuilder().toString();
 	}
-	
-	public String toHtml() {
-		StringBuilder sb=new StringBuilder();
-		for(SqlString sqlString:sqlStrings) {
-			sb.append(sqlString.toHtml());
-			sb.append("<br>");
-		}
-		return sb.toString();
-	}
-	
+
 	public ArrayList<SqlString> getSqlStrings(){
 		return sqlStrings;
 	}
-	
+
 	public SqlString getLastLine() {
 		return sqlStrings.get(sqlStrings.size()-1);
 	}
-	
+
 	public int size() {
 		return sqlStrings.size();
 	}

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.gui.actions.CopyToClipboardAction;
+import lunartools.sqlrepeatabler.parser.HtmlRenderer;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 
 public class IOPanelController {
@@ -38,8 +39,10 @@ public class IOPanelController {
 				int sqlFileIndex=ioPanel.getSqlFileIndex();
 				SqlScript sqlScript=model.getSqlScript(sqlFileIndex);
 				if(sqlScript!=null) {
-					ioPanel.getInputPane().setText(sqlScript.toHtml());
-					ioPanel.getOutputPane().setText(model.getSingleConvertedSqlScriptBlock(sqlFileIndex).toHtml());
+					HtmlRenderer htmlRenderer=new HtmlRenderer();
+					ioPanel.getInputPane().setText(htmlRenderer.render(sqlScript.getSqlStrings()));
+					htmlRenderer=new HtmlRenderer();
+					ioPanel.getOutputPane().setText(htmlRenderer.render(model.getSingleConvertedSqlScriptBlock(sqlFileIndex)));
 					ioPanel.repaint();
 				}
 			}
