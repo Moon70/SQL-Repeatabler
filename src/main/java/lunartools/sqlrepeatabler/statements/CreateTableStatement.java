@@ -22,10 +22,12 @@ public class CreateTableStatement implements Statement{
 	}
 
 	@Override
-	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
-		sqlBlock.add(SqlString.createSqlStringFromString("IF OBJECT_ID(N'%s', 'U') IS NULL", Category.INSERTED, tableName.getFullNameWithoutDelimiter()));
-		sqlBlock.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-		sqlBlock.add(SqlString.createSqlStringFromString("\t%s %s (",Category.INSERTED,tokenStatement,tableName.getFullName()));
+	public void toSqlCharacters(SqlBlock sqlBlockScript) throws Exception {
+		SqlBlock sqlBlockStatement=new SqlBlock();
+		
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("IF OBJECT_ID(N'%s', 'U') IS NULL", Category.INSERTED, tableName.getFullNameWithoutDelimiter()));
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("\t%s %s (",Category.INSERTED,tokenStatement,tableName.getFullName()));
 
 		SqlString sqlString;
 		for(int i=0;i<tokens.size();i++) {
@@ -33,11 +35,15 @@ public class CreateTableStatement implements Statement{
 			if(i<tokens.size()-1) {
 				sqlString.append(new SqlCharacter(',',Category.INSERTED));
 			}
-			sqlBlock.add(sqlString);
+			sqlBlockStatement.add(sqlString);
 		}
 
-		sqlBlock.add(SqlString.createSqlStringFromString("\t);", Category.INSERTED));
-		sqlBlock.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("\t);", Category.INSERTED));
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
+
+		SqlCharacter sqlCharacter=tokenStatement.getFirstCharacter();
+		sqlBlockStatement.setBackgroundColor(sqlCharacter.getBackgroundColor());
+		sqlBlockScript.add(sqlBlockStatement);
 	}
 
 }

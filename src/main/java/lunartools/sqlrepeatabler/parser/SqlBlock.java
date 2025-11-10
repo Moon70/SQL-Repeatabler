@@ -41,4 +41,10 @@ public class SqlBlock {
 	public int size() {
 		return sqlStrings.size();
 	}
+
+	public void setBackgroundColor(String backgroundColor) {
+		for (SqlString sqlString:sqlStrings) {
+			sqlString.setBackgroundColor(backgroundColor);
+		}
+	}
 }

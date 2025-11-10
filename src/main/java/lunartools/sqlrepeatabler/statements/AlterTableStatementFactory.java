@@ -38,6 +38,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("Statement: "+statementTokenizer.toString());
+		statementTokenizer.setBackgroundColor(null);
 
 		Token tokenStatement=statementTokenizer.nextToken(AlterTableStatement.COMMAND);
 		tokenStatement.setCategory(Category.STATEMENT);

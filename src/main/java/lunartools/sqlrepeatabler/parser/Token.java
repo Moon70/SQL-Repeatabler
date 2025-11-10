@@ -155,9 +155,17 @@ public class Token {
 		ArrayList<SqlCharacter> charactersUppercase=new ArrayList<>();
 		for(SqlCharacter sqlCharacter:charactersOfToken) {
 			SqlCharacter sqlCharacterUppercase=new SqlCharacter(Character.toUpperCase(sqlCharacter.getChar()),sqlCharacter.getRow(),sqlCharacter.getColumn(),sqlCharacter.getIndex(),sqlCharacter.getCategory());
+			sqlCharacterUppercase.setBackgroundColor(sqlCharacter.getBackgroundColor());
 			charactersUppercase.add(sqlCharacterUppercase);
 		}
 		return new Token(charactersUppercase);
+	}
+
+	public SqlCharacter getFirstCharacter() {
+		if(charactersOfToken.size()==0) {
+			return null;
+		}
+		return charactersOfToken.get(0);
 	}
 
 }

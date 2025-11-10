@@ -30,7 +30,8 @@ public class CreateTableStatementFactory extends StatementFactory{
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("Statement: "+statementTokenizer.toString());
-
+		statementTokenizer.setBackgroundColor(null);
+		
 		Token tokenStatement=statementTokenizer.nextToken(CreateTableStatement.COMMAND);
 		tokenStatement.setCategory(Category.STATEMENT);
 		tokenStatement=tokenStatement.toUpperCase();

@@ -7,6 +7,7 @@ public class SqlCharacter {
 	private int column;
 	private int index;
 	private Category category=Category.UNCATEGORIZED;
+	private String backgroundColor;
 	
 	public SqlCharacter(char c, int row, int column, int index) {
 		this.c=c;
@@ -70,6 +71,14 @@ public class SqlCharacter {
 
 	public void setChar(char c) {
 		this.c=c;
+	}
+	
+	public String getBackgroundColor() {
+		return backgroundColor;
+	}
+
+	public void setBackgroundColor(String backgroundColor) {
+		this.backgroundColor = backgroundColor;
 	}
 	
 }

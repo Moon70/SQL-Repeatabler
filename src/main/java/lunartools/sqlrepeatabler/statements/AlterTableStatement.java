@@ -24,7 +24,10 @@ public class AlterTableStatement implements Statement{
 	}
 
 	@Override
-	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlockScript) throws Exception {
+		SqlCharacter sqlCharacter=tokenStatement.getFirstCharacter();
+		String statementBackgroundColor=sqlCharacter.getBackgroundColor();
+		
 		boolean hasAlterColumnAction=false;
 
 		SqlBlock sqlblockTemp=new SqlBlock();
@@ -39,17 +42,20 @@ public class AlterTableStatement implements Statement{
 			}
 		}
 		if(hasAlterColumnAction) {
-			sqlBlock.add(SqlString.createSqlStringFromString("%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
+			SqlBlock sqlBlockStatement=new SqlBlock();
+			sqlBlockStatement.add(SqlString.createSqlStringFromString("%s %s", Category.INSERTED,tokenStatement,tableName.getFullName()));
 			sqlblockTemp.getLastLine().append(new SqlCharacter(';',Category.UNCATEGORIZED));
-			sqlBlock.add(sqlblockTemp);
+			sqlBlockStatement.add(sqlblockTemp);
+			sqlBlockStatement.setBackgroundColor(statementBackgroundColor);
+			sqlBlockScript.add(sqlBlockStatement);
 		}
 
 		for(int i=0;i<segments.size();i++) {
 			Segment columnelement=segments.get(i);
 			if(!(columnelement instanceof AlterColumnSegment)) {
-				columnelement.toSqlCharacters(sqlBlock,tokenStatement, tableName, hasAlterColumnAction);
+				columnelement.toSqlCharacters(sqlBlockScript,tokenStatement, tableName, hasAlterColumnAction);
 				if(i<segments.size()-1) {
-					sqlBlock.add(SqlString.EMPTY_LINE);
+					sqlBlockScript.add(SqlString.EMPTY_LINE);
 				}
 			}
 		}

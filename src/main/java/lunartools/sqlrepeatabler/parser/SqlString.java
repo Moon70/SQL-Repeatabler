@@ -119,4 +119,10 @@ public class SqlString {
 	public int size() {
 		return sqlCharacters.size();
 	}
+
+	public void setBackgroundColor(String backgroundColor) {
+		for(SqlCharacter sqlCharacter:sqlCharacters) {
+			sqlCharacter.setBackgroundColor(backgroundColor);
+		}
+	}
 }

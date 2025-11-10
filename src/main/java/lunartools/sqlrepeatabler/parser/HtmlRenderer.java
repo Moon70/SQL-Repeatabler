@@ -3,6 +3,7 @@ package lunartools.sqlrepeatabler.parser;
 import java.util.ArrayList;
 
 public class HtmlRenderer {
+	private boolean enableBackgroundColors=false;
 
 	public String render(SqlBlock sqlBlock) {
 		return render(sqlBlock.getSqlStrings());
@@ -11,7 +12,6 @@ public class HtmlRenderer {
 	public String render(ArrayList<SqlString> sqlStrings) {
 		StringBuilder sbHtml=new StringBuilder();
 		for(SqlString sqlString:sqlStrings) {
-			//sbHtml.append(sqlString.toHtml());
 			render(sbHtml,sqlString);
 			sbHtml.append("<br>");
 		}
@@ -22,10 +22,12 @@ public class HtmlRenderer {
 		ArrayList<SqlCharacter> sqlCharacters=sqlString.getCharacters();
 		StringBuilder sbFragement=new StringBuilder();
 		Category category=Category.UNCATEGORIZED;
+		String back="#000000";
 		for(int i=0;i<sqlCharacters.size();i++) {
 			SqlCharacter sqlCharacter=sqlCharacters.get(i);
-			if(category!=sqlCharacter.getCategory()) {
-				appendHtmlFragment(category,sbHtml,sbFragement);
+			if(category!=sqlCharacter.getCategory() || (sqlCharacter.getBackgroundColor() !=null && !sqlCharacter.getBackgroundColor().equals(back))) {
+				back=sqlCharacter.getBackgroundColor();
+				appendHtmlFragment(category,sbHtml,sbFragement,back);
 				sbFragement=new StringBuilder();
 				category=sqlCharacter.getCategory();
 			}
@@ -38,11 +40,15 @@ public class HtmlRenderer {
 				sbFragement.append(c);
 			}
 		}
-		appendHtmlFragment(category,sbHtml,sbFragement);
+		appendHtmlFragment(category,sbHtml,sbFragement,back);
 	}
 
-	private void appendHtmlFragment(Category category, StringBuilder sbHtml, StringBuilder sbFragement) {
-		sbHtml.append("<span class=\""+category.toString()+"\" >");
+	private void appendHtmlFragment(Category category, StringBuilder sbHtml, StringBuilder sbFragement,String back) {
+		if(enableBackgroundColors) {
+			sbHtml.append(String.format("<span class=\"%s\" style='background-color: %s;' >",category.toString(),back));
+		}else {
+			sbHtml.append(String.format("<span class=\"%s\" >",category.toString()));
+		}
 		sbHtml.append(sbFragement);
 		sbHtml.append("</span>");
 	}

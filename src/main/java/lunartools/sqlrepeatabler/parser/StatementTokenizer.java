@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.common.BackgroundColorProvider;
+
 public class StatementTokenizer {
     private static Logger logger = LoggerFactory.getLogger(StatementTokenizer.class);
 	private ArrayList<SqlCharacter> charactersOfStatement;
@@ -216,6 +218,16 @@ public class StatementTokenizer {
 	public void setCategory(Category category) {
 		for(SqlCharacter sqlCharacter:charactersOfStatement) {
 			sqlCharacter.setCategory(category);
+		}
+	}
+
+	public void setBackgroundColor(String backgroundColor) {
+		if(backgroundColor==null) {
+			backgroundColor=BackgroundColorProvider.getInstance().getNextPrimaryColor();
+			System.out.println("evaluated next primary back: "+backgroundColor);
+		}
+		for(SqlCharacter sqlCharacter: charactersOfStatement) {
+			sqlCharacter.setBackgroundColor(backgroundColor);
 		}
 	}
 	
