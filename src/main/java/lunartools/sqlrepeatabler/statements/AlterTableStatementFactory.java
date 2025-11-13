@@ -32,9 +32,6 @@ public class AlterTableStatementFactory extends StatementFactory{
 		if(!match(sqlScript.peekLineAsString())) {
 			throw new Exception("Illegal factory call");
 		}
-		if(logger.isTraceEnabled()) {
-			logger.trace("parsing statement");
-		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("Statement: "+statementTokenizer.toString());

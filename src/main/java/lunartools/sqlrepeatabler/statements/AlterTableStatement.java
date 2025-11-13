@@ -24,7 +24,7 @@ public class AlterTableStatement implements Statement{
 	}
 
 	@Override
-	public void toSqlCharacters(SqlBlock sqlBlockScript) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
 		SqlCharacter sqlCharacter=tokenStatement.getFirstCharacter();
 		String statementBackgroundColor=sqlCharacter.getBackgroundColor();
 		
@@ -47,15 +47,15 @@ public class AlterTableStatement implements Statement{
 			sqlblockTemp.getLastLine().append(new SqlCharacter(';',Category.UNCATEGORIZED));
 			sqlBlockStatement.add(sqlblockTemp);
 			sqlBlockStatement.setBackgroundColor(statementBackgroundColor);
-			sqlBlockScript.add(sqlBlockStatement);
+			sqlBlock.add(sqlBlockStatement);
 		}
 
 		for(int i=0;i<segments.size();i++) {
 			Segment columnelement=segments.get(i);
 			if(!(columnelement instanceof AlterColumnSegment)) {
-				columnelement.toSqlCharacters(sqlBlockScript,tokenStatement, tableName, hasAlterColumnAction);
+				columnelement.toSqlCharacters(sqlBlock,tokenStatement, tableName, hasAlterColumnAction);
 				if(i<segments.size()-1) {
-					sqlBlockScript.add(SqlString.EMPTY_LINE);
+					sqlBlock.add(SqlString.EMPTY_LINE);
 				}
 			}
 		}

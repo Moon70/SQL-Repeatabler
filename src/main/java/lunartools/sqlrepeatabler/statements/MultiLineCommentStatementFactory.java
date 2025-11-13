@@ -22,9 +22,6 @@ public class MultiLineCommentStatementFactory extends StatementFactory{
 		if(!match(line)) {
 			throw new Exception("Illegal factory call");
 		}
-		if(logger.isTraceEnabled()) {
-			logger.trace("parsing statement");
-		}
 
 		sqlScriptLine.setCategory(Category.COMMENT);
 		logger.info("Statement: comment");

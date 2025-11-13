@@ -24,12 +24,10 @@ public class InsertIntoStatementFactory extends StatementFactory{
 		if(!match(sqlScript.peekLineAsString())) {
 			throw new Exception("Illegal factory call");
 		}
-		if(logger.isTraceEnabled()) {
-			logger.trace("parsing statement");
-		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
 		logger.info("Statement: "+statementTokenizer.toString());
+		statementTokenizer.setBackgroundColor(null);
 
 		Token tokenStatement=statementTokenizer.nextToken(InsertIntoStatement.COMMAND);
 		tokenStatement.setCategory(Category.STATEMENT);
@@ -41,11 +39,12 @@ public class InsertIntoStatementFactory extends StatementFactory{
 		Token tokenColumnNames=statementTokenizer.nextToken('(',')');
 		tokenColumnNames.setCategory(Category.COLUMN);
 
-
-		if(!statementTokenizer.consumePrefixIgnoreCaseAndSpace("VALUES")) {
+		Token tokenValuesCommand=statementTokenizer.nextToken("VALUES");
+		if(tokenValuesCommand==null) {
 			throw new Exception("Keyword VALUES not found");
 		}
-
+		tokenValuesCommand.setCategory(Category.COMMAND);
+		
 		ArrayList<Token> columnValuesTokensList= new ArrayList<>();
 		while(statementTokenizer.hasNext()) {
 			if(statementTokenizer.charAt(0).getChar()==',') {

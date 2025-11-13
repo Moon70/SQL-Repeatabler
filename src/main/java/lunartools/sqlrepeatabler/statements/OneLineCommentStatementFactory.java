@@ -21,9 +21,7 @@ public class OneLineCommentStatementFactory extends StatementFactory{
 		if(!match(sqlScriptLine.toString())) {
 			throw new Exception("Illegal factory call");
 		}
-		if(logger.isTraceEnabled()) {
-			logger.trace("parsing statement");
-		}
+
         sqlScriptLine.setCategory(Category.COMMENT);
 		logger.info("Statement: comment");
 		int endIndex=sqlScript.getIndex();

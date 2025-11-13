@@ -2,6 +2,7 @@ package lunartools.sqlrepeatabler.statements;
 
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
+import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
@@ -29,10 +30,16 @@ public class SpRenameStatement implements Statement{
 
 	@Override
 	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
-		sqlBlock.add(SqlString.createSqlStringFromString("IF COL_LENGTH ('%s','%s') IS NULL", Category.INSERTED, tableNameWithoutBrackets,newNameWithoutBrackets));
-		sqlBlock.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
-		sqlBlock.add(SqlString.createSqlStringFromString("\tEXEC %s '%s.%s', %s, %s;", Category.INSERTED,tokenStatement, tableName,oldName,newName,type));
-		sqlBlock.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
+		SqlBlock sqlBlockStatement=new SqlBlock();
+
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("IF COL_LENGTH ('%s','%s') IS NULL", Category.INSERTED, tableNameWithoutBrackets,newNameWithoutBrackets));
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("\tEXEC %s '%s.%s', %s, %s;", Category.INSERTED,tokenStatement, tableName,oldName,newName,type));
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("END;", Category.INSERTED));
+
+		SqlCharacter sqlCharacter=tokenStatement.getFirstCharacter();
+		sqlBlockStatement.setBackgroundColor(sqlCharacter.getBackgroundColor());
+		sqlBlock.add(sqlBlockStatement);
 	}
 
 }

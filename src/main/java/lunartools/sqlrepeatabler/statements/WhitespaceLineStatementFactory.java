@@ -18,11 +18,7 @@ public class WhitespaceLineStatementFactory extends StatementFactory{
 		if(!match(sqlScript.peekLineAsString())) {
 			throw new Exception("Illegal factory call");
 		}
-		if(logger.isTraceEnabled()) {
-			logger.trace("parsing statement");
-		}
-
-		logger.debug("Statement: whitespace");
+		logger.debug("Statement: whitespace line");
 		int linecount=1;
 		String line;
 		while((line=sqlScript.readNextLineAsString())!=null) {

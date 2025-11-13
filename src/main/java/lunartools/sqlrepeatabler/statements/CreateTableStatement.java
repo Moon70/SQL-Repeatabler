@@ -22,7 +22,7 @@ public class CreateTableStatement implements Statement{
 	}
 
 	@Override
-	public void toSqlCharacters(SqlBlock sqlBlockScript) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
 		SqlBlock sqlBlockStatement=new SqlBlock();
 		
 		sqlBlockStatement.add(SqlString.createSqlStringFromString("IF OBJECT_ID(N'%s', 'U') IS NULL", Category.INSERTED, tableName.getFullNameWithoutDelimiter()));
@@ -43,7 +43,7 @@ public class CreateTableStatement implements Statement{
 
 		SqlCharacter sqlCharacter=tokenStatement.getFirstCharacter();
 		sqlBlockStatement.setBackgroundColor(sqlCharacter.getBackgroundColor());
-		sqlBlockScript.add(sqlBlockStatement);
+		sqlBlock.add(sqlBlockStatement);
 	}
 
 }
