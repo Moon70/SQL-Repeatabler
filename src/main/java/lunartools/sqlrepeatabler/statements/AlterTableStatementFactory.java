@@ -12,8 +12,8 @@ import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
 import lunartools.sqlrepeatabler.segments.AddColumnAction;
-import lunartools.sqlrepeatabler.segments.AddForeignKeyConstraintSegment;
-import lunartools.sqlrepeatabler.segments.AddUniqueConstraintSegment;
+import lunartools.sqlrepeatabler.segments.AddForeignKeyConstraintAction;
+import lunartools.sqlrepeatabler.segments.AddUniqueConstraintAction;
 import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
 import lunartools.sqlrepeatabler.segments.DropColumnSegment;
 import lunartools.sqlrepeatabler.segments.DropConstraintSegment;
@@ -76,32 +76,26 @@ public class AlterTableStatementFactory extends StatementFactory{
 		 * references [T_FOO] ([ID]);
 		 */
 		logger.debug("Parsing ADD action: ");
-		ArrayList<Segment> columnElements=new ArrayList<>();
-
+		ArrayList<Segment> alterTableActions=new ArrayList<>();
 		while(statementTokenizer.hasNext()) {
 			if(beginsWithSupportedCommand(statementTokenizer)) {
 				break;
 			}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("CONSTRAINT")) {
 				Token tokenConstraintName=statementTokenizer.nextToken();
 				tokenConstraintName.setCategory(Category.PARAMETER);
-
 				if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("FOREIGN KEY")) {
 					Token tokenForeignKey=statementTokenizer.nextToken();
-
 					if(!statementTokenizer.consumeCommandIgnoreCaseAndSpace("REFERENCES")) {
-						throw new Exception("'REFERENCES' keyword not found: ");
+						throw new SqlParserException("'REFERENCES' keyword not found.",statementTokenizer.getFirstCharacter());
 					}
 					Token tokenReferencesTable=statementTokenizer.nextToken();
 					Token tokenReferencesColumn=statementTokenizer.nextToken();
-
-					Segment columnElement=new AddForeignKeyConstraintSegment(tokenConstraintName,tokenForeignKey,tokenReferencesTable,tokenReferencesColumn);
-					columnElements.add(columnElement);
-
+					Segment alterTableAction=new AddForeignKeyConstraintAction(tokenConstraintName,tokenForeignKey,tokenReferencesTable,tokenReferencesColumn);
+					alterTableActions.add(alterTableAction);
 				}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("UNIQUE")) {
 					Token tokenReferencesColumn=statementTokenizer.nextToken();
-
-					Segment columnElement=new AddUniqueConstraintSegment(tokenConstraintName,tokenReferencesColumn);
-					columnElements.add(columnElement);
+					Segment alterTableAction=new AddUniqueConstraintAction(tokenConstraintName,tokenReferencesColumn);
+					alterTableActions.add(alterTableAction);
 				}else {
 					throw new Exception("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword not found");
 				}
@@ -115,7 +109,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 				Token tokenColumParameter=statementTokenizer.nextTokenUntil(',').setCategory(Category.COLUMNPARAMETER);
 
 				Segment columnElement=new AddColumnAction(tokenColumName,tokenColumParameter);
-				columnElements.add(columnElement);
+				alterTableActions.add(columnElement);
 				if(statementTokenizer.startsWithIgnoreCase("ADD")) {
 					logger.warn("Ignoring illegal ADD command. In T-SQL, when adding multiple columns in a single ALTER TABLE...ADD statement, only use one ADD keyword!"+statementTokenizer.getFirstCharacter().getLocationString());
 					Token tokenIllegal=statementTokenizer.nextToken();
@@ -123,7 +117,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 				}
 			}
 		}
-		return columnElements;
+		return alterTableActions;
 	}
 
 	public ArrayList<Segment> parseDropAction(StatementTokenizer statementTokenizer) throws Exception {
