@@ -37,4 +37,20 @@ class SpRenameStatementTest {
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
+	@Test
+	void spRename_RenameColumn_TableWithSchema() throws Exception{
+		String filenameTestdata=	TESTDATAFOLDER+"RenameColumn_TableWithSchema_Testdata.txt";
+		String filenameExpecteddata=TESTDATAFOLDER+"RenameColumn_TableWithSchema_Expected.txt";
+		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		assertTrue(factory.match(sqlScript.peekLineAsString()));
+
+		Statement statement=factory.createStatement(sqlScript);
+		SqlBlock sqlBlock=new SqlBlock();
+		statement.toSqlCharacters(sqlBlock);
+		StringBuilder sb=sqlBlock.toStringBuilder();
+		assertEquals(expected,TestHelper.removeCR(sb).toString());
+	}
+
 }

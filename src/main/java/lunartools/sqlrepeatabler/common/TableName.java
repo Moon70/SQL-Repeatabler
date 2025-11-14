@@ -2,6 +2,9 @@ package lunartools.sqlrepeatabler.common;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlString;
@@ -9,6 +12,7 @@ import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public class TableName {
+	private static Logger logger = LoggerFactory.getLogger(TableName.class);
 	private Token databaseName;
 	private Token schemaName;
 	//private String schemaName="[dbo]";
@@ -20,7 +24,26 @@ public class TableName {
 		this.schemaName=tokens.get(1);
 		this.tableName=tokens.get(2);
 		this.mySql=mySql;
-		
+	}
+	
+	public TableName(Token schemaName, Token tableName) {
+		this.schemaName=schemaName;
+		this.tableName=tableName;
+		this.schemaName.setCategory(Category.TABLE);
+		this.tableName.setCategory(Category.TABLE);
+	}
+	
+	public TableName(Token table) {
+		Token[] tokens=table.split('.');
+		if(tokens.length==1) {
+			schemaName=new Token("dbo",Category.TABLE);
+			tableName=table;
+		}else {
+			schemaName=tokens[0];
+			schemaName.setCategory(Category.TABLE);
+			tableName=tokens[1];
+		}
+		tableName.setCategory(Category.TABLE);
 	}
 
 	public static TableName createInstanceByConsuming(StatementTokenizer statementTokenizer) throws Exception{
@@ -53,6 +76,10 @@ public class TableName {
 				break;
 			}
 			statementTokenizer.deleteCharAt(0);
+		}
+		if(mySql) {
+			logger.warn("Table declaration contains backtick delimiter, this is not allowed in T-SQL.");
+			logger.warn("Replaced backticks with square brackets! Script is most likely MySql flavour!");
 		}
 		while(tokens.size()<3) {
 			tokens.add(0,null);
@@ -313,7 +340,7 @@ public class TableName {
         return sb.toString();
     }
 
-	public boolean isMySql() {
+    public boolean isMySql() {
 		return mySql;
 	}
 

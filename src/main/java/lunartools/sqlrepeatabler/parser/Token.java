@@ -168,4 +168,17 @@ public class Token {
 		return charactersOfToken.get(0);
 	}
 
+	public boolean equalsIgnoreCase(String string) {
+		if(charactersOfToken.size()!=string.length()) {
+			return false;
+		}
+		String stringLowerCase=string.toLowerCase();
+		for(int i=0;i<charactersOfToken.size();i++) {
+			if(Character.toLowerCase(charactersOfToken.get(i).getChar())!=stringLowerCase.charAt(i)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

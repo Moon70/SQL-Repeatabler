@@ -3,7 +3,9 @@ package lunartools.sqlrepeatabler.statements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlParserException;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -30,19 +32,31 @@ public class SpRenameStatementFactory extends StatementFactory{
 		statementTokenizer.stripWhiteSpaceLeft();
 		tokenStatement.setCategory(Category.STATEMENT);
 
-		Token source=statementTokenizer.nextToken();
-		Token newName=statementTokenizer.nextToken();
+		Token objName=statementTokenizer.nextToken();//@objname of stored procedure 'sp_rename'
+		objName.removeEnclosing('\'');
+		Token newName=statementTokenizer.nextToken();//@newname of stored procedure 'sp_rename'
 		newName.setCategory(Category.COLUMN);
-		Token type=statementTokenizer.nextToken();
-		type.setCategory(Category.PARAMETER);
-
-		source.removeEnclosing('\'');
-		Token[] subTokens=source.split('.');
-		Token tableName=subTokens[0];
-		tableName.setCategory(Category.TABLE);
-		Token oldName=subTokens[1];
-		oldName.setCategory(Category.COLUMN);
-
-		return new SpRenameStatement(tokenStatement,tableName,oldName,newName,type);
+		Token objtype=statementTokenizer.nextToken();//@objtype of stored procedure 'sp_rename'
+		objtype.setCategory(Category.PARAMETER);
+		objtype=objtype.cloneWithoutDelimiters();
+		
+		if(objtype.equalsIgnoreCase("COLUMN")) {
+			TableName tableName;
+			Token oldName;
+			Token[] subTokens=objName.split('.');
+			if(subTokens.length==3) {
+				tableName=new TableName(subTokens[0],subTokens[1]);
+				oldName=subTokens[2];
+			}else if(subTokens.length==2) {
+				tableName=new TableName(subTokens[0]);
+				oldName=subTokens[1];
+			}else {
+				throw new SqlParserException("Error parsing objectname",objName.getFirstCharacter());
+			}
+			oldName.setCategory(Category.COLUMN);
+			return new SpRenameStatement(tokenStatement,tableName,oldName,newName,objtype);
+		}else {
+			throw new SqlParserException(String.format("Type not supported yet: %s", objtype.toString()), objtype.getFirstCharacter());
+		}
 	}
 }

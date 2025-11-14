@@ -34,9 +34,6 @@ public class CreateTableStatementFactory extends StatementFactory{
 		tokenStatement=tokenStatement.toUpperCase();
 		
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
-		if(tableName.isMySql()) {
-			logger.warn("Script is most likely MySql flavour! Replacing backticks with square brackets!");
-		}
 		logger.debug("Table: "+tableName.toString());
 
 		ArrayList<Token> tokens=new ArrayList<>();
