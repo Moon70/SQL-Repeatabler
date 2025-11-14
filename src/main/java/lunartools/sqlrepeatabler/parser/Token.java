@@ -95,10 +95,11 @@ public class Token {
 		return sb.toString();
 	}
 
-	public void setCategory(Category category) {
+	public Token setCategory(Category category) {
 		for(SqlCharacter sqlCharacter:charactersOfToken) {
 			sqlCharacter.setCategory(category);
 		}
+		return this;
 	}
 
 	public ArrayList<SqlCharacter> getCharacters() {

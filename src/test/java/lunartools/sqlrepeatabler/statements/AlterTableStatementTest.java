@@ -181,22 +181,6 @@ class AlterTableStatementTest {
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
-	@Test
-	void alterTable_AlterColumn_ThreeColumns() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"AlterTable_AlterColumn_ThreeColumns_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_AlterColumn_ThreeColumns_Expected.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
-
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
-
-		Statement statement=factory.createStatement(sqlScript);
-		SqlBlock sqlBlock=new SqlBlock();
-		statement.toSqlCharacters(sqlBlock);
-		StringBuilder sb=sqlBlock.toStringBuilder();
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
-
     @Test
     void alterTable_unsupported_modify() throws Exception{
         String filenameTestdata=    TESTDATAFOLDER+"AlterTable_ModifyColumn_Testdata.txt";

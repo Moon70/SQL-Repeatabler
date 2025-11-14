@@ -11,7 +11,7 @@ import lunartools.sqlrepeatabler.parser.SqlParserException;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
-import lunartools.sqlrepeatabler.segments.AddColumnSegment;
+import lunartools.sqlrepeatabler.segments.AddColumnAction;
 import lunartools.sqlrepeatabler.segments.AddForeignKeyConstraintSegment;
 import lunartools.sqlrepeatabler.segments.AddUniqueConstraintSegment;
 import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
@@ -106,21 +106,21 @@ public class AlterTableStatementFactory extends StatementFactory{
 					throw new Exception("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword not found");
 				}
 			}else {
-				if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("COLUMN")){
-					logger.warn("Script is most likely in MySql flavour. Ignoring COLUMN keyword which is not allowed in T-SQL.");
+				if(statementTokenizer.startsWithIgnoreCase("COLUMN")){
+					logger.warn("Ignoring COLUMN keyword which is not allowed in T-SQL. Script probably uses MySql flavour. "+statementTokenizer.getFirstCharacter().getLocationString());
+					Token token=statementTokenizer.nextToken();
+					token.setCategory(Category.IGNORED);
 				}
-				Token tokenColumName=statementTokenizer.nextToken();
-				tokenColumName.setCategory(Category.COLUMN);
-				Token tokenColumParameter=statementTokenizer.nextTokenUntil(',');
-				tokenColumParameter.setCategory(Category.COLUMNPARAMETER);
+				Token tokenColumName=statementTokenizer.nextToken().setCategory(Category.COLUMN);
+				Token tokenColumParameter=statementTokenizer.nextTokenUntil(',').setCategory(Category.COLUMNPARAMETER);
 
-				Segment columnElement=new AddColumnSegment(tokenColumName,tokenColumParameter);
+				Segment columnElement=new AddColumnAction(tokenColumName,tokenColumParameter);
 				columnElements.add(columnElement);
-                if(statementTokenizer.startsWithIgnoreCase("ADD")) {
-                    logger.warn("Ignoring illegal ADD command. In T-SQL, when adding multiple columns in a single ALTER TABLE...ADD statement, do not repeat the ADD keyword!");
-                    Token tokenIllegal=statementTokenizer.nextToken();
-                    tokenIllegal.setCategory(Category.IGNORED);
-                }
+				if(statementTokenizer.startsWithIgnoreCase("ADD")) {
+					logger.warn("Ignoring illegal ADD command. In T-SQL, when adding multiple columns in a single ALTER TABLE...ADD statement, only use one ADD keyword!"+statementTokenizer.getFirstCharacter().getLocationString());
+					Token tokenIllegal=statementTokenizer.nextToken();
+					tokenIllegal.setCategory(Category.IGNORED);
+				}
 			}
 		}
 		return columnElements;
@@ -162,21 +162,15 @@ public class AlterTableStatementFactory extends StatementFactory{
 	public ArrayList<Segment> parseAlterColumnAction(StatementTokenizer statementTokenizer) throws Exception {
 		logger.debug("Parsing ALTER COLUMN action");
 		ArrayList<Segment> columnElements=new ArrayList<>();
-		while(true) {
-			Token tokenColumnName=statementTokenizer.nextToken();
-			Token tokenColumnParameter=statementTokenizer.nextTokenUntil(',');
+		Token tokenColumnName=statementTokenizer.nextToken();
+		Token tokenColumnParameter=statementTokenizer.nextTokenUntil(',');
 
-			Segment columnElement=new AlterColumnSegment(tokenColumnName,tokenColumnParameter);
-			columnElements.add(columnElement);
+		Segment columnElement=new AlterColumnSegment(tokenColumnName,tokenColumnParameter);
+		columnElements.add(columnElement);
 
-			if(!statementTokenizer.hasNext()) {
-				break;
-			}
-
-			statementTokenizer.consumePrefixIgnoreCaseAndSpace(",");
-
-			//TODO: should be consumed in higher loop
-			statementTokenizer.consumePrefixIgnoreCaseAndSpace("ALTER COLUMN");
+		if(statementTokenizer.hasNext()) {
+			Token token=statementTokenizer.nextToken();
+			throw new SqlParserException(String.format("Unexpected content: %s",token.toString()),token.getFirstCharacter());
 		}
 		return columnElements;
 	}

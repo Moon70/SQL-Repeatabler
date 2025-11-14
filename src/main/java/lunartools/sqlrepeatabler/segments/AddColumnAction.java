@@ -6,11 +6,11 @@ import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
-public class AddColumnSegment extends Segment{
+public class AddColumnAction extends Segment{
 	private Token name;
 	private Token parameters;
 
-	public AddColumnSegment(Token name,Token parameters) {
+	public AddColumnAction(Token name,Token parameters) {
 		super(new Token("ADD",Category.COMMAND),name);
 		this.name=name;
 		this.parameters=parameters;

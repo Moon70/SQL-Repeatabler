@@ -11,7 +11,7 @@ import lunartools.sqlrepeatabler.parser.Token;
 import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
 import lunartools.sqlrepeatabler.segments.Segment;
 
-public class AlterTableStatement implements Statement{
+public class AlterTableStatement implements Statement {
 	public static final String COMMAND="ALTER TABLE";
 	private Token tokenStatement;
 	private TableName tableName;
@@ -53,10 +53,13 @@ public class AlterTableStatement implements Statement{
 		for(int i=0;i<segments.size();i++) {
 			Segment columnelement=segments.get(i);
 			if(!(columnelement instanceof AlterColumnSegment)) {
-				columnelement.toSqlCharacters(sqlBlock,tokenStatement, tableName, hasAlterColumnAction);
+				SqlBlock sqlBlockStatement=new SqlBlock();
+				columnelement.toSqlCharacters(sqlBlockStatement,tokenStatement, tableName, hasAlterColumnAction);
 				if(i<segments.size()-1) {
-					sqlBlock.add(SqlString.EMPTY_LINE);
+					sqlBlockStatement.add(SqlString.EMPTY_LINE);
 				}
+				sqlBlockStatement.setBackgroundColor(statementBackgroundColor);
+				sqlBlock.add(sqlBlockStatement);
 			}
 		}
 	}

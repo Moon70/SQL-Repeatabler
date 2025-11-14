@@ -80,5 +80,9 @@ public class SqlCharacter {
 	public void setBackgroundColor(String backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
+
+	public String getLocationString() {
+		return String.format("Location: row=%d, column=%d, index=%d", row,column,index);
+	}
 	
 }

@@ -224,7 +224,6 @@ public class StatementTokenizer {
 	public void setBackgroundColor(String backgroundColor) {
 		if(backgroundColor==null) {
 			backgroundColor=BackgroundColorProvider.getInstance().getNextPrimaryColor();
-			System.out.println("evaluated next primary back: "+backgroundColor);
 		}
 		for(SqlCharacter sqlCharacter: charactersOfStatement) {
 			sqlCharacter.setBackgroundColor(backgroundColor);
