@@ -43,6 +43,7 @@ public class SqlEditorPane extends JEditorPane{
 		sb.append(text);
 		sb.append(htmlOutro);
 		super.setText(sb.toString());
+		setCaretPosition(0);
 	}
 
 }

@@ -89,5 +89,6 @@ public class LogEditorPane extends JEditorPane{
 		sb.append(sbHtmlLines);
 		sb.append(htmlOutro);
 		setText(sb.toString());
+		setCaretPosition(getDocument().getLength());
 	}
 }
