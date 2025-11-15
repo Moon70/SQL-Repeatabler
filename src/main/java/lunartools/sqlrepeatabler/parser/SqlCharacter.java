@@ -67,4 +67,8 @@ public class SqlCharacter {
 		this.backgroundColor = backgroundColor;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("'%s', %s, %s",c,(int)c,characterLocation.toString());
+	}
 }

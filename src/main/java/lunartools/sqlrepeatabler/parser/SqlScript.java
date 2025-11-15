@@ -64,6 +64,7 @@ public class SqlScript {
 			}else {
 				SqlCharacter sqlCharacter=new SqlCharacter(c,new CharacterLocation(lineIndex,column,characterIndex));
 				sqlString.add(sqlCharacter);
+				column++;
 			}
 		}
 		sqlCharacterLinesOriginal.add(sqlString);
