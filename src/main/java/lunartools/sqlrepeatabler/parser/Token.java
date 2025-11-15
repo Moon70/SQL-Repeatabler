@@ -22,7 +22,7 @@ public class Token {
 	public Token(String s,Category category) {
 		ArrayList<SqlCharacter> characters=new ArrayList<>();
 		for(int k=0;k<s.length();k++) {
-			SqlCharacter sqlCharacter=new SqlCharacter(s.charAt(k),-1,-1,-1);
+			SqlCharacter sqlCharacter=new SqlCharacter(s.charAt(k));
 			sqlCharacter.setCategory(category);
 			characters.add(sqlCharacter);
 		}
@@ -155,7 +155,7 @@ public class Token {
 	public Token toUpperCase() {
 		ArrayList<SqlCharacter> charactersUppercase=new ArrayList<>();
 		for(SqlCharacter sqlCharacter:charactersOfToken) {
-			SqlCharacter sqlCharacterUppercase=new SqlCharacter(Character.toUpperCase(sqlCharacter.getChar()),sqlCharacter.getRow(),sqlCharacter.getColumn(),sqlCharacter.getIndex(),sqlCharacter.getCategory());
+			SqlCharacter sqlCharacterUppercase=new SqlCharacter(Character.toUpperCase(sqlCharacter.getChar()),sqlCharacter.getCharacterLocation(),sqlCharacter.getCategory());
 			sqlCharacterUppercase.setBackgroundColor(sqlCharacter.getBackgroundColor());
 			charactersUppercase.add(sqlCharacterUppercase);
 		}
@@ -180,6 +180,13 @@ public class Token {
 			}
 		}
 		return true;
+	}
+
+	public CharacterLocation getCharacterLocation() {
+		if(charactersOfToken.size()==0) {
+			return null;
+		}
+		return charactersOfToken.get(0).getCharacterLocation();
 	}
 
 }

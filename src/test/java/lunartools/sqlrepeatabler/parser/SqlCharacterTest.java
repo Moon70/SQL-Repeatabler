@@ -12,61 +12,43 @@ class SqlCharacterTest {
 
     @Test
     void getCharWorksAsExpected() throws Exception {
-        SqlCharacter character=new SqlCharacter('x',-1,-1,-1);
+        SqlCharacter character=new SqlCharacter('x');
         assertEquals('x',character.getChar());
     }
     
     @Test
-    void getRowWorksAsExpected() throws Exception {
-        SqlCharacter character=new SqlCharacter('x',1,2,3);
-        assertEquals(1,character.getRow());
-    }
-    
-    @Test
-    void getColumnWorksAsExpected() throws Exception {
-        SqlCharacter character=new SqlCharacter('x',1,2,3);
-        assertEquals(2,character.getColumn());
-    }
-    
-    @Test
-    void getIndexWorksAsExpected() throws Exception {
-        SqlCharacter character=new SqlCharacter('x',1,2,3);
-        assertEquals(3,character.getIndex());
-    }
-    
-    @Test
     void isSpaceWorksAsExpected() throws Exception {
-        SqlCharacter character=new SqlCharacter('x',1,2,3);
+        SqlCharacter character=new SqlCharacter('x');
         assertFalse(character.isSpace());
         
-        character=new SqlCharacter(' ',1,2,3);
+        character=new SqlCharacter(' ');
         assertTrue(character.isSpace());
     }
     
     @Test
     void isSemicolonWorksAsExpected() throws Exception {
-        SqlCharacter character=new SqlCharacter('x',1,2,3);
+        SqlCharacter character=new SqlCharacter('x');
         assertFalse(character.isSemicolon());
         
-        character=new SqlCharacter(';',1,2,3);
+        character=new SqlCharacter(';');
         assertTrue(character.isSemicolon());
     }
     
     @Test
     void isWhiteSpaceWorksAsExpected() throws Exception {
-        SqlCharacter character=new SqlCharacter('x',1,2,3);
+        SqlCharacter character=new SqlCharacter('x');
         assertFalse(character.isWhiteSpace());
         
-        character=new SqlCharacter(' ',1,2,3);
+        character=new SqlCharacter(' ');
         assertTrue(character.isWhiteSpace());
         
-        character=new SqlCharacter('\t',1,2,3);
+        character=new SqlCharacter('\t');
         assertTrue(character.isWhiteSpace());
     }
     
     @Test
     void getCategoryWorksAsExpected() throws Exception {
-        SqlCharacter character=new SqlCharacter('x',1,2,3,Category.COMMENT);
+        SqlCharacter character=new SqlCharacter('x',Category.COMMENT);
         assertEquals(Category.COMMENT, character.getCategory());
     }
     

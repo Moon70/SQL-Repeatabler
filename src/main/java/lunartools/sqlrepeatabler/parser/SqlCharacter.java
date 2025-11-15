@@ -3,52 +3,38 @@ package lunartools.sqlrepeatabler.parser;
 public class SqlCharacter {
 	public static final SqlCharacter SEPARATOR=new SqlCharacter(' ');
 	private char c;
-	private int row;
-	private int column;
-	private int index;
+	private CharacterLocation characterLocation;
 	private Category category=Category.UNCATEGORIZED;
 	private String backgroundColor;
 	
-	public SqlCharacter(char c, int row, int column, int index) {
+	
+	public SqlCharacter(char c) {
 		this.c=c;
-		this.row=row;
-		this.column=column;
-		this.index=index;
 	}
-    
-    public SqlCharacter(char c, int row, int column, int indexInFile,Category category) {
-        this.c=c;
-        this.row=row;
-        this.column=column;
-        this.index=indexInFile;
+	
+	public SqlCharacter(char c, CharacterLocation characterLocation) {
+		this(c);
+		this.characterLocation=characterLocation;
+	}
+	
+    public SqlCharacter(char c, CharacterLocation characterLocation, Category category) {
+    	this(c,characterLocation);
         this.category=category;
     }
     
     public SqlCharacter(char c,Category category) {
-        this(c,-1,-1,-1);
+		this(c);
         this.category=category;
-    }
-    
-    public SqlCharacter(char c) {
-        this(c,-1,-1,-1);
     }
 	
 	public char getChar() {
 		return c;
 	}
 
-	public int getRow() {
-		return row;
+	public CharacterLocation getCharacterLocation() {
+		return characterLocation;
 	}
 	
-	public int getColumn() {
-	    return column;
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
 	public boolean isSpace() {
 		return c==' ';
 	}
@@ -81,8 +67,4 @@ public class SqlCharacter {
 		this.backgroundColor = backgroundColor;
 	}
 
-	public String getLocationString() {
-		return String.format("Location: row=%d, column=%d, index=%d", row,column,index);
-	}
-	
 }

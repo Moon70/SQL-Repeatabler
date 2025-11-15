@@ -62,7 +62,7 @@ public class SqlScript {
 					i++;
 				}
 			}else {
-				SqlCharacter sqlCharacter=new SqlCharacter(c,lineIndex,column,characterIndex);
+				SqlCharacter sqlCharacter=new SqlCharacter(c,new CharacterLocation(lineIndex,column,characterIndex));
 				sqlString.add(sqlCharacter);
 			}
 		}

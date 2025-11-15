@@ -57,7 +57,8 @@ public class AlterTableStatementFactory extends StatementFactory{
 			logger.warn("Found MODIFY COLUMN action which is most likely MySql flavour and not supported in T-SQL. Processing as ALTER COLUMN.");
 			columnElements=parseAlterColumnAction(statementTokenizer);
 		}else {
-			throw new SqlParserException("Unsupported ALTER TABLE action found",statementTokenizer.getFirstCharacter());
+			//TODO: add action name
+			throw new SqlParserException(String.format("Unsupported ALTER TABLE action found: %s"),statementTokenizer.getCharacterLocation());
 		}
 
 		return new AlterTableStatement(tokenStatement,tableName,columnElements);
@@ -86,7 +87,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 				if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("FOREIGN KEY")) {
 					Token tokenForeignKey=statementTokenizer.nextToken();
 					if(!statementTokenizer.consumeCommandIgnoreCaseAndSpace("REFERENCES")) {
-						throw new SqlParserException("'REFERENCES' keyword not found.",statementTokenizer.getFirstCharacter());
+						throw new SqlParserException("'REFERENCES' keyword not found.",statementTokenizer.getCharacterLocation());
 					}
 					Token tokenReferencesTable=statementTokenizer.nextToken();
 					Token tokenReferencesColumn=statementTokenizer.nextToken();
@@ -97,11 +98,11 @@ public class AlterTableStatementFactory extends StatementFactory{
 					AlterTableAction alterTableAction=new AddUniqueConstraintAction(tokenConstraintName,tokenReferencesColumn);
 					alterTableActions.add(alterTableAction);
 				}else {
-					throw new SqlParserException("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword not found",statementTokenizer.getFirstCharacter());
+					throw new SqlParserException("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword not found",statementTokenizer.getCharacterLocation());
 				}
 			}else {
 				if(statementTokenizer.startsWithIgnoreCase("COLUMN")){
-					logger.warn("Ignoring COLUMN keyword which is not allowed in T-SQL. Script probably uses MySql flavour. "+statementTokenizer.getFirstCharacter().getLocationString());
+					logger.warn("Ignoring COLUMN keyword which is not allowed in T-SQL. Script probably uses MySql flavour. "+statementTokenizer.getCharacterLocation().toString());
 					Token token=statementTokenizer.nextToken();
 					token.setCategory(Category.IGNORED);
 				}
@@ -111,7 +112,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 				AlterTableAction alterTableAction=new AddColumnAction(tokenColumName,tokenColumParameter);
 				alterTableActions.add(alterTableAction);
 				if(statementTokenizer.startsWithIgnoreCase("ADD")) {
-					logger.warn("Ignoring illegal ADD command. In T-SQL, when adding multiple columns in a single ALTER TABLE...ADD statement, only use one ADD keyword!"+statementTokenizer.getFirstCharacter().getLocationString());
+					logger.warn("Ignoring illegal ADD command. In T-SQL, when adding multiple columns in a single ALTER TABLE...ADD statement, only use one ADD keyword!"+statementTokenizer.getCharacterLocation().toString());
 					Token tokenIllegal=statementTokenizer.nextToken();
 					tokenIllegal.setCategory(Category.IGNORED);
 				}
@@ -141,7 +142,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 			AlterTableAction alterTableAction=new DropConstraintAction(tokenConstraintName);
 			alterTableActions.add(alterTableAction);
 		}else {
-			throw new SqlParserException(String.format("DROP target not supported: %s",tokenTarget.toString()),tokenTarget.getFirstCharacter());
+			throw new SqlParserException(String.format("DROP target not supported: %s",tokenTarget.toString()),tokenTarget.getCharacterLocation());
 		}
 		return alterTableActions;
 	}
@@ -155,7 +156,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		alterTableActions.add(alterTableAction);
 		if(statementTokenizer.hasNext()) {
 			Token token=statementTokenizer.nextToken();
-			throw new SqlParserException(String.format("Unexpected content: %s",token.toString()),token.getFirstCharacter());
+			throw new SqlParserException(String.format("Unexpected content: %s",token.toString()),token.getCharacterLocation());
 		}
 		return alterTableActions;
 	}

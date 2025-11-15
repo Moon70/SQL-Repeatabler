@@ -51,12 +51,12 @@ public class SpRenameStatementFactory extends StatementFactory{
 				tableName=new TableName(subTokens[0]);
 				oldName=subTokens[1];
 			}else {
-				throw new SqlParserException("Error parsing objectname",objName.getFirstCharacter());
+				throw new SqlParserException("Error parsing objectname",objName.getCharacterLocation());
 			}
 			oldName.setCategory(Category.COLUMN);
 			return new SpRenameStatement(tokenStatement,tableName,oldName,newName,objtype);
 		}else {
-			throw new SqlParserException(String.format("Type not supported yet: %s", objtype.toString()), objtype.getFirstCharacter());
+			throw new SqlParserException(String.format("Type not supported yet: %s", objtype.toString()), objtype.getCharacterLocation());
 		}
 	}
 }

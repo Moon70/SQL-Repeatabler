@@ -262,13 +262,13 @@ public class TableName {
         if(tokenFullname==null) {
             tokenFullname=getSchemaName();
         }else {
-            tokenFullname.append(new SqlCharacter('.',-1,-1,-1));
+            tokenFullname.append(new SqlCharacter('.'));
             tokenFullname.append(getSchemaName());
         }
         if(tokenFullname==null) {
             tokenFullname=getTableName();
         }else {
-            tokenFullname.append(new SqlCharacter('.',-1,-1,-1));
+            tokenFullname.append(new SqlCharacter('.'));
             tokenFullname.append(getTableName());
         }
         return tokenFullname;
@@ -303,7 +303,7 @@ public class TableName {
         if(tokenFullname==null) {
             tokenFullname=getTableName();
         }else {
-            tokenFullname.append(new SqlCharacter('.',-1,-1,-1));
+            tokenFullname.append(new SqlCharacter('.'));
             tokenFullname.append(getTableName());
         }
         return tokenFullname;
@@ -314,13 +314,13 @@ public class TableName {
         if(tokenFullname==null) {
             tokenFullname=getSchemaNameWithoutDelimiter();
         }else {
-            tokenFullname.append(new SqlCharacter('.',-1,-1,-1));
+            tokenFullname.append(new SqlCharacter('.'));
             tokenFullname.append(getSchemaNameWithoutDelimiter());
         }
         if(tokenFullname==null) {
             tokenFullname=getTableNameWithoutDelimiter();
         }else {
-            tokenFullname.append(new SqlCharacter('.',-1,-1,-1));
+            tokenFullname.append(new SqlCharacter('.'));
             tokenFullname.append(getTableNameWithoutDelimiter());
         }
         return tokenFullname;

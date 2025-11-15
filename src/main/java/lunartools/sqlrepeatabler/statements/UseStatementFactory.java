@@ -29,7 +29,7 @@ public class UseStatementFactory extends StatementFactory{
 		logger.info("Statement: "+statementTokenizer.toString());
 		logger.warn("Ignoring statement "+UseStatement.COMMAND);
 		SqlCharacter sqlCharacter=statementTokenizer.getFirstCharacter();
-		logger.warn(String.format("Location: row=%d, column=%d, index=%d",sqlCharacter.getRow(),sqlCharacter.getColumn(),sqlCharacter.getIndex()));
+		logger.warn(String.format("Location: row=%d, column=%d, index=%d",sqlCharacter.getCharacterLocation()));
 		statementTokenizer.setCategory(Category.IGNORED);
 
 		return new UseStatement();

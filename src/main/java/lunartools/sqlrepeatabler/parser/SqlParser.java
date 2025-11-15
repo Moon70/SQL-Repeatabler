@@ -68,7 +68,7 @@ public class SqlParser {
 				}
 			}
 			if(statement==null) {
-				throw new SqlParserException("Unsupported content: "+sqlString.toString(),sqlString.getFirstCharacter());
+				throw new SqlParserException("Unsupported content: "+sqlString.toString(),sqlString.getCharacterLocation());
 			}
 		}
 		return sqlBlockResult;

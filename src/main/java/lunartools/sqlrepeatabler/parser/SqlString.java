@@ -47,6 +47,13 @@ public class SqlString {
 		return sqlCharacters.get(0);
 	}
 
+	public CharacterLocation getCharacterLocation() {
+		if(sqlCharacters.size()==0) {
+			return null;
+		}
+		return sqlCharacters.get(0).getCharacterLocation();
+	}
+
 	public SqlCharacter getLastCharacter() {
 		if(sqlCharacters.size()==0) {
 			return null;
