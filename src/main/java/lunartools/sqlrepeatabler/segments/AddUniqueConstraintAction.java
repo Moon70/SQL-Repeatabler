@@ -6,7 +6,7 @@ import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
-public class AddUniqueConstraintAction extends Segment{
+public class AddUniqueConstraintAction extends AlterTableAction{
 	private Token name;
 	private Token referencesColumn;
 
@@ -17,7 +17,7 @@ public class AddUniqueConstraintAction extends Segment{
 	}
 
 	@Override
-	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName) throws Exception {
         sqlBlock.add(SqlString.createSqlStringFromString("IF OBJECT_ID('%s','UQ') IS NULL"		,Category.INSERTED,getName().cloneWithoutDelimiters()));
         sqlBlock.add(SqlString.createSqlStringFromString("BEGIN"								,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString("    %s %s"							,Category.INSERTED,tokenStatement,tableName.getFullName()));

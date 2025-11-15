@@ -1,11 +1,11 @@
 IF COL_LENGTH ('table_foo','field1') IS NULL
 BEGIN
-	ALTER TABLE [table_foo]
-		ADD [field1] nvarchar(255);
+    ALTER TABLE [table_foo]
+        ADD [field1] nvarchar(255);
 END;
 
 IF COL_LENGTH ('table_foo','field2') IS NULL
 BEGIN
-	ALTER TABLE [table_foo]
-		ADD [field2] int;
+    ALTER TABLE [table_foo]
+        ADD [field2] int;
 END;

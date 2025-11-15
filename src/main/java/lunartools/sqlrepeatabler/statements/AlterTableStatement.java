@@ -8,16 +8,16 @@ import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
-import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
-import lunartools.sqlrepeatabler.segments.Segment;
+import lunartools.sqlrepeatabler.segments.AlterColumnAction;
+import lunartools.sqlrepeatabler.segments.AlterTableAction;
 
 public class AlterTableStatement implements Statement {
 	public static final String COMMAND="ALTER TABLE";
 	private Token tokenStatement;
 	private TableName tableName;
-	private ArrayList<Segment> segments;
+	private ArrayList<AlterTableAction> segments;
 
-	public AlterTableStatement(Token statement,TableName tableName,ArrayList<Segment> segments) {
+	public AlterTableStatement(Token statement,TableName tableName,ArrayList<AlterTableAction> segments) {
 		this.tokenStatement=statement;
 		this.tableName=tableName;
 		this.segments=segments;
@@ -32,13 +32,13 @@ public class AlterTableStatement implements Statement {
 
 		SqlBlock sqlblockTemp=new SqlBlock();
 		for(int i=0;i<segments.size();i++) {
-			Segment segment=segments.get(i);
-			if(segment instanceof AlterColumnSegment) {
+			AlterTableAction segment=segments.get(i);
+			if(segment instanceof AlterColumnAction) {
 				hasAlterColumnAction=true;
 				if(i>0) {
 					sqlblockTemp.getLastLine().append(new SqlCharacter(',',Category.UNCATEGORIZED));
 				}
-				segment.toSqlCharacters(sqlblockTemp,tokenStatement, tableName, hasAlterColumnAction);
+				segment.toSqlCharacters(sqlblockTemp,tokenStatement, tableName);
 			}
 		}
 		if(hasAlterColumnAction) {
@@ -51,10 +51,10 @@ public class AlterTableStatement implements Statement {
 		}
 
 		for(int i=0;i<segments.size();i++) {
-			Segment columnelement=segments.get(i);
-			if(!(columnelement instanceof AlterColumnSegment)) {
+			AlterTableAction columnelement=segments.get(i);
+			if(!(columnelement instanceof AlterColumnAction)) {
 				SqlBlock sqlBlockStatement=new SqlBlock();
-				columnelement.toSqlCharacters(sqlBlockStatement,tokenStatement, tableName, hasAlterColumnAction);
+				columnelement.toSqlCharacters(sqlBlockStatement,tokenStatement, tableName);
 				if(i<segments.size()-1) {
 					sqlBlockStatement.add(SqlString.EMPTY_LINE);
 				}

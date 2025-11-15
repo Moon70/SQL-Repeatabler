@@ -1,23 +1,23 @@
 IF EXISTS (
-	SELECT 1
-	FROM sys.objects
-	WHERE object_id = OBJECT_ID(N'[table_name].[constraint1_name]')
-		AND type IN ('C', 'D', 'F', 'PK', 'UQ')
-		AND parent_object_id = OBJECT_ID(N'[table_name]')
+    SELECT 1
+    FROM sys.objects
+    WHERE object_id = OBJECT_ID(N'[table_name].[constraint1_name]')
+        AND type IN ('C', 'D', 'F', 'PK', 'UQ')
+        AND parent_object_id = OBJECT_ID(N'[table_name]')
 )
 BEGIN
-	ALTER TABLE [table_name]
-	DROP CONSTRAINT [constraint1_name];
+    ALTER TABLE [table_name]
+    DROP CONSTRAINT [constraint1_name];
 END;
 
 IF EXISTS (
-	SELECT 1
-	FROM sys.objects
-	WHERE object_id = OBJECT_ID(N'[table_name].[constraint2_name]')
-		AND type IN ('C', 'D', 'F', 'PK', 'UQ')
-		AND parent_object_id = OBJECT_ID(N'[table_name]')
+    SELECT 1
+    FROM sys.objects
+    WHERE object_id = OBJECT_ID(N'[table_name].[constraint2_name]')
+        AND type IN ('C', 'D', 'F', 'PK', 'UQ')
+        AND parent_object_id = OBJECT_ID(N'[table_name]')
 )
 BEGIN
-	ALTER TABLE [table_name]
-	DROP CONSTRAINT [constraint2_name];
+    ALTER TABLE [table_name]
+    DROP CONSTRAINT [constraint2_name];
 END;

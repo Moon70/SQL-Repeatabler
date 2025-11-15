@@ -14,10 +14,10 @@ import lunartools.sqlrepeatabler.parser.Token;
 import lunartools.sqlrepeatabler.segments.AddColumnAction;
 import lunartools.sqlrepeatabler.segments.AddForeignKeyConstraintAction;
 import lunartools.sqlrepeatabler.segments.AddUniqueConstraintAction;
-import lunartools.sqlrepeatabler.segments.AlterColumnSegment;
-import lunartools.sqlrepeatabler.segments.DropColumnSegment;
-import lunartools.sqlrepeatabler.segments.DropConstraintSegment;
-import lunartools.sqlrepeatabler.segments.Segment;
+import lunartools.sqlrepeatabler.segments.AlterColumnAction;
+import lunartools.sqlrepeatabler.segments.DropColumnAction;
+import lunartools.sqlrepeatabler.segments.DropConstraintAction;
+import lunartools.sqlrepeatabler.segments.AlterTableAction;
 
 public class AlterTableStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(AlterTableStatementFactory.class);
@@ -46,7 +46,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 
 		statementTokenizer.stripWhiteSpaceLeft();
 
-		ArrayList<Segment> columnElements=null;
+		ArrayList<AlterTableAction> columnElements=null;
 		if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("ADD")) {
 			columnElements=parseAddAction(statementTokenizer);
 		}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("DROP")) {
@@ -63,7 +63,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		return new AlterTableStatement(tokenStatement,tableName,columnElements);
 	}
 
-	public ArrayList<Segment> parseAddAction(StatementTokenizer statementTokenizer) throws Exception {
+	public ArrayList<AlterTableAction> parseAddAction(StatementTokenizer statementTokenizer) throws Exception {
 		//column definitions
 		//constraint definitions
 		/*
@@ -76,7 +76,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		 * references [T_FOO] ([ID]);
 		 */
 		logger.debug("Parsing ADD action: ");
-		ArrayList<Segment> alterTableActions=new ArrayList<>();
+		ArrayList<AlterTableAction> alterTableActions=new ArrayList<>();
 		while(statementTokenizer.hasNext()) {
 			if(beginsWithSupportedCommand(statementTokenizer)) {
 				break;
@@ -90,14 +90,14 @@ public class AlterTableStatementFactory extends StatementFactory{
 					}
 					Token tokenReferencesTable=statementTokenizer.nextToken();
 					Token tokenReferencesColumn=statementTokenizer.nextToken();
-					Segment alterTableAction=new AddForeignKeyConstraintAction(tokenConstraintName,tokenForeignKey,tokenReferencesTable,tokenReferencesColumn);
+					AlterTableAction alterTableAction=new AddForeignKeyConstraintAction(tokenConstraintName,tokenForeignKey,tokenReferencesTable,tokenReferencesColumn);
 					alterTableActions.add(alterTableAction);
 				}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("UNIQUE")) {
 					Token tokenReferencesColumn=statementTokenizer.nextToken();
-					Segment alterTableAction=new AddUniqueConstraintAction(tokenConstraintName,tokenReferencesColumn);
+					AlterTableAction alterTableAction=new AddUniqueConstraintAction(tokenConstraintName,tokenReferencesColumn);
 					alterTableActions.add(alterTableAction);
 				}else {
-					throw new Exception("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword not found");
+					throw new SqlParserException("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword not found",statementTokenizer.getFirstCharacter());
 				}
 			}else {
 				if(statementTokenizer.startsWithIgnoreCase("COLUMN")){
@@ -108,8 +108,8 @@ public class AlterTableStatementFactory extends StatementFactory{
 				Token tokenColumName=statementTokenizer.nextToken().setCategory(Category.COLUMN);
 				Token tokenColumParameter=statementTokenizer.nextTokenUntil(',').setCategory(Category.COLUMNPARAMETER);
 
-				Segment columnElement=new AddColumnAction(tokenColumName,tokenColumParameter);
-				alterTableActions.add(columnElement);
+				AlterTableAction alterTableAction=new AddColumnAction(tokenColumName,tokenColumParameter);
+				alterTableActions.add(alterTableAction);
 				if(statementTokenizer.startsWithIgnoreCase("ADD")) {
 					logger.warn("Ignoring illegal ADD command. In T-SQL, when adding multiple columns in a single ALTER TABLE...ADD statement, only use one ADD keyword!"+statementTokenizer.getFirstCharacter().getLocationString());
 					Token tokenIllegal=statementTokenizer.nextToken();
@@ -120,53 +120,44 @@ public class AlterTableStatementFactory extends StatementFactory{
 		return alterTableActions;
 	}
 
-	public ArrayList<Segment> parseDropAction(StatementTokenizer statementTokenizer) throws Exception {
+	public ArrayList<AlterTableAction> parseDropAction(StatementTokenizer statementTokenizer) throws Exception {
 		//column targets
 		//constraint targets
 		logger.debug("Parsing DROP action");
-		ArrayList<Segment> columnElements=new ArrayList<>();
+		ArrayList<AlterTableAction> alterTableActions=new ArrayList<>();
 		Token tokenTarget=statementTokenizer.nextToken();
-
 		if(tokenTarget.toString().equalsIgnoreCase("COLUMN")) {
 			while(true) {
 				Token tokenColumnName=statementTokenizer.nextToken();
-
-				Segment columnElement=new DropColumnSegment(tokenColumnName);
-				columnElements.add(columnElement);
-
+				AlterTableAction alterTableAction=new DropColumnAction(tokenColumnName);
+				alterTableActions.add(alterTableAction);
 				if(!statementTokenizer.hasNext()) {
 					break;
 				}
-
 				statementTokenizer.consumePrefixIgnoreCaseAndSpace(",");
 			}
-
 		}else if(tokenTarget.toString().equalsIgnoreCase("CONSTRAINT")) {
 			Token tokenConstraintName=statementTokenizer.nextToken();
-
-			Segment columnElement=new DropConstraintSegment(tokenConstraintName);
-			columnElements.add(columnElement);
-
+			AlterTableAction alterTableAction=new DropConstraintAction(tokenConstraintName);
+			alterTableActions.add(alterTableAction);
 		}else {
-			throw new Exception("DROP target not supported: >"+tokenTarget+"<");
+			throw new SqlParserException(String.format("DROP target not supported: %s",tokenTarget.toString()),tokenTarget.getFirstCharacter());
 		}
-		return columnElements;
+		return alterTableActions;
 	}
 
-	public ArrayList<Segment> parseAlterColumnAction(StatementTokenizer statementTokenizer) throws Exception {
+	public ArrayList<AlterTableAction> parseAlterColumnAction(StatementTokenizer statementTokenizer) throws Exception {
 		logger.debug("Parsing ALTER COLUMN action");
-		ArrayList<Segment> columnElements=new ArrayList<>();
+		ArrayList<AlterTableAction> alterTableActions=new ArrayList<>();
 		Token tokenColumnName=statementTokenizer.nextToken();
 		Token tokenColumnParameter=statementTokenizer.nextTokenUntil(',');
-
-		Segment columnElement=new AlterColumnSegment(tokenColumnName,tokenColumnParameter);
-		columnElements.add(columnElement);
-
+		AlterTableAction alterTableAction=new AlterColumnAction(tokenColumnName,tokenColumnParameter);
+		alterTableActions.add(alterTableAction);
 		if(statementTokenizer.hasNext()) {
 			Token token=statementTokenizer.nextToken();
 			throw new SqlParserException(String.format("Unexpected content: %s",token.toString()),token.getFirstCharacter());
 		}
-		return columnElements;
+		return alterTableActions;
 	}
 
 	public boolean beginsWithSupportedCommand(StatementTokenizer statementTokenizer) {

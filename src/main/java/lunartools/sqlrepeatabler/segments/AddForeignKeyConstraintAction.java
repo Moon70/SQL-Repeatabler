@@ -6,7 +6,7 @@ import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
-public class AddForeignKeyConstraintAction extends Segment{
+public class AddForeignKeyConstraintAction extends AlterTableAction{
 	private Token name;
 	private Token foreignKey;
 	private Token referencesTable;
@@ -21,7 +21,7 @@ public class AddForeignKeyConstraintAction extends Segment{
 	}
 
 	@Override
-	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName) throws Exception {
         sqlBlock.add(SqlString.createSqlStringFromString("IF NOT EXISTS ("												,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString("    SELECT 1"													,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString("    FROM sys.foreign_keys" 									,Category.INSERTED));

@@ -6,7 +6,7 @@ import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
 
-public class AddColumnAction extends Segment{
+public class AddColumnAction extends AlterTableAction{
 	private Token name;
 	private Token parameters;
 
@@ -17,7 +17,7 @@ public class AddColumnAction extends Segment{
 	}
 
 	@Override
-	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName,boolean mySql) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName) throws Exception {
         sqlBlock.add(SqlString.createSqlStringFromString("IF COL_LENGTH ('%s','%s') IS NULL"	,Category.INSERTED,tableName.getFullNameWithoutDelimiter(),getName().cloneWithoutDelimiters()));
         sqlBlock.add(SqlString.createSqlStringFromString("BEGIN"								,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString("    %s %s"							,Category.INSERTED,tokenStatement,tableName.getFullName()));
