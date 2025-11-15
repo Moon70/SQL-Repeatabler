@@ -11,7 +11,8 @@ public enum Category {
 	COLUMNPARAMETER("#2a895",	null,		null,		null),
 	COMMENT(		"#008000",	null,		"italic",	null),
 	PARAMETER(		"#8B008B",	"bold",		null,		null),
-	INSERTED(		"#4682B4",	"bold",		null,		null);
+	INSERTED(		"#4682B4",	"bold",		null,		null),
+	ERROR(			"#222222",	"bold",		null,		null);
 	
 	private final String color;
 	private final String fontWeight;

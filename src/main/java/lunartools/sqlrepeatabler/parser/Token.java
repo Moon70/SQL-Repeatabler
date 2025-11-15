@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.common.BackgroundColorProvider;
+
 public class Token {
 	private static Logger logger = LoggerFactory.getLogger(Token.class);
 	private ArrayList<SqlCharacter> charactersOfToken;
@@ -189,4 +191,14 @@ public class Token {
 		return charactersOfToken.get(0).getCharacterLocation();
 	}
 
+	public void setBackgroundColor(String backgroundColor) {
+		for(SqlCharacter sqlCharacter:charactersOfToken) {
+			sqlCharacter.setBackgroundColor(backgroundColor);
+		}
+	}
+
+	public void markError() {
+		setCategory(Category.ERROR);
+		setBackgroundColor(BackgroundColorProvider.ERROR);
+	}
 }

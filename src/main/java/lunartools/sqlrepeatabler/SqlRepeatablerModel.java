@@ -82,6 +82,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 
 	public void setSqlScripts(ArrayList<SqlScript> sqlScripts) {
 		this.sqlScripts=sqlScripts;
+		notifyListeners(SimpleEvents.MODEL_INPUTSQLSCRIPTCHANGED);
 	}
 
 	public void setConvertedSqlScriptBlocks(ArrayList<SqlBlock> sqlBlocks) {

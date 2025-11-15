@@ -15,9 +15,9 @@ import lunartools.sqlrepeatabler.segments.AddColumnAction;
 import lunartools.sqlrepeatabler.segments.AddForeignKeyConstraintAction;
 import lunartools.sqlrepeatabler.segments.AddUniqueConstraintAction;
 import lunartools.sqlrepeatabler.segments.AlterColumnAction;
+import lunartools.sqlrepeatabler.segments.AlterTableAction;
 import lunartools.sqlrepeatabler.segments.DropColumnAction;
 import lunartools.sqlrepeatabler.segments.DropConstraintAction;
-import lunartools.sqlrepeatabler.segments.AlterTableAction;
 
 public class AlterTableStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(AlterTableStatementFactory.class);
@@ -58,6 +58,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 			columnElements=parseAlterColumnAction(statementTokenizer);
 		}else {
 			Token token=statementTokenizer.nextToken();
+			token.markError();
 			throw new SqlParserException(String.format("Unsupported ALTER TABLE action found: %s",token.toString()),token.getCharacterLocation());
 		}
 

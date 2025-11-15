@@ -34,6 +34,15 @@ public class IOPanelController {
 		if(logger.isTraceEnabled()) {
 			logger.trace("update: "+object);
 		}
+		if(object==SimpleEvents.MODEL_INPUTSQLSCRIPTCHANGED) {
+			int sqlFileIndex=ioPanel.getSqlFileIndex();
+			SqlScript sqlScript=model.getSqlScript(sqlFileIndex);
+			if(sqlScript!=null) {
+				HtmlRenderer htmlRenderer=new HtmlRenderer();
+				ioPanel.getInputPane().setText(htmlRenderer.render(sqlScript.getSqlStrings()));
+				ioPanel.repaint();
+			}
+		}
 		if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
 			if(model.hasSqlConvertedScripts()) {
 				int sqlFileIndex=ioPanel.getSqlFileIndex();
@@ -46,6 +55,16 @@ public class IOPanelController {
 					ioPanel.repaint();
 				}
 			}
+		}
+	}
+
+	public void setInputPaneText() {
+		int sqlFileIndex=ioPanel.getSqlFileIndex();
+		SqlScript sqlScript=model.getSqlScript(sqlFileIndex);
+		if(sqlScript!=null) {
+			HtmlRenderer htmlRenderer=new HtmlRenderer();
+			ioPanel.getInputPane().setText(htmlRenderer.render(sqlScript.getSqlStrings()));
+			ioPanel.repaint();
 		}
 	}
 }
