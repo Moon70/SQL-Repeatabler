@@ -27,7 +27,7 @@ public class MainSqlRepeatabler {
 				SqlRepeatablerView view=new SqlRepeatablerView(model);
 				new SqlRepeatablerController(model,view,swingAppender);
 				logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
-model.addSqlInputFile(new File("c:/temp/test3.sql"));
+//model.addSqlInputFile(new File("c:/temp/test3.sql"));
 			}catch(Throwable e){
 				if(logger.isErrorEnabled()) {
 					logger.error("Unexpected error",e);

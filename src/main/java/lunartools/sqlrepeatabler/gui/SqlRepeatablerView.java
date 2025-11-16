@@ -82,15 +82,15 @@ public class SqlRepeatablerView extends JFrame{
 	}
 
 	public void setActionFactory(ActionFactory actionFactory) {
-		this.menuModel=new MenuModel(actionFactory);
+		this.menuModel=new MenuModel(model,actionFactory);
 		setJMenuBar(menuModel.getMenuBar());
-		refreshView();
+//		refreshView();
 	}
 
 	public void refreshView() {
-		boolean convertedDataAvailable=model.hasSqlConvertedScripts();
-		menuModel.getMenuFileItemSaveAs().setEnabled(convertedDataAvailable);
-		menuModel.getMenuFileItemReset().setEnabled(convertedDataAvailable);
+//		boolean convertedDataAvailable=model.hasSqlConvertedScripts();
+//		menuModel.getMenuFileItemSaveAs().setEnabled(convertedDataAvailable);
+//		menuModel.getMenuFileItemReset().setEnabled(convertedDataAvailable);
 	}
 
 	public void showMessageboxAbout() {

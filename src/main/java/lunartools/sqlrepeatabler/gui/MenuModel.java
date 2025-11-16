@@ -6,12 +6,19 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lunartools.ImageTools;
+import lunartools.sqlrepeatabler.SimpleEvents;
+import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
 import lunartools.sqlrepeatabler.settings.ProcessingOrder;
 import lunartools.sqlrepeatabler.settings.Settings;
 
 public class MenuModel {
+	private static Logger logger = LoggerFactory.getLogger(MenuModel.class);
+	private SqlRepeatablerModel model;
 	private ActionFactory actionFactory;
 	private JMenuBar menuBar;
 
@@ -31,13 +38,16 @@ public class MenuModel {
 	private JMenu menuHelp;
 	private JMenuItem menuHelpItemAbout;
 	
-	public MenuModel(ActionFactory actionFactory) {
+	public MenuModel(SqlRepeatablerModel model, ActionFactory actionFactory) {
+		this.model=model;
 		this.actionFactory=actionFactory;
 		menuBar=new JMenuBar();
 		menuBar.add(createFileMenu());
 		menuBar.add(createPreferencesMenu());
 		menuBar.add(createHelpMenu());
+		refreshMenuItems();
         refresh();
+		model.addChangeListener(this::updateModelChanges);
 	}
     
     private JMenu createFileMenu(){
@@ -55,12 +65,12 @@ public class MenuModel {
 
         menuFileItemReload=new JMenuItem(actionFactory.createReloadAction());
         menuFileItemReload.setIcon(ImageTools.createImageIcon("/icons/refresh_16.png"));
-        menuFileItemReload.setEnabled(true);
+//        menuFileItemReload.setEnabled(true);
         menuFile.add(menuFileItemReload);
 
         menuFileItemReset=new JMenuItem(actionFactory.createResetAction());
         menuFileItemReset.setIcon(ImageTools.createImageIcon("/icons/restart_alt_16.png"));
-        menuFileItemReset.setEnabled(true);
+//        menuFileItemReset.setEnabled(true);
         menuFile.add(menuFileItemReset);
 
         menuFileItemExitProgram=new JMenuItem(actionFactory.createExitProgramAction());
@@ -133,11 +143,34 @@ public class MenuModel {
 		return menuHelpItemAbout;
 	}
 
+	public void updateModelChanges(Object object) {
+		if(logger.isTraceEnabled()) {
+			logger.trace("update: "+object);
+		}
+		if(object==SimpleEvents.MODEL_SQLINPUTFILESCHANGED) {
+			refreshMenuItems();
+		}else if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
+			refreshMenuItems();
+		}else if(object==SimpleEvents.MODEL_RESET) {
+			refreshMenuItems();
+		}
+
+	}
+
+	private void refreshMenuItems() {
+		System.out.println("model.hasSqlInputFiles(): "+model.hasSqlInputFiles());
+		System.out.println("model.hasSqlConvertedScripts(): "+model.hasSqlConvertedScripts());
+		menuFileItemReload.setEnabled(model.hasSqlInputFiles());
+		menuFileItemReset.setEnabled(model.hasSqlInputFiles());
+		menuFileItemSaveAs.setEnabled(model.hasSqlConvertedScripts());
+	}
+	
 	private void refresh() {
 		Settings settings=Settings.getInstance();
 		ProcessingOrder processingOrder=settings.getProcessingOrder();
 		radioButtonProcessAsAdded.setSelected(processingOrder==ProcessingOrder.ASADDED);
 		radioButtonProcessByCreationDate.setSelected(processingOrder==ProcessingOrder.CREATIONDATE);
 		radioButtonProcessAlphabetically.setSelected(processingOrder==ProcessingOrder.ALPHABETICALLY);
+		
 	}
 }
