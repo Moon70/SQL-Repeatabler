@@ -4,10 +4,12 @@ import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JRadioButton;
+import javax.swing.JRadioButtonMenuItem;
 
 import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
+import lunartools.sqlrepeatabler.settings.ProcessingOrder;
+import lunartools.sqlrepeatabler.settings.Settings;
 
 public class MenuModel {
 	private ActionFactory actionFactory;
@@ -22,8 +24,9 @@ public class MenuModel {
 
 	private JMenu menuPreferences;
 	private JMenu menuProcessFiles;
-	private JRadioButton radioButton1;
-	private JRadioButton radioButton2;
+	private JRadioButtonMenuItem radioButtonProcessAsAdded;
+	private JRadioButtonMenuItem radioButtonProcessByCreationDate;
+	private JRadioButtonMenuItem radioButtonProcessAlphabetically;
 
 	private JMenu menuHelp;
 	private JMenuItem menuHelpItemAbout;
@@ -34,6 +37,7 @@ public class MenuModel {
 		menuBar.add(createFileMenu());
 		menuBar.add(createPreferencesMenu());
 		menuBar.add(createHelpMenu());
+        refresh();
 	}
     
     private JMenu createFileMenu(){
@@ -62,23 +66,29 @@ public class MenuModel {
         menuFileItemExitProgram=new JMenuItem(actionFactory.createExitProgramAction());
         menuFileItemExitProgram.setIcon(ImageTools.createImageIcon("/icons/logout_16.png"));
         menuFile.add(menuFileItemExitProgram);
+        
         return menuFile;
     }
     
 	private JMenu createPreferencesMenu(){
         menuPreferences=new JMenu("Preferences");
 
-        menuProcessFiles=new JMenu("Process files-");
+        menuProcessFiles=new JMenu("File processing order-");
         menuPreferences.add(menuProcessFiles);
+        menuProcessFiles.setIcon(ImageTools.createImageIcon("/icons/sort_16.png"));
 		ButtonGroup buttonGroup = new ButtonGroup();
 		
-		radioButton1=new JRadioButton("by creation date");
-		menuProcessFiles.add(radioButton1);
-		buttonGroup.add(radioButton1);
+		radioButtonProcessAsAdded=new JRadioButtonMenuItem(actionFactory.createAsAddedRadioButtonAction());
+		menuProcessFiles.add(radioButtonProcessAsAdded);
+		buttonGroup.add(radioButtonProcessAsAdded);
+
+		radioButtonProcessByCreationDate=new JRadioButtonMenuItem(actionFactory.createByCreationDateRadioButtonAction());
+		menuProcessFiles.add(radioButtonProcessByCreationDate);
+		buttonGroup.add(radioButtonProcessByCreationDate);
 		
-		radioButton2=new JRadioButton("alphabetically");
-		menuProcessFiles.add(radioButton2);
-		buttonGroup.add(radioButton2);
+		radioButtonProcessAlphabetically=new JRadioButtonMenuItem(actionFactory.createAlphabeticallyRadioButtonAction());
+		menuProcessFiles.add(radioButtonProcessAlphabetically);
+		buttonGroup.add(radioButtonProcessAlphabetically);
 
         return menuPreferences;
 	}
@@ -123,4 +133,11 @@ public class MenuModel {
 		return menuHelpItemAbout;
 	}
 
+	private void refresh() {
+		Settings settings=Settings.getInstance();
+		ProcessingOrder processingOrder=settings.getProcessingOrder();
+		radioButtonProcessAsAdded.setSelected(processingOrder==ProcessingOrder.ASADDED);
+		radioButtonProcessByCreationDate.setSelected(processingOrder==ProcessingOrder.CREATIONDATE);
+		radioButtonProcessAlphabetically.setSelected(processingOrder==ProcessingOrder.ALPHABETICALLY);
+	}
 }

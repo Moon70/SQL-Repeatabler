@@ -7,6 +7,7 @@ import javax.swing.Action;
 
 import lunartools.sqlrepeatabler.SqlRepeatablerController;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.settings.ProcessingOrder;
 
 public class ActionFactory {
 	private SqlRepeatablerController controller;
@@ -37,6 +38,30 @@ public class ActionFactory {
 
 	public Action createAboutAction() {
 		return new AboutAction(controller);
+	}
+	
+	public Action createAsAddedRadioButtonAction() {
+		return new AbstractAction(ProcessingOrder.ASADDED.getKey()) {
+            @Override public void actionPerformed(ActionEvent e) {
+            	controller.getModel().setProcessingOrder(ProcessingOrder.ASADDED);
+            }
+        };
+	}
+	
+	public Action createByCreationDateRadioButtonAction() {
+		return new AbstractAction(ProcessingOrder.CREATIONDATE.getKey()) {
+            @Override public void actionPerformed(ActionEvent e) {
+            	controller.getModel().setProcessingOrder(ProcessingOrder.CREATIONDATE);
+            }
+        };
+	}
+	
+	public Action createAlphabeticallyRadioButtonAction() {
+		return new AbstractAction(ProcessingOrder.ALPHABETICALLY.getKey()) {
+            @Override public void actionPerformed(ActionEvent e) {
+            	controller.getModel().setProcessingOrder(ProcessingOrder.ALPHABETICALLY);
+            }
+        };
 	}
 
     private class ExitProgramAction extends AbstractAction {

@@ -9,24 +9,29 @@ import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lunartools.ChangeListenerSupport;
 import lunartools.SwingTools;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.settings.ProcessingOrder;
+import lunartools.sqlrepeatabler.settings.Settings;
 
 public class SqlRepeatablerModel implements ChangeListenerSupport{
+	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerModel.class);
 	public static final String PROGRAMNAME = "SQL-Repeatabler";
 	private static String versionProgram=SwingTools.determineProgramVersion();
 	private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>();
 
+	private ArrayList<File> sqlInputFilesOrderAsAdded=new ArrayList<>();
 	private ArrayList<File> sqlInputFiles=new ArrayList<>();
 	private ArrayList<SqlScript> sqlScripts=new ArrayList<>();
 	private ArrayList<SqlBlock> sqlConvertedScriptBlocks=new ArrayList<>();
-
+	
 	public static String getProgramVersion() {
 		return versionProgram;
 	}
@@ -41,8 +46,10 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 	}
 
 	public void addSqlInputFile(File file) {
-		if(!this.sqlInputFiles.contains(file)) {
+		if(!this.sqlInputFilesOrderAsAdded.contains(file)) {
+			this.sqlInputFilesOrderAsAdded.add(file);
 			this.sqlInputFiles.add(file);
+			sortInputFiles();
 			notifyListeners(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
 		}
 	}
@@ -51,28 +58,29 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		boolean changed=false;
 		for(int i=0;i<files.size();i++) {
 			File file=files.get(i);
-			if(!this.sqlInputFiles.contains(file)) {
+			if(!this.sqlInputFilesOrderAsAdded.contains(file)) {
+				this.sqlInputFilesOrderAsAdded.add(file);
 				this.sqlInputFiles.add(file);
 				changed=true;
 			}
 		}
 		if(changed) {
+			sortInputFiles();
 			notifyListeners(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
 		}
 	}
 	
-	private Comparator<File> getComparator() {
+	private Comparator<File> getSortFilesByCreationDateComparator() {
 		Comparator<File> comparator=new Comparator<File>() {
 
 			@Override
 			public int compare(File file1, File file2) {
 				Path p1 = file1.toPath();
 				Path p2 = file2.toPath();
-
 				try {
 					FileTime t1 = Files.readAttributes(p1, BasicFileAttributes.class).creationTime();
 					FileTime t2 = Files.readAttributes(p2, BasicFileAttributes.class).creationTime();
-					return t1.compareTo(t2);   // oldest first			
+					return t1.compareTo(t2);			
 				} catch (IOException e) {
 					throw new RuntimeException("Exception while sorting SQL files",e);
 				}
@@ -81,17 +89,13 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		return comparator;
 	}
 	
-	private Comparator<File> getComparator2() {
-		return Comparator.comparing(File::getName);
-	}
-
 	public void clearConvertedSqlScriptBlocks() {
 		sqlConvertedScriptBlocks=new ArrayList<>();
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
 	}
 
 	public boolean hasSqlInputFiles() {
-		return sqlInputFiles.size()>0;
+		return sqlInputFilesOrderAsAdded.size()>0;
 	}
 
 	public boolean hasSqlConvertedScripts() {
@@ -140,6 +144,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 	}
 
 	public void reset() {
+		sqlInputFilesOrderAsAdded=new ArrayList<>();
 		sqlInputFiles=new ArrayList<>();
 		sqlConvertedScriptBlocks=new ArrayList<>();
 		notifyListeners(SimpleEvents.MODEL_RESET);
@@ -150,4 +155,31 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		notifyListeners(SimpleEvents.MODEL_CLEARINPUTPANEL);
 	}
 
+	public void setProcessingOrder(ProcessingOrder processingOrder) {
+		Settings settings=Settings.getInstance();
+		if(settings.getProcessingOrder()!=processingOrder) {
+			logger.info(String.format("Processing order changed: %s", processingOrder.getLabel()));
+			settings.setProcessingOrder(processingOrder);
+			sortInputFiles();
+			notifyListeners(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
+			
+		}
+	}
+
+	private void sortInputFiles() {
+		switch(Settings.getInstance().getProcessingOrder()) {
+		case ASADDED:
+			sqlInputFiles.clear();
+			sqlInputFiles.addAll(sqlInputFilesOrderAsAdded);
+			break;
+		case CREATIONDATE:
+			sqlInputFiles.sort(getSortFilesByCreationDateComparator());
+			break;
+		case ALPHABETICALLY:
+			sqlInputFiles.sort(Comparator.comparing(File::getName));
+			break;
+		}
+		
+	}
+	
 }

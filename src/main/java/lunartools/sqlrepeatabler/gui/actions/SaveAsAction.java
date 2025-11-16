@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import lunartools.SwingTools;
 import lunartools.sqlrepeatabler.SqlRepeatablerController;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.SqlRepeatablerSettings;
 import lunartools.sqlrepeatabler.TextFileFilter;
+import lunartools.sqlrepeatabler.settings.Settings;
 
 class SaveAsAction extends AbstractAction {
 	private static Logger logger = LoggerFactory.getLogger(SaveAsAction.class);
@@ -64,7 +64,7 @@ class SaveAsAction extends AbstractAction {
 			if(file.exists() && userCanceledFileExistsDialogue(file)) {
 				return;
 			}
-			SqlRepeatablerSettings.getInstance().setString(SqlRepeatablerSettings.FILE_SAVEFOLDER, file.getParent());
+			Settings.getInstance().setString(Settings.FILE_SAVEFOLDER, file.getParent());
 			action_SaveProjectFile(file);
 		}
 	}

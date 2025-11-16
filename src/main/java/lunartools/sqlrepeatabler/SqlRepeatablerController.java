@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.Settings;
+import lunartools.AbstractSettings;
 import lunartools.sqlrepeatabler.common.SwingBufferingLogBackAppender;
 import lunartools.sqlrepeatabler.gui.IOPanel;
 import lunartools.sqlrepeatabler.gui.IOPanelController;
@@ -17,6 +17,7 @@ import lunartools.sqlrepeatabler.gui.LogEditorPane;
 import lunartools.sqlrepeatabler.gui.MainPanel;
 import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
+import lunartools.sqlrepeatabler.settings.Settings;
 import lunartools.sqlrepeatabler.worker.ConvertSqlFileWorker;
 
 public class SqlRepeatablerController{
@@ -26,7 +27,7 @@ public class SqlRepeatablerController{
 	private ArrayList<IOPanelController> ioPanelControllers=new ArrayList<>();
 
 	public SqlRepeatablerController(SqlRepeatablerModel model,SqlRepeatablerView view,SwingBufferingLogBackAppender swingAppender) {
-		SqlRepeatablerSettings settings=SqlRepeatablerSettings.getInstance();
+		Settings settings=Settings.getInstance();
 		this.model=model;
 		this.view=view;
 		view.setBounds(settings.getViewBounds());
@@ -89,8 +90,8 @@ public class SqlRepeatablerController{
 	}
 
 	public void shutdown() {
-		Settings settings=SqlRepeatablerSettings.getInstance();
-		settings.setRectangle(SqlRepeatablerSettings.VIEW_BOUNDS, view.getBounds());
+		AbstractSettings settings=Settings.getInstance();
+		settings.setRectangle(Settings.VIEW_BOUNDS, view.getBounds());
 		try {
 			settings.saveSettings();
 		} catch (IOException e) {
