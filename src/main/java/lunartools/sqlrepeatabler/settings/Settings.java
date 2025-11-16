@@ -16,9 +16,9 @@ public class Settings extends AbstractSettings{
 	public static final String FILE_SAVEFOLDER =		"SaveFolder";
 
 	public static final String PROCESSING_ORDER =		"ProcessingOrder";
+	public static final String DIVIDERLOCATION_CONSOLE=	"DividerLocationConsole";
+	public static final String DIVIDERLOCATION_SCRIPT=	"DividerLocationScript";
 	
-	private ProcessingOrder processingOrder=ProcessingOrder.ASADDED;
-
 	public static Settings getInstance() {
 		if(instance==null) {
 			instance=new Settings(SqlRepeatablerModel.PROGRAMNAME,SqlRepeatablerModel.getProgramVersion());
@@ -45,11 +45,32 @@ public class Settings extends AbstractSettings{
 	}
 
 	public ProcessingOrder getProcessingOrder() {
+		String processingOrderString=getString(PROCESSING_ORDER, ProcessingOrder.ASADDED.getKey());
+		ProcessingOrder processingOrder=ProcessingOrder.fromKey(processingOrderString);
+		if(processingOrder==null) {
+			return ProcessingOrder.ASADDED;
+		}
 		return processingOrder;
 	}
 
 	public void setProcessingOrder(ProcessingOrder processingOrder) {
-		this.processingOrder = processingOrder;
+		setString(PROCESSING_ORDER, processingOrder.getKey());
 	}
 
+	public int getDividerlocationConsole() {
+		return getInt(DIVIDERLOCATION_CONSOLE,0);
+	}
+
+	public void setDividerlocationConsole(int dividerlocationConsole) {
+		setInt(DIVIDERLOCATION_CONSOLE, dividerlocationConsole);
+	}
+
+	public int getDividerlocationScript() {
+		return getInt(DIVIDERLOCATION_SCRIPT,0);
+	}
+
+	public void setDividerlocationScript(int dividerlocationScript) {
+		setInt(DIVIDERLOCATION_SCRIPT, dividerlocationScript);
+	}
+	
 }

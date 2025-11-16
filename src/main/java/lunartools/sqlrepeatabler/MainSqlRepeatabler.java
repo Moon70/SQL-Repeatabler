@@ -26,7 +26,6 @@ public class MainSqlRepeatabler {
 				SqlRepeatablerModel model=new SqlRepeatablerModel();
 				SqlRepeatablerView view=new SqlRepeatablerView(model);
 				new SqlRepeatablerController(model,view,swingAppender);
-				view.setVisible(true);
 				logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
 model.addSqlInputFile(new File("c:/temp/test3.sql"));
 			}catch(Throwable e){

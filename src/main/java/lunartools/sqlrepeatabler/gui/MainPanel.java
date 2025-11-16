@@ -11,6 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +19,13 @@ import org.slf4j.LoggerFactory;
 import lunartools.sqlrepeatabler.DailyBackgroundProvider;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.settings.Settings;
 
 public class MainPanel extends JPanel{
 	private static Logger logger = LoggerFactory.getLogger(MainPanel.class);
 	private SqlRepeatablerModel model;
 	private JTabbedPane tabbedPane = new JTabbedPane();
+	private JScrollPane scrollPaneLog;
 	private Image imageBackground;
 	private JSplitPane jSplitPaneVertical;
 	private LogEditorPane logPanel;
@@ -38,11 +41,11 @@ public class MainPanel extends JPanel{
 
 		logPanel=new LogEditorPane(model);
 		logPanel.setMinimumSize(new Dimension(0,100));
-		JScrollPane scrollPaneLog=new JScrollPane(logPanel);
+		scrollPaneLog=new JScrollPane(logPanel);
 		scrollPaneLog.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
 		jSplitPaneVertical.setBottomComponent(scrollPaneLog);
-		jSplitPaneVertical.setDividerLocation(550);
+
+		jSplitPaneVertical.setDividerLocation(700);
 		jSplitPaneVertical.setResizeWeight(1.0);
 
 		add(jSplitPaneVertical,BorderLayout.CENTER);
@@ -50,7 +53,15 @@ public class MainPanel extends JPanel{
 		jSplitPaneVertical.setVisible(false);
 		imageBackground=DailyBackgroundProvider.getImage();		
 		setBackground(Color.black);
+		
+		
 		model.addChangeListener(this::updateModelChanges);
+		SwingUtilities.invokeLater(() -> {
+			jSplitPaneVertical.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, evt -> {
+			    int newLocation=(int)evt.getNewValue();
+			    Settings.getInstance().setDividerlocationConsole(newLocation);
+			});
+		});
 	}
 
 	public void updateModelChanges(Object object) {
@@ -96,6 +107,15 @@ public class MainPanel extends JPanel{
 
 	public LogEditorPane getLogPanel() {
 		return logPanel;
+	}
+
+	public void applyDividerLocation() {
+		int min=tabbedPane.getMinimumSize().height;
+		int max=jSplitPaneVertical.getHeight()-scrollPaneLog.getMinimumSize().height;
+		int location=Settings.getInstance().getDividerlocationConsole();
+		if(location!=0 && location>=min && location<=max) {
+			jSplitPaneVertical.setDividerLocation(location);
+		}
 	}
 
 }
