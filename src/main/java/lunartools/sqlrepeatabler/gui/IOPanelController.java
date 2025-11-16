@@ -1,12 +1,15 @@
 package lunartools.sqlrepeatabler.gui;
 
-import javax.swing.Action;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.gui.actions.CloseScriptAction;
 import lunartools.sqlrepeatabler.gui.actions.CopyToClipboardAction;
 import lunartools.sqlrepeatabler.parser.HtmlRenderer;
 import lunartools.sqlrepeatabler.parser.SqlScript;
@@ -16,20 +19,35 @@ public class IOPanelController {
 	private final SqlRepeatablerModel model;
 	private IOPanel ioPanel;
 
-	public final Action copyToClipboardAction;
-
 	public IOPanelController(SqlRepeatablerModel model,IOPanel ioPanel) {
 		this.model=model;
 		this.ioPanel=ioPanel;
 
-		copyToClipboardAction=new CopyToClipboardAction(model,ioPanel);
+		JPopupMenu popupMenuOutputPane = new JPopupMenu();
+		popupMenuOutputPane.add(createCloseScriptJMenuItem(ioPanel));
+		popupMenuOutputPane.add(createCopyToClipboardJMenuItem(ioPanel));
+		ioPanel.getOutputPane().setComponentPopupMenu(popupMenuOutputPane);
 
-		ioPanel.installPopup(copyToClipboardAction);
+		JPopupMenu popupMenuInputPane = new JPopupMenu();
+		popupMenuInputPane.add(createCloseScriptJMenuItem(ioPanel));
+		ioPanel.getInputPane().setComponentPopupMenu(popupMenuInputPane);
+
 
 		model.addChangeListener(this::updateModelChanges);
-
 	}
 
+	private JMenuItem createCloseScriptJMenuItem(IOPanel ioPanel) {
+		JMenuItem jMenuItemCloseScript=new JMenuItem(new CloseScriptAction(model, ioPanel));
+		jMenuItemCloseScript.setIcon(ImageTools.createImageIcon("/icons/tab_close_16.png"));
+		return jMenuItemCloseScript;
+	}
+
+	private JMenuItem createCopyToClipboardJMenuItem(IOPanel ioPanel) {
+		JMenuItem jMenuItemCopyToClipboard=new JMenuItem(new CopyToClipboardAction(model,ioPanel));
+		jMenuItemCopyToClipboard.setIcon(ImageTools.createImageIcon("/icons/content_copy_16.png"));
+		return jMenuItemCopyToClipboard;
+	}
+	
 	public void updateModelChanges(Object object) {
 		if(logger.isTraceEnabled()) {
 			logger.trace("update: "+object);

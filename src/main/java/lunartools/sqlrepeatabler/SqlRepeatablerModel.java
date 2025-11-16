@@ -181,5 +181,24 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		}
 		
 	}
+
+	public void closeScript(int index) {
+		if(index>=0 && index<sqlInputFilesOrderAsAdded.size()) {
+			sqlInputFilesOrderAsAdded.remove(index);
+			if(sqlInputFilesOrderAsAdded.size()==0) {
+				reset();
+				return;
+			}
+			sqlInputFiles.remove(index);
+			notifyListeners(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
+		}
+	}
+
+	public File getSqlInputFile(int index) {
+		if(index<0 && index>=sqlInputFiles.size()) {
+			throw new IllegalArgumentException(String.format("Illegal index: %s. Valid index: 0 to %s", index,sqlInputFiles.size()-1));
+		}
+		return sqlInputFiles.get(index);
+	}
 	
 }

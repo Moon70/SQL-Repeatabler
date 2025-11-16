@@ -2,16 +2,12 @@ package lunartools.sqlrepeatabler.gui;
 
 import java.awt.BorderLayout;
 
-import javax.swing.Action;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
-import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.settings.Settings;
 
@@ -57,15 +53,6 @@ public class IOPanel extends JPanel{
 			    Settings.getInstance().setDividerlocationScript(newLocation);
 			});
 		});
-	}
-
-	public void installPopup(Action copyAll) {
-		JPopupMenu popupMenu = new JPopupMenu();
-		JMenuItem jMenuItem=new JMenuItem(copyAll);
-		jMenuItem.setIcon(ImageTools.createImageIcon("/icons/content_copy_16.png"));
-		popupMenu.add(jMenuItem);
-
-		outputPane.setComponentPopupMenu(popupMenu);
 	}
 
 	public int getSqlFileIndex() {
