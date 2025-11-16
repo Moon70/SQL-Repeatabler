@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.statements;
+package lunartools.sqlrepeatabler.statement;
 
 import java.util.ArrayList;
 
@@ -8,19 +8,19 @@ import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.Token;
-import lunartools.sqlrepeatabler.segments.AlterColumnAction;
-import lunartools.sqlrepeatabler.segments.AlterTableAction;
+import lunartools.sqlrepeatabler.statement.actions.AlterColumnAction;
+import lunartools.sqlrepeatabler.statement.actions.AlterTableAction;
 
 public class AlterTableStatement implements Statement {
 	public static final String COMMAND="ALTER TABLE";
 	private Token tokenStatement;
 	private TableName tableName;
-	private ArrayList<AlterTableAction> segments;
+	private ArrayList<AlterTableAction> alterTableActions;
 
-	public AlterTableStatement(Token statement,TableName tableName,ArrayList<AlterTableAction> segments) {
+	public AlterTableStatement(Token statement,TableName tableName,ArrayList<AlterTableAction> alterTableActions) {
 		this.tokenStatement=statement;
 		this.tableName=tableName;
-		this.segments=segments;
+		this.alterTableActions=alterTableActions;
 	}
 
 	@Override
@@ -31,14 +31,14 @@ public class AlterTableStatement implements Statement {
 		boolean hasAlterColumnAction=false;
 
 		SqlBlock sqlblockTemp=new SqlBlock();
-		for(int i=0;i<segments.size();i++) {
-			AlterTableAction segment=segments.get(i);
-			if(segment instanceof AlterColumnAction) {
+		for(int i=0;i<alterTableActions.size();i++) {
+			AlterTableAction alterTableAction=alterTableActions.get(i);
+			if(alterTableAction instanceof AlterColumnAction) {
 				hasAlterColumnAction=true;
 				if(i>0) {
 					sqlblockTemp.getLastLine().append(new SqlCharacter(',',Category.UNCATEGORIZED));
 				}
-				segment.toSqlCharacters(sqlblockTemp,tokenStatement, tableName);
+				alterTableAction.toSqlCharacters(sqlblockTemp,tokenStatement, tableName);
 			}
 		}
 		if(hasAlterColumnAction) {
@@ -50,12 +50,12 @@ public class AlterTableStatement implements Statement {
 			sqlBlock.add(sqlBlockStatement);
 		}
 
-		for(int i=0;i<segments.size();i++) {
-			AlterTableAction columnelement=segments.get(i);
-			if(!(columnelement instanceof AlterColumnAction)) {
+		for(int i=0;i<alterTableActions.size();i++) {
+			AlterTableAction alterTableAction=alterTableActions.get(i);
+			if(!(alterTableAction instanceof AlterColumnAction)) {
 				SqlBlock sqlBlockStatement=new SqlBlock();
-				columnelement.toSqlCharacters(sqlBlockStatement,tokenStatement, tableName);
-				if(i<segments.size()-1) {
+				alterTableAction.toSqlCharacters(sqlBlockStatement,tokenStatement, tableName);
+				if(i<alterTableActions.size()-1) {
 					sqlBlockStatement.add(SqlString.EMPTY_LINE);
 				}
 				sqlBlockStatement.setBackgroundColor(statementBackgroundColor);

@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.statements;
+package lunartools.sqlrepeatabler.statement;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.SqlBlock;

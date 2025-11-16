@@ -54,20 +54,20 @@ public class TableName {
 			statementTokenizer.stripWhiteSpaceLeft();
 			SqlCharacter character=statementTokenizer.charAt(0);
 			if(character.getChar()=='[') {
-				Token token=createBracketSegmentByConsuming(statementTokenizer);
+				Token token=createBracketEnclosedTokenByConsuming(statementTokenizer);
 				token.setCategory(Category.TABLE);
 				tokens.add(token);
 			}else if(character.getChar()=='"') {
-				Token token=createQuoteSegmentByConsuming(statementTokenizer);
+				Token token=createQuoteEnclosedTokenByConsuming(statementTokenizer);
 				token.setCategory(Category.TABLE);
 				tokens.add(token);
 			}else if(character.getChar()=='`') {
 				mySql=true;
-				Token token=createBacktickSegmentByConsuming(statementTokenizer);
+				Token token=createBacktickEnclosedTokenByConsuming(statementTokenizer);
 				token.setCategory(Category.TABLE);
 				tokens.add(token);
 			}else {
-				Token token=createSpaceSegmentByConsuming(statementTokenizer);
+				Token token=createSpaceEnclosedTokenByConsuming(statementTokenizer);
 				token.setCategory(Category.TABLE);
 				tokens.add(token);
 			}
@@ -87,7 +87,7 @@ public class TableName {
 		return new TableName(tokens,mySql);
 	}
 
-	private static Token createBracketSegmentByConsuming(StatementTokenizer statementTokenizer) {
+	private static Token createBracketEnclosedTokenByConsuming(StatementTokenizer statementTokenizer) {
 		SqlString sqlString=new SqlString();
 		sqlString.add(statementTokenizer.charAt(0));
 		statementTokenizer.deleteCharAt(0);
@@ -107,7 +107,7 @@ public class TableName {
 		return new Token(sqlString);
 	}
 
-	private static Token createQuoteSegmentByConsuming(StatementTokenizer statementTokenizer) {
+	private static Token createQuoteEnclosedTokenByConsuming(StatementTokenizer statementTokenizer) {
 		SqlString sqlString=new SqlString();
 		sqlString.add(statementTokenizer.charAt(0));
 		statementTokenizer.deleteCharAt(0);
@@ -127,7 +127,7 @@ public class TableName {
 		return new Token(sqlString);
 	}
 
-	private static Token createBacktickSegmentByConsuming(StatementTokenizer statementTokenizer) {
+	private static Token createBacktickEnclosedTokenByConsuming(StatementTokenizer statementTokenizer) {
 		SqlString sqlString=new SqlString();
 		sqlString.add(new SqlCharacter('['));
 		statementTokenizer.deleteCharAt(0);
@@ -151,7 +151,7 @@ public class TableName {
 		return new Token(sqlString);
 	}
 
-	private static Token createSpaceSegmentByConsuming(StatementTokenizer statementTokenizer) {
+	private static Token createSpaceEnclosedTokenByConsuming(StatementTokenizer statementTokenizer) {
 		SqlString sqlString=new SqlString();
 		sqlString.add(statementTokenizer.charAt(0));
 		statementTokenizer.deleteCharAt(0);

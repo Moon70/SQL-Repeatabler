@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import lunartools.sqlrepeatabler.TestHelper;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.statement.Statement;
+import lunartools.sqlrepeatabler.statement.WhitespaceLineStatementFactory;
 
 class WhitespaceLineStatementTest {
 	private static final String TESTDATAFOLDER="/WhitespaceLineStatement/";

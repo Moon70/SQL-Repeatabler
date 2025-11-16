@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.segments;
+package lunartools.sqlrepeatabler.statement.actions;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
@@ -36,6 +36,6 @@ public class AddForeignKeyConstraintAction extends AlterTableAction{
 	}
 	
 	public String toString() {
-		return String.format("AddForeignKeyConstraintSegment: %s CONSTRAINT %s %s %s %s", getAction().toString(),name,foreignKey,referencesTable,referencesColumn);
+		return String.format("AddForeignKeyConstraintAction: %s CONSTRAINT %s %s %s %s", getAction().toString(),name,foreignKey,referencesTable,referencesColumn);
 	}
 }

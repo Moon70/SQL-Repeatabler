@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import lunartools.sqlrepeatabler.TestHelper;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.statement.SetIdentityInsertStatementFactory;
+import lunartools.sqlrepeatabler.statement.Statement;
 
 class SetIdentityInsertStatementTest {
 	private static final String TESTDATAFOLDER="/SetIdentityInsertStatement/";

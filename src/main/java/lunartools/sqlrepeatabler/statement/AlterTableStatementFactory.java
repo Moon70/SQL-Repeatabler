@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.statements;
+package lunartools.sqlrepeatabler.statement;
 
 import java.util.ArrayList;
 
@@ -11,13 +11,13 @@ import lunartools.sqlrepeatabler.parser.SqlParserException;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
-import lunartools.sqlrepeatabler.segments.AddColumnAction;
-import lunartools.sqlrepeatabler.segments.AddForeignKeyConstraintAction;
-import lunartools.sqlrepeatabler.segments.AddUniqueConstraintAction;
-import lunartools.sqlrepeatabler.segments.AlterColumnAction;
-import lunartools.sqlrepeatabler.segments.AlterTableAction;
-import lunartools.sqlrepeatabler.segments.DropColumnAction;
-import lunartools.sqlrepeatabler.segments.DropConstraintAction;
+import lunartools.sqlrepeatabler.statement.actions.AddColumnAction;
+import lunartools.sqlrepeatabler.statement.actions.AddForeignKeyConstraintAction;
+import lunartools.sqlrepeatabler.statement.actions.AddUniqueConstraintAction;
+import lunartools.sqlrepeatabler.statement.actions.AlterColumnAction;
+import lunartools.sqlrepeatabler.statement.actions.AlterTableAction;
+import lunartools.sqlrepeatabler.statement.actions.DropColumnAction;
+import lunartools.sqlrepeatabler.statement.actions.DropConstraintAction;
 
 public class AlterTableStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(AlterTableStatementFactory.class);
@@ -46,23 +46,23 @@ public class AlterTableStatementFactory extends StatementFactory{
 
 		statementTokenizer.stripWhiteSpaceLeft();
 
-		ArrayList<AlterTableAction> columnElements=null;
+		ArrayList<AlterTableAction> alterTableActions=null;
 		if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("ADD")) {
-			columnElements=parseAddAction(statementTokenizer);
+			alterTableActions=parseAddAction(statementTokenizer);
 		}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("DROP")) {
-			columnElements=parseDropAction(statementTokenizer);
+			alterTableActions=parseDropAction(statementTokenizer);
 		}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("ALTER COLUMN")) {
-			columnElements=parseAlterColumnAction(statementTokenizer);
+			alterTableActions=parseAlterColumnAction(statementTokenizer);
 		}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("MODIFY COLUMN")) {//invalid
 			logger.warn("Found MODIFY COLUMN action which is most likely MySql flavour and not supported in T-SQL. Processing as ALTER COLUMN.");
-			columnElements=parseAlterColumnAction(statementTokenizer);
+			alterTableActions=parseAlterColumnAction(statementTokenizer);
 		}else {
 			Token token=statementTokenizer.nextToken();
 			token.markError();
 			throw new SqlParserException(String.format("Unsupported ALTER TABLE action found: %s",token.toString()),token.getCharacterLocation());
 		}
 
-		return new AlterTableStatement(tokenStatement,tableName,columnElements);
+		return new AlterTableStatement(tokenStatement,tableName,alterTableActions);
 	}
 
 	public ArrayList<AlterTableAction> parseAddAction(StatementTokenizer statementTokenizer) throws Exception {

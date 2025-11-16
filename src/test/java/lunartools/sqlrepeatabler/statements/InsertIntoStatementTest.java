@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import lunartools.sqlrepeatabler.TestHelper;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.statement.InsertIntoStatementFactory;
+import lunartools.sqlrepeatabler.statement.Statement;
 
 class InsertIntoStatementTest {
 	private static final String TESTDATAFOLDER="/InsertIntoStatement/";

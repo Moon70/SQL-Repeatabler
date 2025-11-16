@@ -11,11 +11,11 @@ import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
 public class Settings extends AbstractSettings{
 	private static Settings instance;
 
-	public static final String VIEW_BOUNDS =		"ViewBounds";
-	public static final String FILE_LOADFOLDER =	"LoadFolder";
-	public static final String FILE_SAVEFOLDER =	"SaveFolder";
+	public static final String VIEW_BOUNDS =			"ViewBounds";
+	public static final String FILE_LOADFOLDER =		"LoadFolder";
+	public static final String FILE_SAVEFOLDER =		"SaveFolder";
 
-	public static final String PROCESSING_ORDER =	"ProcessingOrder";
+	public static final String PROCESSING_ORDER =		"ProcessingOrder";
 	
 	private ProcessingOrder processingOrder=ProcessingOrder.ASADDED;
 
