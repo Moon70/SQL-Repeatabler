@@ -31,7 +31,7 @@ public class LogEditorPane extends JEditorPane{
 		sb.append(".debug {color: #aaaaaa;}");
 		sb.append(".info {color: #eeeeee;font-weight: bold;}");
 		sb.append(".warn {color: #ff961e;font-weight: bold;}");
-		sb.append(".error {color: #ff0000;font-weight: bold;}");
+		sb.append(".error {color: #ff1122;font-weight: bold;}");
 		sb.append(".stacktrace {color: #dddd22;font-weight: bold;}");
 		sb.append(".stacktraceIndent {color: #dddd22;margin-left: 24px;}");
 		sb.append("</style>");

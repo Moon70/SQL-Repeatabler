@@ -27,13 +27,14 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, SwingWorkerUpdate<?>
 
 	@Override
 	public Void doInBackground() {
+		File file=null;
 		try {
 			model.clearConvertedSqlScriptBlocks();
 			model.clearInputPanel();
 			ArrayList<File> files=model.getSqlInputFiles();
 
 			for(int i=0;i<files.size();i++) {
-				File file=files.get(i);
+				file=files.get(i);
 				logger.info("Reading: "+file);
 				ConverterService converterService=new ConverterService(model);
 				SqlScript sqlScript=converterService.createSqlScript(file);
@@ -43,7 +44,7 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, SwingWorkerUpdate<?>
 			publish(new SwingWorkerUpdate<>(Step.SQLSCRIPT,sqlScripts));
 
 			for(int i=0;i<files.size();i++) {
-				File file=files.get(i);
+				file=files.get(i);
 				logger.info("Processing: "+file);
 				ConverterService converterService=new ConverterService(model);
 				SqlScript sqlScript=sqlScripts.get(i);
@@ -51,7 +52,7 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, SwingWorkerUpdate<?>
 				convertedSqlScriptBlocks.add(sqlBlock);
 			}
 		} catch (Exception e) {
-			logger.error("Error processing sql files",e);
+			logger.error(String.format("Error processing sql file: %s",file),e);
 		}
 		return null;
 	}

@@ -2,6 +2,8 @@ package lunartools.sqlrepeatabler.parser;
 
 import java.util.ArrayList;
 
+import lunartools.sqlrepeatabler.common.BackgroundColorProvider;
+
 public class SqlString {
 	public static final SqlString EMPTY_LINE=SqlString.createSqlStringFromString("",Category.UNCATEGORIZED);
 	private ArrayList<SqlCharacter> sqlCharacters=new ArrayList<>();
@@ -131,5 +133,10 @@ public class SqlString {
 		for(SqlCharacter sqlCharacter:sqlCharacters) {
 			sqlCharacter.setBackgroundColor(backgroundColor);
 		}
+	}
+
+	public void markError() {
+		setCategory(Category.ERROR);
+		setBackgroundColor(BackgroundColorProvider.ERROR);
 	}
 }
