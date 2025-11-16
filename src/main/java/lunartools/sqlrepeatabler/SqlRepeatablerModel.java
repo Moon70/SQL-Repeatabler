@@ -1,8 +1,16 @@
 package lunartools.sqlrepeatabler;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import lunartools.ChangeListenerSupport;
@@ -51,6 +59,30 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		if(changed) {
 			notifyListeners(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
 		}
+	}
+	
+	private Comparator<File> getComparator() {
+		Comparator<File> comparator=new Comparator<File>() {
+
+			@Override
+			public int compare(File file1, File file2) {
+				Path p1 = file1.toPath();
+				Path p2 = file2.toPath();
+
+				try {
+					FileTime t1 = Files.readAttributes(p1, BasicFileAttributes.class).creationTime();
+					FileTime t2 = Files.readAttributes(p2, BasicFileAttributes.class).creationTime();
+					return t1.compareTo(t2);   // oldest first			
+				} catch (IOException e) {
+					throw new RuntimeException("Exception while sorting SQL files",e);
+				}
+			}
+		};
+		return comparator;
+	}
+	
+	private Comparator<File> getComparator2() {
+		return Comparator.comparing(File::getName);
 	}
 
 	public void clearConvertedSqlScriptBlocks() {

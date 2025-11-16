@@ -1,8 +1,10 @@
 package lunartools.sqlrepeatabler.gui;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButton;
 
 import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
@@ -18,6 +20,11 @@ public class MenuModel {
 	private JMenuItem menuFileItemReset;
 	private JMenuItem menuFileItemExitProgram;
 
+	private JMenu menuPreferences;
+	private JMenu menuProcessFiles;
+	private JRadioButton radioButton1;
+	private JRadioButton radioButton2;
+
 	private JMenu menuHelp;
 	private JMenuItem menuHelpItemAbout;
 	
@@ -25,6 +32,7 @@ public class MenuModel {
 		this.actionFactory=actionFactory;
 		menuBar=new JMenuBar();
 		menuBar.add(createFileMenu());
+		menuBar.add(createPreferencesMenu());
 		menuBar.add(createHelpMenu());
 	}
     
@@ -57,7 +65,25 @@ public class MenuModel {
         return menuFile;
     }
     
-	private JMenu createHelpMenu(){
+	private JMenu createPreferencesMenu(){
+        menuPreferences=new JMenu("Preferences");
+
+        menuProcessFiles=new JMenu("Process files-");
+        menuPreferences.add(menuProcessFiles);
+		ButtonGroup buttonGroup = new ButtonGroup();
+		
+		radioButton1=new JRadioButton("by creation date");
+		menuProcessFiles.add(radioButton1);
+		buttonGroup.add(radioButton1);
+		
+		radioButton2=new JRadioButton("alphabetically");
+		menuProcessFiles.add(radioButton2);
+		buttonGroup.add(radioButton2);
+
+        return menuPreferences;
+	}
+
+    private JMenu createHelpMenu(){
 		menuHelp=new JMenu("?");
 		menuHelpItemAbout=new JMenuItem(actionFactory.createAboutAction());
 		menuHelpItemAbout.setIcon(ImageTools.createImageIcon("/icons/ProgramIcon16.png"));
