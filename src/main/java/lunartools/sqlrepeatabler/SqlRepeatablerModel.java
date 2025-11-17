@@ -162,7 +162,15 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 			settings.setProcessingOrder(processingOrder);
 			sortInputFiles();
 			notifyListeners(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
-			
+		}
+	}
+
+	public void enableBackgroundColor(boolean isBackgroundColorEnabled) {
+		Settings settings=Settings.getInstance();
+		if(settings.isBackgroundColorEnabled()!=isBackgroundColorEnabled) {
+			logger.info(String.format("Background color %s",isBackgroundColorEnabled?"enabled":"disabled"));
+			Settings.getInstance().enableBackgroundColor(isBackgroundColorEnabled);
+			notifyListeners(SimpleEvents.MODEL_SETTING_BACKGROUNDCOLOR_CHANGED);
 		}
 	}
 

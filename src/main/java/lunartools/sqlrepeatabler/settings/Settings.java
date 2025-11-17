@@ -18,6 +18,7 @@ public class Settings extends AbstractSettings{
 	public static final String PROCESSING_ORDER =		"ProcessingOrder";
 	public static final String DIVIDERLOCATION_CONSOLE=	"DividerLocationConsole";
 	public static final String DIVIDERLOCATION_SCRIPT=	"DividerLocationScript";
+	public static final String BACKGROUND_COLOR=		"BackgroundColor";
 	
 	public static Settings getInstance() {
 		if(instance==null) {
@@ -71,6 +72,15 @@ public class Settings extends AbstractSettings{
 
 	public void setDividerlocationScript(int dividerlocationScript) {
 		setInt(DIVIDERLOCATION_SCRIPT, dividerlocationScript);
+	}
+
+	public boolean isBackgroundColorEnabled() {
+		String s=getString(BACKGROUND_COLOR,"true");
+		return s.equalsIgnoreCase("true");
+	}
+
+	public void enableBackgroundColor(boolean isBackgroundColorEnabled) {
+		setString(BACKGROUND_COLOR, isBackgroundColorEnabled?"true":"false");
 	}
 	
 }

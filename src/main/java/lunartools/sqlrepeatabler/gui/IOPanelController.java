@@ -60,8 +60,7 @@ public class IOPanelController {
 				ioPanel.getInputPane().setText(htmlRenderer.render(sqlScript.getSqlStrings()));
 				ioPanel.repaint();
 			}
-		}
-		if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
+		}else if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
 			if(model.hasSqlConvertedScripts()) {
 				int sqlFileIndex=ioPanel.getSqlFileIndex();
 				SqlScript sqlScript=model.getSqlScript(sqlFileIndex);
@@ -72,6 +71,16 @@ public class IOPanelController {
 					ioPanel.getOutputPane().setText(htmlRenderer.render(model.getSingleConvertedSqlScriptBlock(sqlFileIndex)));
 					ioPanel.repaint();
 				}
+			}
+		}else if(object==SimpleEvents.MODEL_SETTING_BACKGROUNDCOLOR_CHANGED) {
+			int sqlFileIndex=ioPanel.getSqlFileIndex();
+			SqlScript sqlScript=model.getSqlScript(sqlFileIndex);
+			if(sqlScript!=null) {
+				HtmlRenderer htmlRenderer=new HtmlRenderer();
+				ioPanel.getInputPane().setText(htmlRenderer.render(sqlScript.getSqlStrings()));
+				ioPanel.repaint();
+				ioPanel.getOutputPane().setText(htmlRenderer.render(model.getSingleConvertedSqlScriptBlock(sqlFileIndex)));
+				ioPanel.repaint();
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package lunartools.sqlrepeatabler.gui;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -34,6 +35,7 @@ public class MenuModel {
 	private JRadioButtonMenuItem radioButtonProcessAsAdded;
 	private JRadioButtonMenuItem radioButtonProcessByCreationDate;
 	private JRadioButtonMenuItem radioButtonProcessAlphabetically;
+	private JCheckBoxMenuItem checkboxBackgroundColor;
 
 	private JMenu menuHelp;
 	private JMenuItem menuHelpItemAbout;
@@ -100,6 +102,9 @@ public class MenuModel {
 		menuProcessFiles.add(radioButtonProcessAlphabetically);
 		buttonGroup.add(radioButtonProcessAlphabetically);
 
+		checkboxBackgroundColor=new JCheckBoxMenuItem(actionFactory.createBackgroundColorCheckboxAction());
+		menuPreferences.add(checkboxBackgroundColor);
+
         return menuPreferences;
 	}
 
@@ -154,12 +159,9 @@ public class MenuModel {
 		}else if(object==SimpleEvents.MODEL_RESET) {
 			refreshMenuItems();
 		}
-
 	}
 
 	private void refreshMenuItems() {
-		System.out.println("model.hasSqlInputFiles(): "+model.hasSqlInputFiles());
-		System.out.println("model.hasSqlConvertedScripts(): "+model.hasSqlConvertedScripts());
 		menuFileItemReload.setEnabled(model.hasSqlInputFiles());
 		menuFileItemReset.setEnabled(model.hasSqlInputFiles());
 		menuFileItemSaveAs.setEnabled(model.hasSqlConvertedScripts());
@@ -171,6 +173,6 @@ public class MenuModel {
 		radioButtonProcessAsAdded.setSelected(processingOrder==ProcessingOrder.ASADDED);
 		radioButtonProcessByCreationDate.setSelected(processingOrder==ProcessingOrder.CREATIONDATE);
 		radioButtonProcessAlphabetically.setSelected(processingOrder==ProcessingOrder.ALPHABETICALLY);
-		
+		checkboxBackgroundColor.setSelected(settings.isBackgroundColorEnabled());
 	}
 }

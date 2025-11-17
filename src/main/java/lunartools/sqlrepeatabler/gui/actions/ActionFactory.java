@@ -4,9 +4,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JCheckBoxMenuItem;
 
 import lunartools.sqlrepeatabler.SqlRepeatablerController;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.settings.CheckboxSettings;
 import lunartools.sqlrepeatabler.settings.ProcessingOrder;
 
 public class ActionFactory {
@@ -41,7 +43,7 @@ public class ActionFactory {
 	}
 	
 	public Action createAsAddedRadioButtonAction() {
-		return new AbstractAction(ProcessingOrder.ASADDED.getKey()) {
+		return new AbstractAction(ProcessingOrder.ASADDED.getLabel()) {
             @Override public void actionPerformed(ActionEvent e) {
             	controller.getModel().setProcessingOrder(ProcessingOrder.ASADDED);
             }
@@ -49,7 +51,7 @@ public class ActionFactory {
 	}
 	
 	public Action createByCreationDateRadioButtonAction() {
-		return new AbstractAction(ProcessingOrder.CREATIONDATE.getKey()) {
+		return new AbstractAction(ProcessingOrder.CREATIONDATE.getLabel()) {
             @Override public void actionPerformed(ActionEvent e) {
             	controller.getModel().setProcessingOrder(ProcessingOrder.CREATIONDATE);
             }
@@ -57,9 +59,19 @@ public class ActionFactory {
 	}
 	
 	public Action createAlphabeticallyRadioButtonAction() {
-		return new AbstractAction(ProcessingOrder.ALPHABETICALLY.getKey()) {
+		return new AbstractAction(ProcessingOrder.ALPHABETICALLY.getLabel()) {
             @Override public void actionPerformed(ActionEvent e) {
             	controller.getModel().setProcessingOrder(ProcessingOrder.ALPHABETICALLY);
+            }
+        };
+	}
+
+	public Action createBackgroundColorCheckboxAction() {
+		return new AbstractAction(CheckboxSettings.BACKGROUND_COLOR.getLabel()) {
+            @Override public void actionPerformed(ActionEvent e) {
+				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
+			    boolean checked = item.isSelected();
+			    controller.getModel().enableBackgroundColor(checked);
             }
         };
 	}
