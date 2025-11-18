@@ -42,7 +42,8 @@ public class InsertIntoStatement implements Statement{
 			tokenAllValues.removeEnclosing('(',')');
 			Token[] columnValues=tokenAllValues.split(',');
 			Token tokenFirstColumnValue=columnValues[0];
-			sqlBlockStatement.add(SqlString.createSqlStringFromString("if (select COUNT(*) from %s where %s=%s)=0", Category.INSERTED,tableName.getFullName(),tokenFirstColumnName,tokenFirstColumnValue));
+//            sqlBlockStatement.add(SqlString.createSqlStringFromString("if (select COUNT(*) from %s where %s=%s)=0", Category.INSERTED,tableName.getFullName(),tokenFirstColumnName,tokenFirstColumnValue));
+            sqlBlockStatement.add(SqlString.createSqlStringFromString("IF NOT EXISTS (SELECT 1 FROM %s WHERE %s=%s)", Category.INSERTED,tableName.getFullName(),tokenFirstColumnName,tokenFirstColumnValue));
 			sqlBlockStatement.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
 			sqlBlockStatement.add(SqlString.createSqlStringFromString("\tSET IDENTITY_INSERT %s ON;",Category.INSERTED,tableName.getFullSchemaAndName()));
 			sqlBlockStatement.add(SqlString.createSqlStringFromString("\t\t%s %s %s %s", Category.INSERTED,tokenStatement,tableName.getFullName(),tokenColumnNames,tokenValues));

@@ -18,15 +18,15 @@ class MultiLineCommentStatementTest {
 
 	@Test
 	void nonMultiLineCommentIsNotAccepted() throws Exception {
-		String filenameTestdata=	TESTDATAFOLDER+"OneNonMultiLineCommentLine_Testdata.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"OneNonMultiLineCommentLine_Testdata.sql";
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertFalse(factory.match(sqlScript.peekLineAsString()));
 	}
 
 	@Test
 	void multiLineCommentIsAccepted() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"TwoMultiLineCommentLines_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"TwoMultiLineCommentLines_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"TwoMultiLineCommentLines_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"TwoMultiLineCommentLines_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));

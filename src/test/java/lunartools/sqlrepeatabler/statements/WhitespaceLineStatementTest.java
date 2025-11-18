@@ -18,15 +18,15 @@ class WhitespaceLineStatementTest {
 
 	@Test
 	void nonWhitespaceLineIsNotAccepted() throws Exception {
-		String filenameTestdata=	TESTDATAFOLDER+"OneNonWhitespaceLine_Testdata.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"OneNonWhitespaceLine_Testdata.sql";
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertFalse(factory.match(sqlScript.peekLineAsString()));
 	}
 
 	@Test
 	void whitespaceLinesAreAccepted() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"TwoWhitespaceLines_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"TwoWhitespaceLines_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"TwoWhitespaceLines_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"TwoWhitespaceLines_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));

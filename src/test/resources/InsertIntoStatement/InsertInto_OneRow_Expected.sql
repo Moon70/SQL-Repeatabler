@@ -1,4 +1,4 @@
-if (select COUNT(*) from table_name where ID=columnValue_1)=0
+IF NOT EXISTS (SELECT 1 FROM table_name WHERE ID=columnValue_1)
 BEGIN
 	SET IDENTITY_INSERT table_name ON;
 		INSERT INTO table_name (ID, columnName_2, columnName_3, columnName_4) VALUES

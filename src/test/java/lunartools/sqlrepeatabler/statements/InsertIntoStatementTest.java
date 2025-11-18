@@ -18,15 +18,15 @@ class InsertIntoStatementTest {
 
 	@Test
 	void nonInsertIntoLineIsNotAccepted() throws Exception {
-		String filenameTestdata=	TESTDATAFOLDER+"OneNonInsertIntoLine_Testdata.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"OneNonInsertIntoLine_Testdata.sql";
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertFalse(factory.match(sqlScript.peekLineAsString()));
 	}
 
 	@Test
 	void insert_OneColumn() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_OneRow_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_OneRow_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_OneRow_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_OneRow_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -41,8 +41,8 @@ class InsertIntoStatementTest {
 
 	@Test
 	void insert_ThreeColumns() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_ThreeRows_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_ThreeRows_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_ThreeRows_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_ThreeRows_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -57,8 +57,8 @@ class InsertIntoStatementTest {
 
 	@Test
 	void insert_OneColumn_ColumnWithFunction() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_OneRow_ColumnWithFunction_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_OneRow_ColumnWithFunction_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_OneRow_ColumnWithFunction_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_OneRow_ColumnWithFunction_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
