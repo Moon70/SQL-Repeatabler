@@ -18,15 +18,15 @@ class SpRenameStatementTest {
 
 	@Test
 	void nonSpRenameLineIsNotAccepted() throws Exception {
-		String filenameTestdata=	TESTDATAFOLDER+"OneNonSpRenameLine_Testdata.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"OneNonSpRenameLine_Testdata.sql";
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertFalse(factory.match(sqlScript.peekLineAsString()));
 	}
 
 	@Test
 	void spRename_RenameColumn() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"RenameColumn_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"RenameColumn_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"RenameColumn_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"RenameColumn_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -41,8 +41,8 @@ class SpRenameStatementTest {
 
 	@Test
 	void spRename_RenameColumn_TableWithSchema() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"RenameColumn_TableWithSchema_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"RenameColumn_TableWithSchema_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"RenameColumn_TableWithSchema_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"RenameColumn_TableWithSchema_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));

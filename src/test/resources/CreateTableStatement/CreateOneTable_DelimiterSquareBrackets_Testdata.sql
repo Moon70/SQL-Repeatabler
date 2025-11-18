@@ -1,10 +1,7 @@
-IF OBJECT_ID(N'table_name', 'U') IS NULL
-BEGIN
-    CREATE TABLE [table_name] (
+    create table [dbo].[table_name] (
         [ID] int identity not null,
         [column_name_1] nvarchar(255),
         [column_name_2] int,
         [column_name_3] datetime,
         primary key ([ID])
     );
-END;

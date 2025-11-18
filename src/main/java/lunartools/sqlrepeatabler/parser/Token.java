@@ -108,12 +108,14 @@ public class Token {
 		return charactersOfToken;
 	}
 
-	public void append(Token token) {
+	public Token append(Token token) {
 		charactersOfToken.addAll(token.getCharacters());
+		return this;
 	}
 
-	public void append(SqlCharacter character) {
+	public Token append(SqlCharacter character) {
 		charactersOfToken.add(character);
+		return this;
 	}
 
 	public boolean fixMySqlDelimiter(){
