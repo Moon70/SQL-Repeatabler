@@ -18,15 +18,15 @@ class AlterTableStatementTest {
 
 	@Test
 	void nonAlterTableIsNotAccepted() throws Exception {
-		String filenameTestdata=	TESTDATAFOLDER+"NonAlterTableLine_Testdata.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"NonAlterTableLine_Testdata.sql";
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertFalse(factory.match(sqlScript.peekLineAsString()));
 	}
 
 	@Test
 	void alterTable_Column_AddOne() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"Column_AddOne_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"Column_AddOne_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"Column_AddOne_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"Column_AddOne_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -57,8 +57,8 @@ class AlterTableStatementTest {
 
 	@Test
 	void alterTable_Column_AddThree() throws Exception{
-		String filenameExpecteddata=TESTDATAFOLDER+"Column_AddThree_Expected.txt";
-		String filenameTestdata=	TESTDATAFOLDER+"Column_AddThree_Testdata.txt";
+		String filenameExpecteddata=TESTDATAFOLDER+"Column_AddThree_Expected.sql";
+		String filenameTestdata=	TESTDATAFOLDER+"Column_AddThree_Testdata.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -121,8 +121,8 @@ class AlterTableStatementTest {
 
 	@Test
 	void alterTable_DropOneColumnWorksAsExpected() throws Exception{
-		String filenameExpecteddata=TESTDATAFOLDER+"Column_DropOne_Expected.txt";
-		String filenameTestdata=	TESTDATAFOLDER+"Column_DropOne_Testdata.txt";
+		String filenameExpecteddata=TESTDATAFOLDER+"Column_DropOne_Expected.sql";
+		String filenameTestdata=	TESTDATAFOLDER+"Column_DropOne_Testdata.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -137,8 +137,8 @@ class AlterTableStatementTest {
 
 	@Test
 	void alterTable_DropThreeColumnWorksAsExpectedg() throws Exception{
-		String filenameExpecteddata=TESTDATAFOLDER+"Column_DropThree_Expected.txt";
-		String filenameTestdata=	TESTDATAFOLDER+"Column_DropThree_Testdata.txt";
+		String filenameExpecteddata=TESTDATAFOLDER+"Column_DropThree_Expected.sql";
+		String filenameTestdata=	TESTDATAFOLDER+"Column_DropThree_Testdata.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
