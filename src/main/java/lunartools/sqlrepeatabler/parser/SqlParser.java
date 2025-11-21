@@ -71,6 +71,7 @@ public class SqlParser {
 			}
 			if(statement==null) {
 				sqlString.markError();
+				BackgroundColorProvider.getInstance().getNextPrimaryColor();//consume one color, so that in case the second statement of a two statement script fails, the first statement shows a background color
 				throw new SqlParserException("Unsupported content: "+sqlString.toString(),sqlString.getLocation());
 			}
 		}
