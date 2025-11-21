@@ -1,5 +1,0 @@
-IF OBJECT_ID('constraint1_name','UQ') IS NULL
-BEGIN
-    ALTER TABLE [table1_name]
-        ADD CONSTRAINT constraint1_name unique ([column1_ID]);
-END;

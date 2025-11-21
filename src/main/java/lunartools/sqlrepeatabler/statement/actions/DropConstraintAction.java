@@ -18,10 +18,10 @@ public class DropConstraintAction extends AlterTableAction{
 	public void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName) throws Exception {
         sqlBlock.add(SqlString.createSqlStringFromString("IF EXISTS ("										,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString("    SELECT 1"										,Category.INSERTED));
-        sqlBlock.add(SqlString.createSqlStringFromString("    FROM sys.objects"								,Category.INSERTED));
-        sqlBlock.add(SqlString.createSqlStringFromString("    WHERE object_id = OBJECT_ID(N'%s.%s')"		,Category.INSERTED,tableName.getFullName(),name));
-        sqlBlock.add(SqlString.createSqlStringFromString("        AND type IN ('C', 'D', 'F', 'PK', 'UQ')"	,Category.INSERTED));
-        sqlBlock.add(SqlString.createSqlStringFromString("        AND parent_object_id = OBJECT_ID(N'%s')"	,Category.INSERTED, tableName.getFullName()));
+        sqlBlock.add(SqlString.createSqlStringFromString("    FROM sys.objects AS o"						,Category.INSERTED));
+        sqlBlock.add(SqlString.createSqlStringFromString("    WHERE o.name = N'%s'"                  		,Category.INSERTED,name.cloneWithoutDelimiters()));
+        sqlBlock.add(SqlString.createSqlStringFromString("        AND o.parent_object_id = OBJECT_ID(N'%s')",Category.INSERTED, tableName.getFullNameWithoutDelimiter()));
+        sqlBlock.add(SqlString.createSqlStringFromString("        AND o.type IN ('C', 'F', 'PK', 'UQ')"     ,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString(")"												,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString("BEGIN"											,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString("    %s %s"										,Category.INSERTED,tokenStatement, tableName.getFullName()));

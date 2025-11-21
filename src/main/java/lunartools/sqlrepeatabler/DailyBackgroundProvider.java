@@ -44,7 +44,6 @@ public class DailyBackgroundProvider {
 	public static Image getImage() {
 		if(imageBackground==null) {
 			int indexBackground=Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % affenvisionen.size();
-			indexBackground=11;
 			String resourceBackground="/pixelzeug/"+affenvisionen.get(indexBackground)+".sskp";
 			try {
 //				imageBackground = ImageTools.createImageFromResource(resourceBackground);

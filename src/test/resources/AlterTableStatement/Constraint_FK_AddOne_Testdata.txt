@@ -1,4 +1,0 @@
-    alter table [table1_name]
-        add constraint [constraint1_name]
-        foreign key ([column1_ID])
-        references [table2_name] ([ID]);

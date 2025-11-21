@@ -25,7 +25,8 @@ public class AddForeignKeyConstraintAction extends AlterTableAction{
         sqlBlock.add(SqlString.createSqlStringFromString("IF NOT EXISTS ("												,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString("    SELECT 1"													,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString("    FROM sys.foreign_keys" 									,Category.INSERTED));
-        sqlBlock.add(SqlString.createSqlStringFromString("    WHERE name = '%s' AND parent_object_id = OBJECT_ID('%s')" ,Category.INSERTED,getName().cloneWithoutDelimiters(),tableName.getFullNameWithoutDelimiter()));
+        sqlBlock.add(SqlString.createSqlStringFromString("    WHERE name = '%s'"                                        ,Category.INSERTED,getName().cloneWithoutDelimiters()));
+        sqlBlock.add(SqlString.createSqlStringFromString("        AND parent_object_id = OBJECT_ID('%s')"               ,Category.INSERTED,tableName.getFullNameWithoutDelimiter()));
         sqlBlock.add(SqlString.createSqlStringFromString(")"															,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString("BEGIN"														,Category.INSERTED));
         sqlBlock.add(SqlString.createSqlStringFromString("    %s %s"													,Category.INSERTED,tokenStatement,tableName.getFullName()));

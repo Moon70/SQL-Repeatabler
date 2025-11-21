@@ -41,8 +41,8 @@ class AlterTableStatementTest {
 
 	@Test
 	void alterTable_Column_AddOne_OneLine() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"Column_AddOne_OneLine_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"Column_AddOne_OneLine_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"Column_AddOne_OneLine_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"Column_AddOne_OneLine_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -73,8 +73,8 @@ class AlterTableStatementTest {
 
 	@Test
 	void alterTable_Constraint_FK_AddOne() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"Constraint_FK_AddOne_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_FK_AddOne_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"Constraint_FK_AddOne_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_FK_AddOne_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -89,8 +89,8 @@ class AlterTableStatementTest {
 
 	@Test
 	void alterTable_Constraint_Unique_AddOne() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"Constraint_Unique_AddOne_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_Unique_AddOne_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"Constraint_Unique_AddOne_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_Unique_AddOne_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -105,8 +105,8 @@ class AlterTableStatementTest {
 
 	@Test
 	void alterTable_Constraint_FK_AddTwo() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"Constraint_FK_AddTwo_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_FK_AddTwo_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"Constraint_FK_AddTwo_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_FK_AddTwo_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -151,26 +151,42 @@ class AlterTableStatementTest {
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
-	@Test
-	void alterTable_DropOneConstraintWorksAsExpected() throws Exception{
-		String filenameExpecteddata=TESTDATAFOLDER+"Constraint_DropOne_Expected.txt";
-		String filenameTestdata=	TESTDATAFOLDER+"Constraint_DropOne_Testdata.txt";
-		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+    @Test
+    void alterTable_DropOneConstraintWorksAsExpected() throws Exception{
+        String filenameExpecteddata=TESTDATAFOLDER+"Constraint_DropOne_Expected.sql";
+        String filenameTestdata=    TESTDATAFOLDER+"Constraint_DropOne_Testdata.sql";
+        String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
+        SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+        assertTrue(factory.match(sqlScript.peekLineAsString()));
 
-		Statement statement=factory.createStatement(sqlScript);
-		SqlBlock sqlBlock=new SqlBlock();
-		statement.toSqlCharacters(sqlBlock);
-		StringBuilder sb=sqlBlock.toStringBuilder();
-		assertEquals(expected,TestHelper.removeCR(sb).toString());
-	}
+        Statement statement=factory.createStatement(sqlScript);
+        SqlBlock sqlBlock=new SqlBlock();
+        statement.toSqlCharacters(sqlBlock);
+        StringBuilder sb=sqlBlock.toStringBuilder();
+        assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
+    @Test
+    void alterTable_DropOneConstraintWithoutSchemaWorksAsExpected() throws Exception{
+        String filenameExpecteddata=TESTDATAFOLDER+"Constraint_DropOne_WithoutSchema_Expected.sql";
+        String filenameTestdata=    TESTDATAFOLDER+"Constraint_DropOne_WithoutSchema_Testdata.sql";
+        String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+        SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+        assertTrue(factory.match(sqlScript.peekLineAsString()));
+
+        Statement statement=factory.createStatement(sqlScript);
+        SqlBlock sqlBlock=new SqlBlock();
+        statement.toSqlCharacters(sqlBlock);
+        StringBuilder sb=sqlBlock.toStringBuilder();
+        assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
 
 	@Test
 	void alterTable_AlterColumn_OneColumn() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"AlterTable_AlterColumn_OneColumn_Testdata.txt";
-		String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_AlterColumn_OneColumn_Expected.txt";
+		String filenameTestdata=	TESTDATAFOLDER+"AlterTable_AlterColumn_OneColumn_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_AlterColumn_OneColumn_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -185,8 +201,8 @@ class AlterTableStatementTest {
 
     @Test
     void alterTable_unsupported_modify() throws Exception{
-        String filenameTestdata=    TESTDATAFOLDER+"AlterTable_ModifyColumn_Testdata.txt";
-        String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_ModifyColumn_Expected.txt";
+        String filenameTestdata=    TESTDATAFOLDER+"AlterTable_ModifyColumn_Testdata.sql";
+        String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_ModifyColumn_Expected.sql";
         String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
         SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -201,8 +217,8 @@ class AlterTableStatementTest {
 
     @Test
     void alterTable_missingSemicolon() throws Exception{
-        String filenameTestdata=    TESTDATAFOLDER+"AlterTable_AlterColumn_MissingSemicolon_Testdata.txt";
-        String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_AlterColumn_MissingSemicolon_Expected.txt";
+        String filenameTestdata=    TESTDATAFOLDER+"AlterTable_AlterColumn_MissingSemicolon_Testdata.sql";
+        String filenameExpecteddata=TESTDATAFOLDER+"AlterTable_AlterColumn_MissingSemicolon_Expected.sql";
         String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
         SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -217,8 +233,8 @@ class AlterTableStatementTest {
     
     @Test
     void alterTable_invalidAddCommandIsIgnoredWhenAddingTwoColumns() throws Exception {
-        String filenameTestdata=    TESTDATAFOLDER+"Column_InvalidAddTwoColumnsThrowsAnException_Testdata.txt";
-        String filenameExpecteddata=TESTDATAFOLDER+"Column_InvalidAddTwoColumnsThrowsAnException_Expected.txt";
+        String filenameTestdata=    TESTDATAFOLDER+"Column_InvalidAddCommandIsIgnoredWhenAddingTwoColumns_Testdata.sql";
+        String filenameExpecteddata=TESTDATAFOLDER+"Column_InvalidAddCommandIsIgnoredWhenAddingTwoColumns_Expected.sql";
         String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
         SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
