@@ -31,7 +31,7 @@ public class SqlCharacter {
 		return c;
 	}
 
-	public CharacterLocation getCharacterLocation() {
+	public CharacterLocation getLocation() {
 		return characterLocation;
 	}
 	
@@ -69,6 +69,6 @@ public class SqlCharacter {
 
 	@Override
 	public String toString() {
-		return String.format("'%s', %s, %s",c,(int)c,characterLocation.toString());
+		return String.format("'%s', %d, %s",c,(int)c,characterLocation);
 	}
 }

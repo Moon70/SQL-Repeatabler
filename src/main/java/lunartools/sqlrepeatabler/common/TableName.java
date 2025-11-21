@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.CharacterLocation;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlString;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
@@ -49,7 +50,7 @@ public class TableName {
 	public static TableName createInstanceByConsuming(StatementTokenizer statementTokenizer) throws Exception{
 		boolean mySql=false;
 		ArrayList<Token> tokens=new ArrayList<>();
-
+		CharacterLocation statementLocation=statementTokenizer.getLocation();
 		for(int i=0;i<3;i++) {//database name, schema name, table name
 			statementTokenizer.stripWhiteSpaceLeft();
 			SqlCharacter character=statementTokenizer.charAt(0);
@@ -78,8 +79,7 @@ public class TableName {
 			statementTokenizer.deleteCharAt(0);
 		}
 		if(mySql) {
-			logger.warn("Table declaration contains backtick delimiter, this is not allowed in T-SQL.");
-			logger.warn("Replaced backticks with square brackets! Script is most likely MySql flavour!");
+			logger.warn(String.format("It smells like MySql! Replaced backtick delimiter in table declaration with square brackets, because backticks are not allowed in T-SQL. %s", statementLocation) );
 		}
 		while(tokens.size()<3) {
 			tokens.add(0,null);
@@ -89,11 +89,11 @@ public class TableName {
 
 	private static Token createBracketEnclosedTokenByConsuming(StatementTokenizer statementTokenizer) {
 		SqlString sqlString=new SqlString();
-		sqlString.add(statementTokenizer.charAt(0));
+		sqlString.append(statementTokenizer.charAt(0));
 		statementTokenizer.deleteCharAt(0);
 		while(true) {
 			if(statementTokenizer.charAt(0).getChar()==']') {
-				sqlString.add(statementTokenizer.charAt(0));
+				sqlString.append(statementTokenizer.charAt(0));
 				statementTokenizer.deleteCharAt(0);
 				if(statementTokenizer.charAt(0).getChar()==']') {
 					continue;
@@ -101,7 +101,7 @@ public class TableName {
 					break;
 				}
 			}
-			sqlString.add(statementTokenizer.charAt(0));
+			sqlString.append(statementTokenizer.charAt(0));
 			statementTokenizer.deleteCharAt(0);
 		}
 		return new Token(sqlString);
@@ -109,11 +109,11 @@ public class TableName {
 
 	private static Token createQuoteEnclosedTokenByConsuming(StatementTokenizer statementTokenizer) {
 		SqlString sqlString=new SqlString();
-		sqlString.add(statementTokenizer.charAt(0));
+		sqlString.append(statementTokenizer.charAt(0));
 		statementTokenizer.deleteCharAt(0);
 		while(true) {
 			if(statementTokenizer.charAt(0).getChar()=='"') {
-				sqlString.add(statementTokenizer.charAt(0));
+				sqlString.append(statementTokenizer.charAt(0));
 				statementTokenizer.deleteCharAt(0);
 				if(statementTokenizer.charAt(0).getChar()=='"') {
 					continue;
@@ -121,7 +121,7 @@ public class TableName {
 					break;
 				}
 			}
-			sqlString.add(statementTokenizer.charAt(0));
+			sqlString.append(statementTokenizer.charAt(0));
 			statementTokenizer.deleteCharAt(0);
 		}
 		return new Token(sqlString);
@@ -129,23 +129,23 @@ public class TableName {
 
 	private static Token createBacktickEnclosedTokenByConsuming(StatementTokenizer statementTokenizer) {
 		SqlString sqlString=new SqlString();
-		sqlString.add(new SqlCharacter('['));
+		sqlString.append(new SqlCharacter('['));
 		statementTokenizer.deleteCharAt(0);
 		while(true) {
 			if(statementTokenizer.charAt(0).getChar()=='`') {
 				if(statementTokenizer.charAt(1).getChar()=='`') {
-					sqlString.add(statementTokenizer.charAt(0));
-					sqlString.add(statementTokenizer.charAt(1));
+					sqlString.append(statementTokenizer.charAt(0));
+					sqlString.append(statementTokenizer.charAt(1));
 					statementTokenizer.deleteCharAt(0);
 					statementTokenizer.deleteCharAt(0);
 					continue;
 				}else {
-					sqlString.add(new SqlCharacter(']'));
+					sqlString.append(new SqlCharacter(']'));
 					statementTokenizer.deleteCharAt(0);
 					break;
 				}
 			}
-			sqlString.add(statementTokenizer.charAt(0));
+			sqlString.append(statementTokenizer.charAt(0));
 			statementTokenizer.deleteCharAt(0);
 		}
 		return new Token(sqlString);
@@ -153,7 +153,7 @@ public class TableName {
 
 	private static Token createSpaceEnclosedTokenByConsuming(StatementTokenizer statementTokenizer) {
 		SqlString sqlString=new SqlString();
-		sqlString.add(statementTokenizer.charAt(0));
+		sqlString.append(statementTokenizer.charAt(0));
 		statementTokenizer.deleteCharAt(0);
 		while(true) {
 			if(statementTokenizer.charAt(0).isSpace()) {
@@ -164,7 +164,7 @@ public class TableName {
 					break;
 				}
 			}
-			sqlString.add(statementTokenizer.charAt(0));
+			sqlString.append(statementTokenizer.charAt(0));
 			statementTokenizer.deleteCharAt(0);
 		}
 		return new Token(sqlString);

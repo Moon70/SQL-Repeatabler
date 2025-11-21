@@ -39,6 +39,7 @@ public class BackgroundColorProvider {
 	private static BackgroundColorProvider instance;
 	private int primaryIndex;
 	private int secondaryIndex;
+	private int numberOfColorsUsed;
 
 	private BackgroundColorProvider() {
 		reset();
@@ -52,15 +53,21 @@ public class BackgroundColorProvider {
 	}
 
 	public synchronized String getNextPrimaryColor() {
+		numberOfColorsUsed++;
 		return colors[primaryIndex++];
 	}
 
 	public synchronized String getNextSecondaryColor() {
+		numberOfColorsUsed++;
 		return colors[--secondaryIndex];
 	}
 
+	public int getNumberOfColorsUsed() {
+		return numberOfColorsUsed;
+	}
+
 	public void reset(){
-		primaryIndex=0;
+		primaryIndex=numberOfColorsUsed=0;
 		secondaryIndex=colors.length;
 	}
 }

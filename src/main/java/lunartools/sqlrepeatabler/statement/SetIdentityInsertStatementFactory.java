@@ -20,7 +20,7 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 	@Override
 	public Statement createStatement(SqlScript sqlScript) throws Exception{
 		if(!match(sqlScript.peekLineAsString())) {
-			throw new Exception("Illegal factory call");
+			throw new RuntimeException("Illegal factory call");
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();

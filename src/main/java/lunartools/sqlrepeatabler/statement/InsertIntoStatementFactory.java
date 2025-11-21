@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlParserException;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
 import lunartools.sqlrepeatabler.parser.Token;
@@ -22,7 +23,7 @@ public class InsertIntoStatementFactory extends StatementFactory{
 	@Override
 	public Statement createStatement(SqlScript sqlScript) throws Exception{
 		if(!match(sqlScript.peekLineAsString())) {
-			throw new Exception("Illegal factory call");
+			throw new RuntimeException("Illegal factory call");
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
@@ -41,7 +42,7 @@ public class InsertIntoStatementFactory extends StatementFactory{
 
 		Token tokenValuesCommand=statementTokenizer.nextToken("VALUES");
 		if(tokenValuesCommand==null) {
-			throw new Exception("Keyword VALUES not found");
+			throw new SqlParserException("Keyword VALUES not found",statementTokenizer.getLocation());
 		}
 		tokenValuesCommand.setCategory(Category.COMMAND);
 		

@@ -18,7 +18,7 @@ public class UseStatementFactory extends StatementFactory{
 	@Override
 	public Statement createStatement(SqlScript sqlScript) throws Exception{
 		if(!match(sqlScript.peekLineAsString())) {
-			throw new Exception("Illegal factory call");
+			throw new RuntimeException("Illegal factory call");
 		}
 		if(logger.isTraceEnabled()) {
 			logger.trace("parsing statement");
@@ -26,7 +26,7 @@ public class UseStatementFactory extends StatementFactory{
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeOneLineStatement();
 		logger.info("Statement: "+statementTokenizer.toString());
-		logger.warn(String.format("Ignoring statement %s. %s", UseStatement.COMMAND,statementTokenizer.getCharacterLocation().toString()));
+		logger.warn(String.format("Ignoring statement %s. %s", UseStatement.COMMAND,statementTokenizer.getLocation()));
 		statementTokenizer.setCategory(Category.IGNORED);
 
 		return new UseStatement();

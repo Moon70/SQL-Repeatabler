@@ -63,7 +63,7 @@ public class SqlScript {
 				}
 			}else {
 				SqlCharacter sqlCharacter=new SqlCharacter(c,new CharacterLocation(lineIndex,column,characterIndex));
-				sqlString.add(sqlCharacter);
+				sqlString.append(sqlCharacter);
 				column++;
 			}
 		}
@@ -151,7 +151,6 @@ public class SqlScript {
 		while(true) {
 			SqlString sqlStringLine=readLineCharacters();
 			if(sqlStringLine==null) {
-				//				throw new EOFException("Unexpected end of script");
 				break;
 			}
 			if(sqlStringStatement.size()>0 && !sqlStringStatement.get(sqlStringStatement.size()-1).isWhiteSpace()) {

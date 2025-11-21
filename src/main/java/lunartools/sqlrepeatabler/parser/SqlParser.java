@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.common.BackgroundColorProvider;
 import lunartools.sqlrepeatabler.statement.AlterTableStatementFactory;
 import lunartools.sqlrepeatabler.statement.CreateTableStatementFactory;
 import lunartools.sqlrepeatabler.statement.InsertIntoStatementFactory;
@@ -35,6 +36,7 @@ public class SqlParser {
 //	}
 
 	public static SqlBlock parse(SqlScript sqlScript) throws Exception {
+		BackgroundColorProvider.getInstance().reset();
 		SqlBlock sqlBlockResult=new SqlBlock();
 		ArrayList<StatementFactory> sqlStatementFactories=new ArrayList<>();
 		ArrayList<Statement> statements=new ArrayList<>();
@@ -69,7 +71,7 @@ public class SqlParser {
 			}
 			if(statement==null) {
 				sqlString.markError();
-				throw new SqlParserException("Unsupported content: "+sqlString.toString(),sqlString.getCharacterLocation());
+				throw new SqlParserException("Unsupported content: "+sqlString.toString(),sqlString.getLocation());
 			}
 		}
 		return sqlBlockResult;

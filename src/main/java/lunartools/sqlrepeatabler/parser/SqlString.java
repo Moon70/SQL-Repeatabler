@@ -6,7 +6,7 @@ import lunartools.sqlrepeatabler.common.BackgroundColorProvider;
 
 public class SqlString {
 	public static final SqlString EMPTY_LINE=SqlString.createSqlStringFromString("",Category.UNCATEGORIZED);
-	private ArrayList<SqlCharacter> sqlCharacters=new ArrayList<>();
+	ArrayList<SqlCharacter> sqlCharacters=new ArrayList<>();
 
 	public static SqlString createSqlStringFromString(String string, Category category, Token... tokens){
 		String[] stringFragments;
@@ -17,7 +17,7 @@ public class SqlString {
 			stringFragments=string.split("%s",-1);
 		}
 		if(stringFragments.length!=tokens.length+1) {
-			throw new IllegalArgumentException("String fragment count ("+stringFragments.length+") does not match token count ("+tokens.length+")");
+			throw new IllegalArgumentException(String.format("String fragment count (%d) does not match token count (%d)",stringFragments.length,tokens.length));
 		}
 
 		ArrayList<SqlCharacter> characters=new ArrayList<>();
@@ -49,11 +49,11 @@ public class SqlString {
 		return sqlCharacters.get(0);
 	}
 
-	public CharacterLocation getCharacterLocation() {
+	public CharacterLocation getLocation() {
 		if(sqlCharacters.size()==0) {
 			return null;
 		}
-		return sqlCharacters.get(0).getCharacterLocation();
+		return sqlCharacters.get(0).getLocation();
 	}
 
 	public SqlCharacter getLastCharacter() {
@@ -94,34 +94,23 @@ public class SqlString {
 		return true;
 	}
 
-	public void setCategory(Category category) {
+	public SqlString setCategory(Category category) {
 		for(SqlCharacter sqlCharacter:sqlCharacters) {
 			sqlCharacter.setCategory(category);
 		}
+		return this;
 	}
 
 	public void append(ArrayList<SqlCharacter> characters) {
 		sqlCharacters.addAll(characters);
 	}
 
-	public void append(SqlCharacter sqlCharacter) {
+	public SqlString append(SqlCharacter sqlCharacter) {
 		sqlCharacters.add(sqlCharacter);
+		return this;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder sb=new StringBuilder();
-		for(int i=0;i<sqlCharacters.size();i++) {
-			sb.append(sqlCharacters.get(i).getChar());
-		}
-		return sb.toString();
-	}
-
-	public void add(SqlCharacter sqlCharacter) {
-		sqlCharacters.add(sqlCharacter);
-	}
-
-	public void add(SqlString sqlString) {
+	public void append(SqlString sqlString) {
 		sqlCharacters.addAll(sqlString.getCharacters());
 	}
 
@@ -138,5 +127,14 @@ public class SqlString {
 	public void markError() {
 		setCategory(Category.ERROR);
 		setBackgroundColor(BackgroundColorProvider.ERROR);
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb=new StringBuilder();
+		for(int i=0;i<sqlCharacters.size();i++) {
+			sb.append(sqlCharacters.get(i).getChar());
+		}
+		return sb.toString();
 	}
 }

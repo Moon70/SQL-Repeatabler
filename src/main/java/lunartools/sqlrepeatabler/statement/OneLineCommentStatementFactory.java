@@ -19,7 +19,7 @@ public class OneLineCommentStatementFactory extends StatementFactory{
 	public Statement createStatement(SqlScript sqlScript) throws Exception{
 	    SqlString sqlScriptLine=sqlScript.readLine();
 		if(!match(sqlScriptLine.toString())) {
-			throw new Exception("Illegal factory call");
+			throw new RuntimeException("Illegal factory call");
 		}
 
         sqlScriptLine.setCategory(Category.COMMENT);

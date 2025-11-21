@@ -1,5 +1,7 @@
 package lunartools.sqlrepeatabler.statement;
 
+import java.io.EOFException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +22,7 @@ public class MultiLineCommentStatementFactory extends StatementFactory{
         SqlString sqlScriptLine=sqlScript.readLine();
 		String line=sqlScriptLine.toString();
 		if(!match(line)) {
-			throw new Exception("Illegal factory call");
+			throw new RuntimeException("Illegal factory call");
 		}
 
 		sqlScriptLine.setCategory(Category.COMMENT);
@@ -34,7 +36,7 @@ public class MultiLineCommentStatementFactory extends StatementFactory{
 			    line=sqlScriptLine.toString();
 				
 				if(line==null) {
-					throw new Exception("Unexpected end of data");
+					throw new EOFException("Multiline comment not closed");
 				}
 				endIndex++;
 				if(line.endsWith("*/")) {

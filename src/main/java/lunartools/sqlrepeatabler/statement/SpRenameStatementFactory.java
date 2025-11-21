@@ -21,7 +21,7 @@ public class SpRenameStatementFactory extends StatementFactory{
 	@Override
 	public Statement createStatement(SqlScript sqlScript) throws Exception{
 		if(!match(sqlScript.peekLineAsString())) {
-			throw new Exception("Illegal factory call");
+			throw new RuntimeException("Illegal factory call");
 		}
 		
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
@@ -51,12 +51,12 @@ public class SpRenameStatementFactory extends StatementFactory{
 				tableName=new TableName(subTokens[0]);
 				oldName=subTokens[1];
 			}else {
-				throw new SqlParserException("Error parsing objectname",objName.getCharacterLocation());
+				throw new SqlParserException("Error parsing object name",objName.getLocation());
 			}
 			oldName.setCategory(Category.COLUMN);
 			return new SpRenameStatement(tokenStatement,tableName,oldName,newName,objtype);
 		}else {
-			throw new SqlParserException(String.format("Type not supported yet: %s", objtype.toString()), objtype.getCharacterLocation());
+			throw new SqlParserException(String.format("Type not supported yet: %s", objtype), objtype.getLocation());
 		}
 	}
 }

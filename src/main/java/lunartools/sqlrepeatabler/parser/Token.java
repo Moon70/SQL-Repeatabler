@@ -5,19 +5,16 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.common.BackgroundColorProvider;
-
-public class Token {
+public class Token extends SqlString{
 	private static Logger logger = LoggerFactory.getLogger(Token.class);
-	private ArrayList<SqlCharacter> charactersOfToken;
-
-	public Token(SqlString sqlString) {
-		this.charactersOfToken=sqlString.getCharacters();
+	
+	public Token(ArrayList<SqlCharacter> charactersOfToken) {
+		this.sqlCharacters=charactersOfToken;
 		trim();
 	}
 
-	public Token(ArrayList<SqlCharacter> charactersOfToken) {
-		this.charactersOfToken=charactersOfToken;
+	public Token(SqlString sqlString) {
+		this.sqlCharacters=sqlString.getCharacters();
 		trim();
 	}
 
@@ -28,15 +25,15 @@ public class Token {
 			sqlCharacter.setCategory(category);
 			characters.add(sqlCharacter);
 		}
-		this.charactersOfToken=characters;
+		this.sqlCharacters=characters;
 		trim();
 	}
 
 	public Token[] split(char c) {
 		ArrayList<Token> tokens=new ArrayList<>();
 		ArrayList<SqlCharacter> charactersOfSubtoken=new ArrayList<>();
-		for(int i=0;i<charactersOfToken.size();i++) {
-			SqlCharacter character=charactersOfToken.get(i);
+		for(int i=0;i<sqlCharacters.size();i++) {
+			SqlCharacter character=sqlCharacters.get(i);
 			if(character.getChar()==c) {
 				Token token=new Token(charactersOfSubtoken);
 				token.trim();
@@ -58,18 +55,18 @@ public class Token {
 
 	public void removeEnclosing(char cLeft, char cRight) {
 		if(
-				charactersOfToken.get(0).getChar()==cLeft &&
-				charactersOfToken.get(charactersOfToken.size()-1).getChar()==cRight
+				sqlCharacters.get(0).getChar()==cLeft &&
+				sqlCharacters.get(sqlCharacters.size()-1).getChar()==cRight
 				) {
-			charactersOfToken.remove(charactersOfToken.size()-1);
-			charactersOfToken.remove(0);
+			sqlCharacters.remove(sqlCharacters.size()-1);
+			sqlCharacters.remove(0);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Token clone() throws CloneNotSupportedException {
-		return new Token((ArrayList<SqlCharacter>)charactersOfToken.clone());
+		return new Token((ArrayList<SqlCharacter>)sqlCharacters.clone());
 	}
 
 	public Token cloneWithoutDelimiters() throws CloneNotSupportedException {
@@ -80,50 +77,35 @@ public class Token {
 	}
 
 	private void trim() {
-		while(charactersOfToken.size()>0 && charactersOfToken.get(0).isWhiteSpace()) {
-			charactersOfToken.remove(0);
+		while(sqlCharacters.size()>0 && sqlCharacters.get(0).isWhiteSpace()) {
+			sqlCharacters.remove(0);
 		}
-		while(charactersOfToken.size()>0 && charactersOfToken.get(charactersOfToken.size()-1).isWhiteSpace()) {
-			charactersOfToken.remove(charactersOfToken.size()-1);
+		while(sqlCharacters.size()>0 && sqlCharacters.get(sqlCharacters.size()-1).isWhiteSpace()) {
+			sqlCharacters.remove(sqlCharacters.size()-1);
 		}
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb=new StringBuilder();
-		for(SqlCharacter character:charactersOfToken) {
-			sb.append(character.getChar());
-		}
-		return sb.toString();
 	}
 
 	public Token setCategory(Category category) {
-		for(SqlCharacter sqlCharacter:charactersOfToken) {
-			sqlCharacter.setCategory(category);
-		}
+		super.setCategory(category);
 		return this;
 	}
 
-	public ArrayList<SqlCharacter> getCharacters() {
-		return charactersOfToken;
-	}
-
 	public Token append(Token token) {
-		charactersOfToken.addAll(token.getCharacters());
+		sqlCharacters.addAll(token.getCharacters());
 		return this;
 	}
 
 	public Token append(SqlCharacter character) {
-		charactersOfToken.add(character);
+		super.append(character);
 		return this;
 	}
 
-	public boolean fixMySqlDelimiter(){
+	public boolean fixMySql(){
 		boolean isMySql=false;
 		isMySql=true;
 		boolean openBracket=false;
-		for(int i=0;i<charactersOfToken.size();i++) {
-			SqlCharacter sqlCharacter=charactersOfToken.get(i);
+		for(int i=0;i<sqlCharacters.size();i++) {
+			SqlCharacter sqlCharacter=sqlCharacters.get(i);
 			if(sqlCharacter.getChar()=='`') {
 				if(openBracket) {
 					sqlCharacter.setChar(']');
@@ -133,74 +115,55 @@ public class Token {
 				openBracket=!openBracket;
 			}
 		}
-		if(replaceIfExists("auto_increment","identity")) {
-			logger.warn("Script is most likely MySql flavour! Replacing 'auto_increment' with 'identity'!");
+		CharacterLocation searchStringLocation=replaceIfExists("auto_increment","identity");
+		if(searchStringLocation!=null) {
+			logger.warn(String.format("It smells like MySql! Replacing 'auto_increment' with 'identity'! %s", searchStringLocation) );
 		}
 
 		return isMySql;
 	}
 
-	private boolean replaceIfExists(String search,String replace) {
+	private CharacterLocation replaceIfExists(String search,String replace) {
 		int p=toString().toLowerCase().indexOf(search);
+		if(p==-1) {
+			return null;
+		}
+		CharacterLocation searchStringLocation=sqlCharacters.get(0).getLocation();
 		boolean isMySql=p!=-1;
 		if(isMySql) {
 			isMySql=true;
-			Category category=charactersOfToken.get(0).getCategory();
+			Category category=sqlCharacters.get(0).getCategory();
 			for(int i=0;i<search.length();i++) {
-				charactersOfToken.get(p).setCategory(Category.IGNORED);
-				charactersOfToken.remove(p);
+				sqlCharacters.get(p).setCategory(Category.IGNORED);
+				sqlCharacters.remove(p);
 			}
 			SqlString sqlString=SqlString.createSqlStringFromString(replace, category);
-			charactersOfToken.addAll(p, sqlString.getCharacters());
+			sqlCharacters.addAll(p, sqlString.getCharacters());
 		}
-		return isMySql;
+		return searchStringLocation;
 	}
 
 	public Token toUpperCase() {
 		ArrayList<SqlCharacter> charactersUppercase=new ArrayList<>();
-		for(SqlCharacter sqlCharacter:charactersOfToken) {
-			SqlCharacter sqlCharacterUppercase=new SqlCharacter(Character.toUpperCase(sqlCharacter.getChar()),sqlCharacter.getCharacterLocation(),sqlCharacter.getCategory());
+		for(SqlCharacter sqlCharacter:sqlCharacters) {
+			SqlCharacter sqlCharacterUppercase=new SqlCharacter(Character.toUpperCase(sqlCharacter.getChar()),sqlCharacter.getLocation(),sqlCharacter.getCategory());
 			sqlCharacterUppercase.setBackgroundColor(sqlCharacter.getBackgroundColor());
 			charactersUppercase.add(sqlCharacterUppercase);
 		}
 		return new Token(charactersUppercase);
 	}
 
-	public SqlCharacter getFirstCharacter() {
-		if(charactersOfToken.size()==0) {
-			return null;
-		}
-		return charactersOfToken.get(0);
-	}
-
 	public boolean equalsIgnoreCase(String string) {
-		if(charactersOfToken.size()!=string.length()) {
+		if(sqlCharacters.size()!=string.length()) {
 			return false;
 		}
 		String stringLowerCase=string.toLowerCase();
-		for(int i=0;i<charactersOfToken.size();i++) {
-			if(Character.toLowerCase(charactersOfToken.get(i).getChar())!=stringLowerCase.charAt(i)) {
+		for(int i=0;i<sqlCharacters.size();i++) {
+			if(Character.toLowerCase(sqlCharacters.get(i).getChar())!=stringLowerCase.charAt(i)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public CharacterLocation getCharacterLocation() {
-		if(charactersOfToken.size()==0) {
-			return null;
-		}
-		return charactersOfToken.get(0).getCharacterLocation();
-	}
-
-	public void setBackgroundColor(String backgroundColor) {
-		for(SqlCharacter sqlCharacter:charactersOfToken) {
-			sqlCharacter.setBackgroundColor(backgroundColor);
-		}
-	}
-
-	public void markError() {
-		setCategory(Category.ERROR);
-		setBackgroundColor(BackgroundColorProvider.ERROR);
-	}
 }

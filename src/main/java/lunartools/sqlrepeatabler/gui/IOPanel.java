@@ -1,6 +1,7 @@
 package lunartools.sqlrepeatabler.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -33,11 +34,13 @@ public class IOPanel extends JPanel{
 		jSplitPaneHorizontal.setDividerSize(8);
 
 		scrollPaneLeft=new JScrollPane(inputPane);
+		scrollPaneLeft.setMinimumSize(new Dimension(50,Integer.MAX_VALUE));
 		scrollPaneLeft.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneLeft.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		jSplitPaneHorizontal.setLeftComponent(scrollPaneLeft);
 
 		scrollPaneRight=new JScrollPane(outputPane);
+		scrollPaneRight.setMinimumSize(new Dimension(50,Integer.MAX_VALUE));
 		scrollPaneRight.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneRight.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		jSplitPaneHorizontal.setRightComponent(scrollPaneRight);
@@ -71,9 +74,10 @@ public class IOPanel extends JPanel{
 		int min=scrollPaneLeft.getMinimumSize().width;
 		int max=jSplitPaneHorizontal.getWidth()-scrollPaneRight.getMinimumSize().width;
 		int location=Settings.getInstance().getDividerlocationScript();
-		if(location!=0 && location>=min && location<=max) {
-			jSplitPaneHorizontal.setDividerLocation(location);
+		if(location<=min || location>=max) {
+			location=min+(max-min)/2;
 		}
+		jSplitPaneHorizontal.setDividerLocation(location);
 	}
 
 }

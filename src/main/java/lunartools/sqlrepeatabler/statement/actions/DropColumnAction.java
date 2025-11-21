@@ -24,6 +24,6 @@ public class DropColumnAction extends AlterTableAction{
 	}
 	
 	public String toString() {
-		return String.format("DropColumnAction: %s %s",getAction().toString(),name);
+		return String.format("DropColumnAction: %s %s",getAction(),name);
 	}
 }

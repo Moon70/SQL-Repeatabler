@@ -30,6 +30,6 @@ public class DropConstraintAction extends AlterTableAction{
 	}
 	
 	public String toString() {
-		return String.format("DropConstraintAction: %s %s",getAction().toString(),name);
+		return String.format("DropConstraintAction: %s %s",getAction(),name);
 	}
 }

@@ -2,6 +2,7 @@ package lunartools.sqlrepeatabler.parser;
 
 import java.util.ArrayList;
 
+import lunartools.sqlrepeatabler.common.BackgroundColorProvider;
 import lunartools.sqlrepeatabler.settings.Settings;
 
 public class HtmlRenderer {
@@ -21,7 +22,7 @@ public class HtmlRenderer {
 	}
 
 	private void render(StringBuilder sbHtml,SqlString sqlString) {
-		isBackgroundColorEnabled=Settings.getInstance().isBackgroundColorEnabled();
+		isBackgroundColorEnabled=Settings.getInstance().isBackgroundColorEnabled() && BackgroundColorProvider.getInstance().getNumberOfColorsUsed()>1;
 		ArrayList<SqlCharacter> sqlCharacters=sqlString.getCharacters();
 		StringBuilder sbFragement=new StringBuilder();
 		Category category=Category.UNCATEGORIZED;
@@ -49,11 +50,11 @@ public class HtmlRenderer {
 		appendHtmlFragment(category,sbHtml,sbFragement,backgroundColor);
 	}
 
-	private void appendHtmlFragment(Category category, StringBuilder sbHtml, StringBuilder sbFragement,String back) {
-		if(isBackgroundColorEnabled && back!=null) {
-			sbHtml.append(String.format("<span class=\"%s\" style='background-color: %s;' >",category.toString(),back));
+	private void appendHtmlFragment(Category category, StringBuilder sbHtml, StringBuilder sbFragement,String backgroundColor) {
+		if(isBackgroundColorEnabled && backgroundColor!=null) {
+			sbHtml.append(String.format("<span class=\"%s\" style='background-color: %s;' >",category,backgroundColor));
 		}else {
-			sbHtml.append(String.format("<span class=\"%s\" >",category.toString()));
+			sbHtml.append(String.format("<span class=\"%s\" >",category));
 		}
 		sbHtml.append(sbFragement);
 		sbHtml.append("</span>");

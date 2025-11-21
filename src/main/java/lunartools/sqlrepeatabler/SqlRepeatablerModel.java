@@ -204,7 +204,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 
 	public File getSqlInputFile(int index) {
 		if(index<0 && index>=sqlInputFiles.size()) {
-			throw new IllegalArgumentException(String.format("Illegal index: %s. Valid index: 0 to %s", index,sqlInputFiles.size()-1));
+			throw new IllegalArgumentException(String.format("Illegal index: %d. Valid index: 0 to %d", index,sqlInputFiles.size()-1));
 		}
 		return sqlInputFiles.get(index);
 	}

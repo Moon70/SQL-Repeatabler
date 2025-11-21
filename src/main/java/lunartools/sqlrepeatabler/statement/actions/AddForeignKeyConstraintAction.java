@@ -36,6 +36,6 @@ public class AddForeignKeyConstraintAction extends AlterTableAction{
 	}
 	
 	public String toString() {
-		return String.format("AddForeignKeyConstraintAction: %s CONSTRAINT %s %s %s %s", getAction().toString(),name,foreignKey,referencesTable,referencesColumn);
+		return String.format("AddForeignKeyConstraintAction: %s CONSTRAINT %s %s %s %s", getAction(),name,foreignKey,referencesTable,referencesColumn);
 	}
 }

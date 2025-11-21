@@ -26,6 +26,6 @@ public class AddUniqueConstraintAction extends AlterTableAction{
 	}
 	
 	public String toString() {
-		return String.format("AddUniqueConstraintAction: %s CONSTRAINT %s %s", getAction().toString(),name,referencesColumn);
+		return String.format("AddUniqueConstraintAction: %s CONSTRAINT %s %s", getAction(),name,referencesColumn);
 	}
 }

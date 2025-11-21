@@ -48,7 +48,7 @@ public class CreateTableStatement implements Statement{
 		    if(token.toString().toUpperCase().startsWith("PRIMARY KEY")) {
 		        try {
 		            token=updatePrimaryKeyToken(token);
-		            logger.info(String.format("Added a nice CONSTRAINT name to the PRIMARY KEY declaration: %s",token.toString()));
+		            logger.info(String.format("Added a nice CONSTRAINT name to the PRIMARY KEY declaration: %s",token));
                 } catch (Exception e) {
                     logger.warn("Error while adding CONSTRAINT name. Using PRIMARY KEY declaration without CONSTRAINT name.");
                 }
@@ -77,7 +77,7 @@ public class CreateTableStatement implements Statement{
             String firstColumnName = columnsArray[0].replaceAll("\\[|\\]|\\\"", "");
             token=new Token(String.format("CONSTRAINT PK_%s_%s",tableName.getTableNameWithoutDelimiter(),firstColumnName),Category.INSERTED).append(SqlCharacter.SEPARATOR).append(token);
         } else {
-            throw new SqlParserException("Error extracting constraint column list.",token.getCharacterLocation());
+            throw new SqlParserException("Error extracting constraint column list.",token.getLocation());
         }
 	    return token;
 	}

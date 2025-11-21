@@ -29,18 +29,22 @@ public class MainPanel extends JPanel{
 	private Image imageBackground;
 	private JSplitPane jSplitPaneVertical;
 	private LogEditorPane logPanel;
-
+	private final int TABBED_PANE_MIN_SIZE=100;
+	private final int LOG_PANE_MIN_SIZE=100;
+	
 	public MainPanel(SqlRepeatablerModel model) {
 		this.model=model;
 		setLayout(new BorderLayout());
+		tabbedPane.setMinimumSize(new Dimension(Integer.MAX_VALUE,TABBED_PANE_MIN_SIZE));
 		jSplitPaneVertical=new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		jSplitPaneVertical.setMinimumSize(new Dimension(Integer.MAX_VALUE,TABBED_PANE_MIN_SIZE+LOG_PANE_MIN_SIZE));
 		jSplitPaneVertical.setOneTouchExpandable(true);
 		jSplitPaneVertical.setDividerSize(8);
 		jSplitPaneVertical.setOpaque(false);
 		jSplitPaneVertical.setTopComponent(tabbedPane);
 
 		logPanel=new LogEditorPane(model);
-		logPanel.setMinimumSize(new Dimension(0,100));
+		logPanel.setMinimumSize(new Dimension(Integer.MAX_VALUE,LOG_PANE_MIN_SIZE));
 		scrollPaneLog=new JScrollPane(logPanel);
 		scrollPaneLog.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jSplitPaneVertical.setBottomComponent(scrollPaneLog);
@@ -72,6 +76,10 @@ public class MainPanel extends JPanel{
 			jSplitPaneVertical.setVisible(model.hasSqlInputFiles());
 			revalidate();
 			repaint();
+			SwingUtilities.invokeLater(() -> {
+				applyDividerLocation();
+			});
+
 		}else if(object==SimpleEvents.MODEL_RESET) {
 			jSplitPaneVertical.setVisible(false);
 			revalidate();
@@ -111,11 +119,12 @@ public class MainPanel extends JPanel{
 
 	public void applyDividerLocation() {
 		int min=tabbedPane.getMinimumSize().height;
-		int max=jSplitPaneVertical.getHeight()-scrollPaneLog.getMinimumSize().height;
+		int max=jSplitPaneVertical.getHeight()-logPanel.getMinimumSize().height;
 		int location=Settings.getInstance().getDividerlocationConsole();
-		if(location!=0 && location>=min && location<=max) {
-			jSplitPaneVertical.setDividerLocation(location);
+		if(location<=min || location>=max) {
+			location=max-min;
 		}
+		jSplitPaneVertical.setDividerLocation(location);
 	}
 
 }

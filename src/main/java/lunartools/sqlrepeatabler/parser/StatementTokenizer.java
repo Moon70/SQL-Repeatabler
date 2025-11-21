@@ -98,7 +98,7 @@ public class StatementTokenizer {
 				tokenCharacters.add(getFirstCharacter());
 				deleteCharAt(0);
 			}else {
-				throw new SqlParserException(String.format("Expected '%s'", text),sqlCharacter.getCharacterLocation());
+				throw new SqlParserException(String.format("Expected '%s'", text),sqlCharacter.getLocation());
 			}
 		}
 		return new Token(tokenCharacters);
@@ -145,7 +145,7 @@ public class StatementTokenizer {
 		stripWhiteSpaceLeft();
 		if(charAt(0).getChar()!=left) {
 			SqlCharacter character=charAt(0);
-			throw new SqlParserException("Error parsing tokens in parenthesis! Expected: >(<. Found: >"+character.getChar()+"<",character.getCharacterLocation());
+			throw new SqlParserException(String.format("Error parsing tokens in parenthesis! Expected: >(<. Found: >%s<",character.getChar()),character.getLocation());
 		}
 		int index=1;
 		while(true) {
@@ -215,11 +215,11 @@ public class StatementTokenizer {
         return charactersOfStatement.get(0);
     }
 
-    public CharacterLocation getCharacterLocation() {
+    public CharacterLocation getLocation() {
         if(charactersOfStatement.size()==0) {
             return null;
         }
-        return charactersOfStatement.get(0).getCharacterLocation();
+        return charactersOfStatement.get(0).getLocation();
     	
     }
     

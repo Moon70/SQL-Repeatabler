@@ -2,11 +2,15 @@ package lunartools.sqlrepeatabler;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+
+import javax.imageio.ImageIO;
 
 import lunartools.FileTools;
 import lunartools.ImageTools;
@@ -28,7 +32,7 @@ public class DailyBackgroundProvider {
 			"Titanic Apeisode Two",
 			"Ape Lisa",
 			"Albert Apestein",
-			"Gipsy Ape",
+			"Fortune teller",
 			"First ape on the moon",
 			"Apeula",
 			"2001 An Ape Odyssey",
@@ -40,6 +44,7 @@ public class DailyBackgroundProvider {
 	public static Image getImage() {
 		if(imageBackground==null) {
 			int indexBackground=Calendar.getInstance().get(Calendar.DAY_OF_YEAR) % affenvisionen.size();
+			indexBackground=11;
 			String resourceBackground="/pixelzeug/"+affenvisionen.get(indexBackground)+".sskp";
 			try {
 //				imageBackground = ImageTools.createImageFromResource(resourceBackground);
@@ -56,6 +61,7 @@ public class DailyBackgroundProvider {
 		try (InputStream inputStream=new SSKPFilterInputStream(ImageTools.class.getResourceAsStream(resourcePath))
 				){
 			byte[] imagedata=FileTools.readInputStreamToByteArray(inputStream);
+			FileTools.writeByteArrayToFile(new File("c:/temp/image.jpg"), imagedata);
 			Image image=Toolkit.getDefaultToolkit().createImage(imagedata);
 			return image;
 		}

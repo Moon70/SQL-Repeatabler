@@ -22,7 +22,7 @@ public class CreateTableStatementFactory extends StatementFactory{
 	@Override
 	public Statement createStatement(SqlScript sqlScript) throws Exception{
 		if(!match(sqlScript.peekLineAsString())) {
-			throw new Exception("Illegal factory call");
+			throw new RuntimeException("Illegal factory call");
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
@@ -43,7 +43,7 @@ public class CreateTableStatementFactory extends StatementFactory{
 		Token[] columns=allCollumnsToken.split(',');
 		for(int i=0;i<columns.length;i++) {
 			if(tableName.isMySql()) {
-				columns[i].fixMySqlDelimiter();
+				columns[i].fixMySql();
 			}
 			tokens.add(columns[i]);
 		}

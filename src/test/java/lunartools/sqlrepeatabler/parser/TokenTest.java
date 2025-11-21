@@ -96,11 +96,11 @@ class TokenTest {
 	@Test
 	void fixMySqlDelimiterWorksCorrectly() throws CloneNotSupportedException {
 		Token token=new Token("`ABC`",Category.STATEMENT);
-		token.fixMySqlDelimiter();
+		token.fixMySql();
 		assertEquals("[ABC]",token.toString());
 		
 		token=new Token("`ABC`.`XYZ`.`123`",Category.STATEMENT);
-		token.fixMySqlDelimiter();
+		token.fixMySql();
 		assertEquals("[ABC].[XYZ].[123]",token.toString());
 	}
 	

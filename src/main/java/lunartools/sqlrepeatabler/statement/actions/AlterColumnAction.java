@@ -22,6 +22,6 @@ public class AlterColumnAction extends AlterTableAction{
 	}
 	
 	public String toString() {
-		return String.format("AlterColumnAction: %s %s %s",getAction().toString(),name,parameters);
+		return String.format("AlterColumnAction: %s %s %s",getAction(),name,parameters);
 	}
 }

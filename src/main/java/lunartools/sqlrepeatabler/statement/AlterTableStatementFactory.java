@@ -30,7 +30,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 	@Override
 	public Statement createStatement(SqlScript sqlScript) throws Exception{
 		if(!match(sqlScript.peekLineAsString())) {
-			throw new Exception("Illegal factory call");
+			throw new RuntimeException("Illegal factory call");
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
@@ -53,13 +53,16 @@ public class AlterTableStatementFactory extends StatementFactory{
 			alterTableActions=parseDropAction(statementTokenizer);
 		}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("ALTER COLUMN")) {
 			alterTableActions=parseAlterColumnAction(statementTokenizer);
-		}else if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("MODIFY COLUMN")) {//invalid
-			logger.warn("Found MODIFY COLUMN action which is most likely MySql flavour and not supported in T-SQL. Processing as ALTER COLUMN.");
+		}else if(statementTokenizer.startsWithIgnoreCase("MODIFY COLUMN")) {
+			logger.warn(String.format("It smells like MySql! 'MODIFY COLUMN' is not supported in T-SQL, processing as 'ALTER COLUMN'. %s",statementTokenizer.getLocation()) );
+			statementTokenizer.nextToken("MODIFY").setCategory(Category.IGNORED);
+			statementTokenizer.stripWhiteSpaceLeft();
+			statementTokenizer.consumeCommandIgnoreCaseAndSpace("COLUMN");
 			alterTableActions=parseAlterColumnAction(statementTokenizer);
 		}else {
 			Token token=statementTokenizer.nextToken();
 			token.markError();
-			throw new SqlParserException(String.format("Unsupported ALTER TABLE action found: %s",token.toString()),token.getCharacterLocation());
+			throw new SqlParserException(String.format("Unsupported ALTER TABLE action found: %s",token),token.getLocation());
 		}
 
 		return new AlterTableStatement(tokenStatement,tableName,alterTableActions);
@@ -88,7 +91,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 				if(statementTokenizer.consumeCommandIgnoreCaseAndSpace("FOREIGN KEY")) {
 					Token tokenForeignKey=statementTokenizer.nextToken();
 					if(!statementTokenizer.consumeCommandIgnoreCaseAndSpace("REFERENCES")) {
-						throw new SqlParserException("'REFERENCES' keyword not found.",statementTokenizer.getCharacterLocation());
+						throw new SqlParserException("'REFERENCES' keyword not found.",statementTokenizer.getLocation());
 					}
 					Token tokenReferencesTable=statementTokenizer.nextToken();
 					Token tokenReferencesColumn=statementTokenizer.nextToken();
@@ -99,11 +102,11 @@ public class AlterTableStatementFactory extends StatementFactory{
 					AlterTableAction alterTableAction=new AddUniqueConstraintAction(tokenConstraintName,tokenReferencesColumn);
 					alterTableActions.add(alterTableAction);
 				}else {
-					throw new SqlParserException("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword not found",statementTokenizer.getCharacterLocation());
+					throw new SqlParserException("Neither 'FOREIGN KEY' nor 'UNIQUE' keyword found",statementTokenizer.getLocation());
 				}
 			}else {
 				if(statementTokenizer.startsWithIgnoreCase("COLUMN")){
-					logger.warn("Ignoring COLUMN keyword which is not allowed in T-SQL. Script probably uses MySql flavour. "+statementTokenizer.getCharacterLocation().toString());
+					logger.warn(String.format("It smells like MySql! Ignoring COLUMN keyword which is not allowed in T-SQL. %s", statementTokenizer.getLocation()));
 					Token token=statementTokenizer.nextToken();
 					token.setCategory(Category.IGNORED);
 				}
@@ -113,7 +116,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 				AlterTableAction alterTableAction=new AddColumnAction(tokenColumName,tokenColumParameter);
 				alterTableActions.add(alterTableAction);
 				if(statementTokenizer.startsWithIgnoreCase("ADD")) {
-					logger.warn("Ignoring illegal ADD command. In T-SQL, when adding multiple columns in a single ALTER TABLE...ADD statement, only use one ADD keyword!"+statementTokenizer.getCharacterLocation().toString());
+					logger.warn("Ignoring illegal ADD command. In T-SQL, when adding multiple columns in a single ALTER TABLE...ADD statement, only use one ADD keyword!"+statementTokenizer.getLocation().toString());
 					Token tokenIllegal=statementTokenizer.nextToken();
 					tokenIllegal.setCategory(Category.IGNORED);
 				}
@@ -143,7 +146,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 			AlterTableAction alterTableAction=new DropConstraintAction(tokenConstraintName);
 			alterTableActions.add(alterTableAction);
 		}else {
-			throw new SqlParserException(String.format("DROP target not supported: %s",tokenTarget.toString()),tokenTarget.getCharacterLocation());
+			throw new SqlParserException(String.format("DROP target not supported: %s",tokenTarget),tokenTarget.getLocation());
 		}
 		return alterTableActions;
 	}
@@ -157,7 +160,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		alterTableActions.add(alterTableAction);
 		if(statementTokenizer.hasNext()) {
 			Token token=statementTokenizer.nextToken();
-			throw new SqlParserException(String.format("Unexpected content: %s",token.toString()),token.getCharacterLocation());
+			throw new SqlParserException(String.format("Unexpected content: %s",token),token.getLocation());
 		}
 		return alterTableActions;
 	}
