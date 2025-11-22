@@ -27,7 +27,7 @@ public class UseStatementFactory extends StatementFactory{
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeOneLineStatement();
-		logger.info("Statement: "+statementTokenizer.toString());
+		logger.debug("Statement: "+statementTokenizer.toString());
 		logger.warn(String.format("Ignoring statement %s. %s", UseStatement.COMMAND,statementTokenizer.getLocation()));
 		statementTokenizer.setCategory(Category.IGNORED);
 

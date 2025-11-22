@@ -23,7 +23,7 @@ public class OneLineCommentStatementFactory extends StatementFactory{
 		}
 
 		sqlScriptLine.setCategory(Category.COMMENT);
-		logger.info("Statement: comment");
+		logger.debug("Statement: comment");
 		int endIndex=sqlScript.getIndex();
 		int startIndex=endIndex-1;
 		while((sqlScriptLine=sqlScript.peekLine())!=null) {

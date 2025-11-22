@@ -25,6 +25,6 @@ public class CharacterLocation {
 
 	@Override
 	public String toString() {
-		return String.format("Location: row=%d, column=%d, index=%d",row,column,index);
+		return String.format("Location: row=%d, column=%d, index=%d",row+1,column+1,index);
 	}
 }

@@ -25,7 +25,7 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 		}
 
 		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
-		logger.info("Statement: "+statementTokenizer.toString());
+		logger.debug("Statement: "+statementTokenizer.toString());
 
 		Token tokenStatement=statementTokenizer.nextToken(SetIdentityInsertStatement.COMMAND);
 		tokenStatement.setCategory(Category.STATEMENT);
