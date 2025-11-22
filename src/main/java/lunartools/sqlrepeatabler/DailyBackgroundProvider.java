@@ -10,7 +10,7 @@ import java.util.Calendar;
 
 import lunartools.FileTools;
 import lunartools.ImageTools;
-import lunartools.sqlrepeatabler.util.SSKPFilterInputStream;
+import lunartools.sqlrepeatabler.common.SSKPFilterInputStream;
 
 public class DailyBackgroundProvider {
 	private static Image imageBackground;

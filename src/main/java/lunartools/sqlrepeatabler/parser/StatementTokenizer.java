@@ -9,20 +9,20 @@ import org.slf4j.LoggerFactory;
 import lunartools.sqlrepeatabler.common.BackgroundColorProvider;
 
 public class StatementTokenizer {
-    private static Logger logger = LoggerFactory.getLogger(StatementTokenizer.class);
+	private static Logger logger = LoggerFactory.getLogger(StatementTokenizer.class);
 	private ArrayList<SqlCharacter> charactersOfStatement;
-	
+
 	public StatementTokenizer(ArrayList<SqlCharacter> charactersOfStatement) {
 		this.charactersOfStatement=charactersOfStatement;
 	}
-	
-	private static Token consumeNextToken(ArrayList<SqlCharacter> charactersOfStatement, char tokenDelimiter) throws Exception{
+
+	private static Token consumeNextToken(ArrayList<SqlCharacter> charactersOfStatement, char tokenDelimiter){
 		boolean doubleQuoteOpen=false;
 		boolean singleQuoteOpen=false;
 		int parenthesisOpen=0;
-		
+
 		ArrayList<SqlCharacter> tokenCharacters=new ArrayList<>();
-		
+
 		while(charactersOfStatement.size()>0) {
 			SqlCharacter character=charactersOfStatement.get(0);
 			if(character.getChar()=='"') {
@@ -50,43 +50,43 @@ public class StatementTokenizer {
 		logger.warn("Reached end of file while scanning for statement terminating semicolon. Treating eof as semicolon!");
 		return new Token(tokenCharacters);
 	}
-	
+
 	public void stripWhiteSpaceLeft() {
 		while(hasNext() && charactersOfStatement.get(0).isWhiteSpace()) {
 			charactersOfStatement.remove(0);
 		}
 	}
-	
+
 	public void stripWhiteSpaceRight() {
 		while(charactersOfStatement.get(charactersOfStatement.size()-1).isWhiteSpace()) {
 			charactersOfStatement.remove(charactersOfStatement.size()-1);
 		}
 	}
-	
+
 	public int length() {
 		return charactersOfStatement.size();
 	}
-	
+
 	private static void stripWhiteSpaceLeft(ArrayList<SqlCharacter> characters) {
 		while(characters.get(0).isWhiteSpace()) {
 			characters.remove(0);
 		}
 	}
-	
+
 	public void stripUntil(char c) {
 		while(charactersOfStatement.size()>0 && charAt(0).getChar()!=c) {
 			charactersOfStatement.remove(0);
 		}
 	}
-	
-	public Token nextToken() throws Exception {
+
+	public Token nextToken(){
 		if(charactersOfStatement.size()==0 || charactersOfStatement.get(0).isSemicolon()) {
 			return null;
 		}
 		return consumeNextToken(charactersOfStatement,' ');
 	}
 
-	public Token nextToken(String text) throws Exception {
+	public Token nextToken(String text) throws SqlParserException{
 		if(charactersOfStatement.size()==0 || charactersOfStatement.get(0).isSemicolon()) {
 			return null;
 		}
@@ -103,30 +103,30 @@ public class StatementTokenizer {
 		}
 		return new Token(tokenCharacters);
 	}
-	
+
 	private boolean compareCharIgnoreCase(char c1,char c2) {
 		return Character.toLowerCase(c1)==Character.toLowerCase(c2);
 	}
 
-	public Token nextTokenUntil(char c) throws Exception {
+	public Token nextTokenUntil(char c){
 		if(charactersOfStatement.size()==0 || charactersOfStatement.get(0).isSemicolon()) {
 			return null;
 		}
 		return consumeNextToken(charactersOfStatement,c);
 	}
-	
+
 	public boolean hasNext() {
 		return charactersOfStatement.size()>0 && !charAt(0).isSemicolon();
 	}
-	
+
 	public SqlCharacter charAt(int i) {
 		return charactersOfStatement.get(i);
 	}
-	
+
 	public Token toToken() {
 		return new Token(charactersOfStatement);
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb=new StringBuilder();
@@ -140,7 +140,7 @@ public class StatementTokenizer {
 		charactersOfStatement.remove(i);
 	}
 
-	public Token nextToken(char left, char right) throws Exception {
+	public Token nextToken(char left, char right) throws SqlParserException{
 		int openParenthesis=0;
 		stripWhiteSpaceLeft();
 		if(charAt(0).getChar()!=left) {
@@ -161,7 +161,7 @@ public class StatementTokenizer {
 			}
 			index++;
 		}
-		
+
 		List<SqlCharacter> list=charactersOfStatement.subList(0, index+1);
 		ArrayList<SqlCharacter> arrayList=new ArrayList<>();
 		arrayList.addAll(list);
@@ -197,7 +197,7 @@ public class StatementTokenizer {
 			return false;
 		}
 	}
-	
+
 	public boolean startsWithIgnoreCase(String s) {
 		s=s.toLowerCase();
 		for(int i=0;i<s.length();i++) {
@@ -208,21 +208,21 @@ public class StatementTokenizer {
 		return true;
 	}
 
-    public SqlCharacter getFirstCharacter() {
-        if(charactersOfStatement.size()==0) {
-            return null;
-        }
-        return charactersOfStatement.get(0);
-    }
+	public SqlCharacter getFirstCharacter() {
+		if(charactersOfStatement.size()==0) {
+			return null;
+		}
+		return charactersOfStatement.get(0);
+	}
 
-    public CharacterLocation getLocation() {
-        if(charactersOfStatement.size()==0) {
-            return null;
-        }
-        return charactersOfStatement.get(0).getLocation();
-    	
-    }
-    
+	public CharacterLocation getLocation() {
+		if(charactersOfStatement.size()==0) {
+			return null;
+		}
+		return charactersOfStatement.get(0).getLocation();
+
+	}
+
 	public void setCategory(Category category) {
 		for(SqlCharacter sqlCharacter:charactersOfStatement) {
 			sqlCharacter.setCategory(category);
@@ -237,5 +237,5 @@ public class StatementTokenizer {
 			sqlCharacter.setBackgroundColor(backgroundColor);
 		}
 	}
-	
+
 }

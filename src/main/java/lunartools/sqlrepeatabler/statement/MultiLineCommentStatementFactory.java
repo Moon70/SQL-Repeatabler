@@ -18,8 +18,8 @@ public class MultiLineCommentStatementFactory extends StatementFactory{
 	}
 
 	@Override
-	public Statement createStatement(SqlScript sqlScript) throws Exception{
-        SqlString sqlScriptLine=sqlScript.readLine();
+	public Statement createStatement(SqlScript sqlScript) throws EOFException{
+		SqlString sqlScriptLine=sqlScript.readLine();
 		String line=sqlScriptLine.toString();
 		if(!match(line)) {
 			throw new RuntimeException("Illegal factory call");
@@ -31,10 +31,10 @@ public class MultiLineCommentStatementFactory extends StatementFactory{
 		int startIndex=endIndex-1;
 		if(!line.endsWith("*/")) {
 			while(true) {
-			    sqlScriptLine=sqlScript.readLine();
-		        sqlScriptLine.setCategory(Category.COMMENT);
-			    line=sqlScriptLine.toString();
-				
+				sqlScriptLine=sqlScript.readLine();
+				sqlScriptLine.setCategory(Category.COMMENT);
+				line=sqlScriptLine.toString();
+
 				if(line==null) {
 					throw new EOFException("Multiline comment not closed");
 				}

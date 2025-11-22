@@ -39,7 +39,7 @@ public class MenuModel {
 
 	private JMenu menuHelp;
 	private JMenuItem menuHelpItemAbout;
-	
+
 	public MenuModel(SqlRepeatablerModel model, ActionFactory actionFactory) {
 		this.model=model;
 		this.actionFactory=actionFactory;
@@ -48,48 +48,46 @@ public class MenuModel {
 		menuBar.add(createPreferencesMenu());
 		menuBar.add(createHelpMenu());
 		refreshMenuItems();
-        refresh();
+		refresh();
 		model.addChangeListener(this::updateModelChanges);
 	}
-    
-    private JMenu createFileMenu(){
-        menuFile=new JMenu("File");
 
-        menuFileItemOpen=new JMenuItem(actionFactory.createOpenAction());
-        menuFileItemOpen.setIcon(ImageTools.createImageIcon("/icons/file_open_16.png"));
-        menuFileItemOpen.setEnabled(true);
-        menuFile.add(menuFileItemOpen);
+	private JMenu createFileMenu(){
+		menuFile=new JMenu("File");
 
-        menuFileItemSaveAs=new JMenuItem(actionFactory.createSaveAsAction());
-        menuFileItemSaveAs.setIcon(ImageTools.createImageIcon("/icons/save_as_16.png"));
-        menuFileItemSaveAs.setEnabled(true);
-        menuFile.add(menuFileItemSaveAs);
+		menuFileItemOpen=new JMenuItem(actionFactory.createOpenAction());
+		menuFileItemOpen.setIcon(ImageTools.createImageIcon("/icons/file_open_16.png"));
+		menuFileItemOpen.setEnabled(true);
+		menuFile.add(menuFileItemOpen);
 
-        menuFileItemReload=new JMenuItem(actionFactory.createReloadAction());
-        menuFileItemReload.setIcon(ImageTools.createImageIcon("/icons/refresh_16.png"));
-//        menuFileItemReload.setEnabled(true);
-        menuFile.add(menuFileItemReload);
+		menuFileItemSaveAs=new JMenuItem(actionFactory.createSaveAsAction());
+		menuFileItemSaveAs.setIcon(ImageTools.createImageIcon("/icons/save_as_16.png"));
+		menuFileItemSaveAs.setEnabled(true);
+		menuFile.add(menuFileItemSaveAs);
 
-        menuFileItemReset=new JMenuItem(actionFactory.createResetAction());
-        menuFileItemReset.setIcon(ImageTools.createImageIcon("/icons/restart_alt_16.png"));
-//        menuFileItemReset.setEnabled(true);
-        menuFile.add(menuFileItemReset);
+		menuFileItemReload=new JMenuItem(actionFactory.createReloadAction());
+		menuFileItemReload.setIcon(ImageTools.createImageIcon("/icons/refresh_16.png"));
+		menuFile.add(menuFileItemReload);
 
-        menuFileItemExitProgram=new JMenuItem(actionFactory.createExitProgramAction());
-        menuFileItemExitProgram.setIcon(ImageTools.createImageIcon("/icons/logout_16.png"));
-        menuFile.add(menuFileItemExitProgram);
-        
-        return menuFile;
-    }
-    
+		menuFileItemReset=new JMenuItem(actionFactory.createResetAction());
+		menuFileItemReset.setIcon(ImageTools.createImageIcon("/icons/restart_alt_16.png"));
+		menuFile.add(menuFileItemReset);
+
+		menuFileItemExitProgram=new JMenuItem(actionFactory.createExitProgramAction());
+		menuFileItemExitProgram.setIcon(ImageTools.createImageIcon("/icons/logout_16.png"));
+		menuFile.add(menuFileItemExitProgram);
+
+		return menuFile;
+	}
+
 	private JMenu createPreferencesMenu(){
-        menuPreferences=new JMenu("Preferences");
+		menuPreferences=new JMenu("Preferences");
 
-        menuProcessFiles=new JMenu("File processing order-");
-        menuPreferences.add(menuProcessFiles);
-        menuProcessFiles.setIcon(ImageTools.createImageIcon("/icons/sort_16.png"));
+		menuProcessFiles=new JMenu("File processing order-");
+		menuPreferences.add(menuProcessFiles);
+		menuProcessFiles.setIcon(ImageTools.createImageIcon("/icons/sort_16.png"));
 		ButtonGroup buttonGroup = new ButtonGroup();
-		
+
 		radioButtonProcessAsAdded=new JRadioButtonMenuItem(actionFactory.createAsAddedRadioButtonAction());
 		menuProcessFiles.add(radioButtonProcessAsAdded);
 		buttonGroup.add(radioButtonProcessAsAdded);
@@ -97,7 +95,7 @@ public class MenuModel {
 		radioButtonProcessByCreationDate=new JRadioButtonMenuItem(actionFactory.createByCreationDateRadioButtonAction());
 		menuProcessFiles.add(radioButtonProcessByCreationDate);
 		buttonGroup.add(radioButtonProcessByCreationDate);
-		
+
 		radioButtonProcessAlphabetically=new JRadioButtonMenuItem(actionFactory.createAlphabeticallyRadioButtonAction());
 		menuProcessFiles.add(radioButtonProcessAlphabetically);
 		buttonGroup.add(radioButtonProcessAlphabetically);
@@ -105,10 +103,10 @@ public class MenuModel {
 		checkboxBackgroundColor=new JCheckBoxMenuItem(actionFactory.createBackgroundColorCheckboxAction());
 		menuPreferences.add(checkboxBackgroundColor);
 
-        return menuPreferences;
+		return menuPreferences;
 	}
 
-    private JMenu createHelpMenu(){
+	private JMenu createHelpMenu(){
 		menuHelp=new JMenu("?");
 		menuHelpItemAbout=new JMenuItem(actionFactory.createAboutAction());
 		menuHelpItemAbout.setIcon(ImageTools.createImageIcon("/icons/ProgramIcon16.png"));
@@ -166,7 +164,7 @@ public class MenuModel {
 		menuFileItemReset.setEnabled(model.hasSqlInputFiles());
 		menuFileItemSaveAs.setEnabled(model.hasSqlConvertedScripts());
 	}
-	
+
 	private void refresh() {
 		Settings settings=Settings.getInstance();
 		ProcessingOrder processingOrder=settings.getProcessingOrder();

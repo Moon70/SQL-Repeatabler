@@ -119,14 +119,6 @@ public class SqlScript {
 		return sqlStrings.get(index++);
 	}
 
-	public SqlCharacter getFirstCharacterOfCurrentLine() {
-		if(index==sqlStrings.size()) {
-			return null;
-		}
-		SqlString sqlScriptLine=sqlStrings.get(index);
-		return sqlScriptLine.getFirstCharacter();
-	}
-
 	/**
 	 * @return line after incrementing the index 
 	 */
@@ -146,7 +138,7 @@ public class SqlScript {
 		return sqlStrings.get(index++);
 	}
 
-	public StatementTokenizer consumeStatement() throws Exception {
+	public StatementTokenizer consumeStatement(){
 		ArrayList<SqlCharacter> sqlStringStatement=new ArrayList<>();
 		while(true) {
 			SqlString sqlStringLine=readLineCharacters();
@@ -164,7 +156,7 @@ public class SqlScript {
 		return new StatementTokenizer(stripWhitespace(sqlStringStatement));
 	}
 
-	public StatementTokenizer consumeOneLineStatement() throws Exception {
+	public StatementTokenizer consumeOneLineStatement() throws EOFException{
 		SqlString sqlString=readLineCharacters();
 		if(sqlString==null) {
 			throw new EOFException("Unexpected end of script");

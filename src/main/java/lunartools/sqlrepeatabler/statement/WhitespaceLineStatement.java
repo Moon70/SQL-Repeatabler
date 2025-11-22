@@ -11,7 +11,7 @@ public class WhitespaceLineStatement implements Statement{
 	}
 
 	@Override
-	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlock){
 		for(int i=0;i<numberOfEmptyLines;i++) {
 			sqlBlock.add(SqlString.EMPTY_LINE);
 		}

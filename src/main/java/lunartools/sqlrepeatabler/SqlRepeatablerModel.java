@@ -31,7 +31,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 	private ArrayList<File> sqlInputFiles=new ArrayList<>();
 	private ArrayList<SqlScript> sqlScripts=new ArrayList<>();
 	private ArrayList<SqlBlock> sqlConvertedScriptBlocks=new ArrayList<>();
-	
+
 	public static String getProgramVersion() {
 		return versionProgram;
 	}
@@ -69,7 +69,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 			notifyListeners(SimpleEvents.MODEL_SQLINPUTFILESCHANGED);
 		}
 	}
-	
+
 	private Comparator<File> getSortFilesByCreationDateComparator() {
 		Comparator<File> comparator=new Comparator<File>() {
 
@@ -88,7 +88,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		};
 		return comparator;
 	}
-	
+
 	public void clearConvertedSqlScriptBlocks() {
 		sqlConvertedScriptBlocks=new ArrayList<>();
 		notifyListeners(SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED);
@@ -187,7 +187,7 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 			sqlInputFiles.sort(Comparator.comparing(File::getName));
 			break;
 		}
-		
+
 	}
 
 	public void closeScript(int index) {
@@ -208,5 +208,5 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 		}
 		return sqlInputFiles.get(index);
 	}
-	
+
 }

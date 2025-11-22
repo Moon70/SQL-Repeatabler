@@ -14,7 +14,7 @@ public class WhitespaceLineStatementFactory extends StatementFactory{
 	}
 
 	@Override
-	public Statement createStatement(SqlScript sqlScript) throws Exception{
+	public Statement createStatement(SqlScript sqlScript){
 		if(!match(sqlScript.peekLineAsString())) {
 			throw new RuntimeException("Illegal factory call");
 		}

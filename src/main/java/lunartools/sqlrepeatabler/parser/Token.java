@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 public class Token extends SqlString{
 	private static Logger logger = LoggerFactory.getLogger(Token.class);
-	
+
 	public Token(ArrayList<SqlCharacter> charactersOfToken) {
 		this.sqlCharacters=charactersOfToken;
 		trim();
@@ -69,11 +69,15 @@ public class Token extends SqlString{
 		return new Token((ArrayList<SqlCharacter>)sqlCharacters.clone());
 	}
 
-	public Token cloneWithoutDelimiters() throws CloneNotSupportedException {
-		Token token=(Token)this.clone();
-		token.removeEnclosing('[',']');
-		token.removeEnclosing('"');
-		return token;
+	public Token cloneWithoutDelimiters(){
+		try {
+			Token token = (Token)this.clone();
+			token.removeEnclosing('[',']');
+			token.removeEnclosing('"');
+			return token;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException("Unexpected error cloning a token",e);
+		}
 	}
 
 	private void trim() {

@@ -3,10 +3,11 @@ package lunartools.sqlrepeatabler.statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
+import lunartools.sqlrepeatabler.parser.SqlParserException;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
+import lunartools.sqlrepeatabler.parser.TableName;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public class SetIdentityInsertStatementFactory extends StatementFactory{
@@ -18,7 +19,7 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 	}
 
 	@Override
-	public Statement createStatement(SqlScript sqlScript) throws Exception{
+	public Statement createStatement(SqlScript sqlScript) throws SqlParserException{
 		if(!match(sqlScript.peekLineAsString())) {
 			throw new RuntimeException("Illegal factory call");
 		}

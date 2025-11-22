@@ -19,7 +19,7 @@ public class Settings extends AbstractSettings{
 	public static final String DIVIDERLOCATION_CONSOLE=	"DividerLocationConsole";
 	public static final String DIVIDERLOCATION_SCRIPT=	"DividerLocationScript";
 	public static final String BACKGROUND_COLOR=		"BackgroundColor";
-	
+
 	public static Settings getInstance() {
 		if(instance==null) {
 			instance=new Settings(SqlRepeatablerModel.PROGRAMNAME,SqlRepeatablerModel.getProgramVersion());
@@ -82,5 +82,5 @@ public class Settings extends AbstractSettings{
 	public void enableBackgroundColor(boolean isBackgroundColorEnabled) {
 		setString(BACKGROUND_COLOR, isBackgroundColorEnabled?"true":"false");
 	}
-	
+
 }

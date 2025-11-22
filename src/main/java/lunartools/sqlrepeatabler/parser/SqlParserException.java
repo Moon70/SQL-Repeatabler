@@ -2,11 +2,11 @@ package lunartools.sqlrepeatabler.parser;
 
 public class SqlParserException extends Exception{
 	private CharacterLocation characterLocation;
-	
-    public SqlParserException(String message, CharacterLocation characterLocation) {
-        super(message);
-        this.characterLocation=characterLocation;
-    }
+
+	public SqlParserException(String message, CharacterLocation characterLocation) {
+		super(message);
+		this.characterLocation=characterLocation;
+	}
 
 	@Override
 	public String getMessage() {

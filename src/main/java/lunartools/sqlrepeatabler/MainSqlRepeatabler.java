@@ -20,7 +20,7 @@ public class MainSqlRepeatabler {
 			try{
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				SwingBufferingLogBackAppender swingAppender = setupLogger(Level.INFO);
-				
+
 				SqlRepeatablerModel model=new SqlRepeatablerModel();
 				SqlRepeatablerView view=new SqlRepeatablerView(model);
 				new SqlRepeatablerController(model,view,swingAppender);
@@ -36,23 +36,23 @@ public class MainSqlRepeatabler {
 	}
 
 	public static SwingBufferingLogBackAppender setupLogger(Level level) {
-        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        SwingBufferingLogBackAppender swingBufferingAppender = new SwingBufferingLogBackAppender();
-        swingBufferingAppender.setContext(loggerContext);
-        swingBufferingAppender.setName(SqlRepeatablerModel.PROGRAMNAME);
+		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+		SwingBufferingLogBackAppender swingBufferingAppender = new SwingBufferingLogBackAppender();
+		swingBufferingAppender.setContext(loggerContext);
+		swingBufferingAppender.setName(SqlRepeatablerModel.PROGRAMNAME);
 
-        ThresholdFilter tresholdFilter = new ThresholdFilter();
-        tresholdFilter.setLevel(level.toString());
-        tresholdFilter.setContext(loggerContext);
-        tresholdFilter.start();
+		ThresholdFilter tresholdFilter = new ThresholdFilter();
+		tresholdFilter.setLevel(level.toString());
+		tresholdFilter.setContext(loggerContext);
+		tresholdFilter.start();
 
-        swingBufferingAppender.addFilter(tresholdFilter);
-        swingBufferingAppender.start();
+		swingBufferingAppender.addFilter(tresholdFilter);
+		swingBufferingAppender.start();
 
 		ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        rootLogger.addAppender(swingBufferingAppender);
+		rootLogger.addAppender(swingBufferingAppender);
 
-        return swingBufferingAppender;
-    }
-	
+		return swingBufferingAppender;
+	}
+
 }

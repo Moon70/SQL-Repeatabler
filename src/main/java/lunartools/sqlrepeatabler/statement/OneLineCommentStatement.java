@@ -18,7 +18,7 @@ public class OneLineCommentStatement implements Statement{
 	}
 
 	@Override
-	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlock){
 		for(int i=startIndex;i<endIndex;i++) {
 			SqlString sqlString=SqlString.createSqlStringFromString(sqlScript.getLineAt(i),Category.COMMENT);
 			sqlBlock.add(sqlString);

@@ -28,7 +28,7 @@ public class SqlRepeatablerView extends JFrame{
 	private static final int WINDOW_MINIMUM_WIDTH=1280;
 	private static final int WINDOW_MINIMUM_HEIGHT=(int)(WINDOW_MINIMUM_WIDTH/SwingTools.SECTIOAUREA);
 	public static final Dimension MINIMUM_FRAME_SIZE=new Dimension(WINDOW_MINIMUM_WIDTH,WINDOW_MINIMUM_HEIGHT);
-	
+
 	private SqlRepeatablerModel model;
 	private MainPanel mainPanel;
 	private MenuModel menuModel;
@@ -47,11 +47,11 @@ public class SqlRepeatablerView extends JFrame{
 		glass.setVisible(true);
 		glass.setOpaque(false);
 		glass.setDropTarget(new DropTarget() {
-			public synchronized void drop(DropTargetDropEvent evt) {
+			public synchronized void drop(DropTargetDropEvent dropTargetDropEvent) {
 				try {
-					evt.acceptDrop(DnDConstants.ACTION_COPY);
+					dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY);
 					@SuppressWarnings("unchecked")
-					List<File> droppedFiles = (List<File>)evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+					List<File> droppedFiles = (List<File>)dropTargetDropEvent.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
 					ArrayList<File> arraylistAcceptedFiles=new ArrayList<>();
 					for (File file : droppedFiles) {
 						if(file.getName().toLowerCase().endsWith(".sql")) {
@@ -84,13 +84,13 @@ public class SqlRepeatablerView extends JFrame{
 	public void setActionFactory(ActionFactory actionFactory) {
 		this.menuModel=new MenuModel(model,actionFactory);
 		setJMenuBar(menuModel.getMenuBar());
-//		refreshView();
+		//refreshView();
 	}
 
 	public void refreshView() {
-//		boolean convertedDataAvailable=model.hasSqlConvertedScripts();
-//		menuModel.getMenuFileItemSaveAs().setEnabled(convertedDataAvailable);
-//		menuModel.getMenuFileItemReset().setEnabled(convertedDataAvailable);
+		//boolean convertedDataAvailable=model.hasSqlConvertedScripts();
+		//menuModel.getMenuFileItemSaveAs().setEnabled(convertedDataAvailable);
+		//menuModel.getMenuFileItemReset().setEnabled(convertedDataAvailable);
 	}
 
 	public void showMessageboxAbout() {

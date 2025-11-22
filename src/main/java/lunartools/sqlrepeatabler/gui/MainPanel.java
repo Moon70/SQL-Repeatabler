@@ -31,7 +31,7 @@ public class MainPanel extends JPanel{
 	private LogEditorPane logPanel;
 	private final int TABBED_PANE_MIN_SIZE=100;
 	private final int LOG_PANE_MIN_SIZE=100;
-	
+
 	public MainPanel(SqlRepeatablerModel model) {
 		this.model=model;
 		setLayout(new BorderLayout());
@@ -57,13 +57,13 @@ public class MainPanel extends JPanel{
 		jSplitPaneVertical.setVisible(false);
 		imageBackground=DailyBackgroundProvider.getImage();		
 		setBackground(Color.black);
-		
-		
+
+
 		model.addChangeListener(this::updateModelChanges);
 		SwingUtilities.invokeLater(() -> {
 			jSplitPaneVertical.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, evt -> {
-			    int newLocation=(int)evt.getNewValue();
-			    Settings.getInstance().setDividerlocationConsole(newLocation);
+				int newLocation=(int)evt.getNewValue();
+				Settings.getInstance().setDividerlocationConsole(newLocation);
 			});
 		});
 	}

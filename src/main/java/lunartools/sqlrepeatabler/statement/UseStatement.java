@@ -7,7 +7,7 @@ public class UseStatement implements Statement{
 
 	public UseStatement() {}
 
-    @Override
-    public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {}
+	@Override
+	public void toSqlCharacters(SqlBlock sqlBlock){}
 
 }

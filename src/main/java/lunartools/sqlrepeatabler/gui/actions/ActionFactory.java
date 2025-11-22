@@ -13,7 +13,7 @@ import lunartools.sqlrepeatabler.settings.ProcessingOrder;
 
 public class ActionFactory {
 	private SqlRepeatablerController controller;
-	
+
 	public ActionFactory(SqlRepeatablerController controller) {
 		this.controller=controller;
 	}
@@ -33,7 +33,7 @@ public class ActionFactory {
 	public Action createResetAction() {
 		return new ResetAction(controller);
 	}
-	
+
 	public Action createExitProgramAction() {
 		return new ExitProgramAction(controller);
 	}
@@ -41,61 +41,61 @@ public class ActionFactory {
 	public Action createAboutAction() {
 		return new AboutAction(controller);
 	}
-	
+
 	public Action createAsAddedRadioButtonAction() {
 		return new AbstractAction(ProcessingOrder.ASADDED.getLabel()) {
-            @Override public void actionPerformed(ActionEvent e) {
-            	controller.getModel().setProcessingOrder(ProcessingOrder.ASADDED);
-            }
-        };
+			@Override public void actionPerformed(ActionEvent e) {
+				controller.getModel().setProcessingOrder(ProcessingOrder.ASADDED);
+			}
+		};
 	}
-	
+
 	public Action createByCreationDateRadioButtonAction() {
 		return new AbstractAction(ProcessingOrder.CREATIONDATE.getLabel()) {
-            @Override public void actionPerformed(ActionEvent e) {
-            	controller.getModel().setProcessingOrder(ProcessingOrder.CREATIONDATE);
-            }
-        };
+			@Override public void actionPerformed(ActionEvent e) {
+				controller.getModel().setProcessingOrder(ProcessingOrder.CREATIONDATE);
+			}
+		};
 	}
-	
+
 	public Action createAlphabeticallyRadioButtonAction() {
 		return new AbstractAction(ProcessingOrder.ALPHABETICALLY.getLabel()) {
-            @Override public void actionPerformed(ActionEvent e) {
-            	controller.getModel().setProcessingOrder(ProcessingOrder.ALPHABETICALLY);
-            }
-        };
+			@Override public void actionPerformed(ActionEvent e) {
+				controller.getModel().setProcessingOrder(ProcessingOrder.ALPHABETICALLY);
+			}
+		};
 	}
 
 	public Action createBackgroundColorCheckboxAction() {
 		return new AbstractAction(CheckboxSettings.BACKGROUND_COLOR.getLabel()) {
-            @Override public void actionPerformed(ActionEvent e) {
+			@Override public void actionPerformed(ActionEvent e) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-			    boolean checked = item.isSelected();
-			    controller.getModel().enableBackgroundColor(checked);
-            }
-        };
+				boolean checked = item.isSelected();
+				controller.getModel().enableBackgroundColor(checked);
+			}
+		};
 	}
 
-    private class ExitProgramAction extends AbstractAction {
-        private SqlRepeatablerController controller;
+	private class ExitProgramAction extends AbstractAction {
+		private SqlRepeatablerController controller;
 
-        public ExitProgramAction(SqlRepeatablerController controller) {
-            this.controller = controller;
-            this.putValue(NAME, "Exit");
-        }
+		public ExitProgramAction(SqlRepeatablerController controller) {
+			this.controller = controller;
+			this.putValue(NAME, "Exit");
+		}
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            controller.shutdown();
-        }
-    }
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			controller.shutdown();
+		}
+	}
 
 	private class ReloadAction extends AbstractAction {
 		private SqlRepeatablerController controller;
 
 		public ReloadAction(SqlRepeatablerController controller) {
 			this.controller = controller;
-            this.putValue(NAME, "Reload");
+			this.putValue(NAME, "Reload");
 		}
 
 		@Override
@@ -109,7 +109,7 @@ public class ActionFactory {
 
 		public ResetAction(SqlRepeatablerController controller) {
 			this.controller = controller;
-            this.putValue(NAME, "Reset");
+			this.putValue(NAME, "Reset");
 		}
 
 		@Override
@@ -123,7 +123,7 @@ public class ActionFactory {
 
 		public AboutAction(SqlRepeatablerController controller) {
 			this.controller = controller;
-            this.putValue(NAME, "About "+SqlRepeatablerModel.PROGRAMNAME);
+			this.putValue(NAME, "About "+SqlRepeatablerModel.PROGRAMNAME);
 		}
 
 		@Override

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlString;
+import lunartools.sqlrepeatabler.parser.TableName;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public class InsertIntoStatement implements Statement{
@@ -28,9 +28,9 @@ public class InsertIntoStatement implements Statement{
 	}
 
 	@Override
-	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlock){
 		SqlBlock sqlBlockStatement=new SqlBlock();
-		
+
 		Token tokenFirstColumnName=getFirstValueFromCsvToken(tokenColumnNames);
 		if(!tokenFirstColumnName.toString().equalsIgnoreCase("ID")){
 			logger.warn("INSERT INTO: First column name is '"+tokenFirstColumnName.toString()+"', usually it is 'ID' !");
@@ -38,12 +38,16 @@ public class InsertIntoStatement implements Statement{
 		Token tokenValues=new Token("VALUES",Category.COMMAND);
 
 		for(int i=0;i<columnValuesTokensList.size();i++) {
-			Token tokenAllValues=columnValuesTokensList.get(i).clone();
+			Token tokenAllValues;
+			try {
+				tokenAllValues = columnValuesTokensList.get(i).clone();
+			} catch (CloneNotSupportedException e) {
+				throw new RuntimeException("Unexpected error cloning a token",e);
+			}
 			tokenAllValues.removeEnclosing('(',')');
 			Token[] columnValues=tokenAllValues.split(',');
 			Token tokenFirstColumnValue=columnValues[0];
-//            sqlBlockStatement.add(SqlString.createSqlStringFromString("if (select COUNT(*) from %s where %s=%s)=0", Category.INSERTED,tableName.getFullName(),tokenFirstColumnName,tokenFirstColumnValue));
-            sqlBlockStatement.add(SqlString.createSqlStringFromString("IF NOT EXISTS (SELECT 1 FROM %s WHERE %s=%s)", Category.INSERTED,tableName.getFullName(),tokenFirstColumnName,tokenFirstColumnValue));
+			sqlBlockStatement.add(SqlString.createSqlStringFromString("IF NOT EXISTS (SELECT 1 FROM %s WHERE %s=%s)", Category.INSERTED,tableName.getFullName(),tokenFirstColumnName,tokenFirstColumnValue));
 			sqlBlockStatement.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
 			sqlBlockStatement.add(SqlString.createSqlStringFromString("\tSET IDENTITY_INSERT %s ON;",Category.INSERTED,tableName.getFullSchemaAndName()));
 			sqlBlockStatement.add(SqlString.createSqlStringFromString("\t\t%s %s %s %s", Category.INSERTED,tokenStatement,tableName.getFullName(),tokenColumnNames,tokenValues));
@@ -61,11 +65,15 @@ public class InsertIntoStatement implements Statement{
 		sqlBlock.add(sqlBlockStatement);
 	}
 
-	private Token getFirstValueFromCsvToken(Token token) throws CloneNotSupportedException {
-		Token tokenClone=token.clone();
-		tokenClone.removeEnclosing('(',')');
-		Token[] tokenArray=tokenClone.split(',');
-		return tokenArray[0];
+	private Token getFirstValueFromCsvToken(Token token){
+		try {
+			Token tokenClone = token.clone();
+			tokenClone.removeEnclosing('(',')');
+			Token[] tokenArray=tokenClone.split(',');
+			return tokenArray[0];
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException("Unexpected error cloning a token",e);
+		}
 	}
 
 }

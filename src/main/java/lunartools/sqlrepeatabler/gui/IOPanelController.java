@@ -47,7 +47,7 @@ public class IOPanelController {
 		jMenuItemCopyToClipboard.setIcon(ImageTools.createImageIcon("/icons/content_copy_16.png"));
 		return jMenuItemCopyToClipboard;
 	}
-	
+
 	public void updateModelChanges(Object object) {
 		if(logger.isTraceEnabled()) {
 			logger.trace("update: "+object);

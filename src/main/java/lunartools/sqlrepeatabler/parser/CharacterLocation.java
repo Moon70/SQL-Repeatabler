@@ -4,13 +4,13 @@ public class CharacterLocation {
 	private int row;
 	private int column;
 	private int index;
-	
+
 	public CharacterLocation(int row, int column, int index) {
 		this.row=row;
 		this.column=column;
 		this.index=index;
 	}
-	
+
 	public int getRow() {
 		return row;
 	}

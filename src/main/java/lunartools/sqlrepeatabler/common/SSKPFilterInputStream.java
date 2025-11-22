@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.util;
+package lunartools.sqlrepeatabler.common;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;

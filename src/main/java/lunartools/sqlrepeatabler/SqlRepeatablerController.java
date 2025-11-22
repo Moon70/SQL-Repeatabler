@@ -40,14 +40,14 @@ public class SqlRepeatablerController{
 			public void windowClosing(WindowEvent event){
 				shutdown();
 			}
-			
+
 			@Override
-		    public void windowOpened(WindowEvent e) {
+			public void windowOpened(WindowEvent e) {
 				SwingUtilities.invokeLater(() -> {
 					view.revalidate();
 					view.repaint();
 				});
-		    }
+			}
 		});
 
 		LogEditorPane logPanelEditorpane=view.getMainPanel().getLogPanel();
@@ -58,9 +58,6 @@ public class SqlRepeatablerController{
 		model.addChangeListener(this::updateModelChanges);
 		view.validate();
 		view.setVisible(true);
-//		SwingUtilities.invokeLater(() -> {
-//			view.getMainPanel().applyDividerLocation();
-//		});
 
 	}
 

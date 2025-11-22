@@ -35,20 +35,20 @@ public class SqlParser {
 		sqlStatementFactories.add(new OneLineCommentStatementFactory());
 		sqlStatementFactories.add(new SetIdentityInsertStatementFactory());
 		sqlStatementFactories.add(new SpRenameStatementFactory());
-        sqlStatementFactories.add(new WhitespaceLineStatementFactory());
-        sqlStatementFactories.add(new UseStatementFactory());
+		sqlStatementFactories.add(new WhitespaceLineStatementFactory());
+		sqlStatementFactories.add(new UseStatementFactory());
 
 		while(sqlScript.hasCurrentLine()) {
 			SqlString sqlString=sqlScript.peekLine();
-			
+
 			logger.debug("Processing line "+(sqlScript.getIndex()+1)+"\t:"+sqlString.toString());
 			Statement statement=null;
 			for(StatementFactory statementFactory:sqlStatementFactories) {
 				if(statementFactory.match(sqlString.toString())) {
 					statement=statementFactory.createStatement(sqlScript);
 					if(statements.size()==0 && statement instanceof WhitespaceLineStatement) {
-					    logger.debug("Ignoring leading whitespace lines");
-					    break;
+						logger.debug("Ignoring leading whitespace lines");
+						break;
 					}
 					statements.add(statement);
 					SqlBlock tempCharacters=new SqlBlock();

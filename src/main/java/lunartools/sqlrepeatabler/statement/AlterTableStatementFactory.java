@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlParserException;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.parser.StatementTokenizer;
+import lunartools.sqlrepeatabler.parser.TableName;
 import lunartools.sqlrepeatabler.parser.Token;
 import lunartools.sqlrepeatabler.statement.actions.AddColumnAction;
 import lunartools.sqlrepeatabler.statement.actions.AddForeignKeyConstraintAction;
@@ -28,7 +28,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 	}
 
 	@Override
-	public Statement createStatement(SqlScript sqlScript) throws Exception{
+	public Statement createStatement(SqlScript sqlScript) throws SqlParserException{
 		if(!match(sqlScript.peekLineAsString())) {
 			throw new RuntimeException("Illegal factory call");
 		}
@@ -68,18 +68,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		return new AlterTableStatement(tokenStatement,tableName,alterTableActions);
 	}
 
-	public ArrayList<AlterTableAction> parseAddAction(StatementTokenizer statementTokenizer) throws Exception {
-		//column definitions
-		//constraint definitions
-		/*
-		 * alter table [T_FOO]
-		 * add [COLUMNNAME] tinyint;
-		 * 
-		 * alter table [T_FOO]
-		 * add constraint [T_FOO_COLUMNNAME_ID_FK]
-		 * foreign key ([COLUMNNAME_ID])
-		 * references [T_FOO] ([ID]);
-		 */
+	public ArrayList<AlterTableAction> parseAddAction(StatementTokenizer statementTokenizer) throws SqlParserException{
 		logger.debug("Parsing ADD action: ");
 		ArrayList<AlterTableAction> alterTableActions=new ArrayList<>();
 		while(statementTokenizer.hasNext()) {
@@ -125,9 +114,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		return alterTableActions;
 	}
 
-	public ArrayList<AlterTableAction> parseDropAction(StatementTokenizer statementTokenizer) throws Exception {
-		//column targets
-		//constraint targets
+	public ArrayList<AlterTableAction> parseDropAction(StatementTokenizer statementTokenizer) throws SqlParserException{
 		logger.debug("Parsing DROP action");
 		ArrayList<AlterTableAction> alterTableActions=new ArrayList<>();
 		Token tokenTarget=statementTokenizer.nextToken();
@@ -151,7 +138,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		return alterTableActions;
 	}
 
-	public ArrayList<AlterTableAction> parseAlterColumnAction(StatementTokenizer statementTokenizer) throws Exception {
+	public ArrayList<AlterTableAction> parseAlterColumnAction(StatementTokenizer statementTokenizer) throws SqlParserException{
 		logger.debug("Parsing ALTER COLUMN action");
 		ArrayList<AlterTableAction> alterTableActions=new ArrayList<>();
 		Token tokenColumnName=statementTokenizer.nextToken();
@@ -165,7 +152,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		return alterTableActions;
 	}
 
-	public boolean beginsWithSupportedCommand(StatementTokenizer statementTokenizer) {
+	private boolean beginsWithSupportedCommand(StatementTokenizer statementTokenizer) {
 		return 
 				statementTokenizer.startsWithIgnoreCase("ADD") ||
 				statementTokenizer.startsWithIgnoreCase("DROP") ||

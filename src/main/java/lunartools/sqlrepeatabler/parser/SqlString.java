@@ -56,13 +56,6 @@ public class SqlString {
 		return sqlCharacters.get(0).getLocation();
 	}
 
-	public SqlCharacter getLastCharacter() {
-		if(sqlCharacters.size()==0) {
-			return null;
-		}
-		return sqlCharacters.get(sqlCharacters.size()-1);
-	}
-
 	public ArrayList<SqlCharacter> getCharacters(){
 		return sqlCharacters;
 	}
@@ -114,10 +107,6 @@ public class SqlString {
 		sqlCharacters.addAll(sqlString.getCharacters());
 	}
 
-	public int size() {
-		return sqlCharacters.size();
-	}
-
 	public void setBackgroundColor(String backgroundColor) {
 		for(SqlCharacter sqlCharacter:sqlCharacters) {
 			sqlCharacter.setBackgroundColor(backgroundColor);
@@ -128,7 +117,7 @@ public class SqlString {
 		setCategory(Category.ERROR);
 		setBackgroundColor(BackgroundColorProvider.ERROR);
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb=new StringBuilder();

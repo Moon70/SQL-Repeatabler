@@ -6,27 +6,27 @@ public class SqlCharacter {
 	private CharacterLocation characterLocation;
 	private Category category=Category.UNCATEGORIZED;
 	private String backgroundColor;
-	
-	
+
+
 	public SqlCharacter(char c) {
 		this.c=c;
 	}
-	
+
 	public SqlCharacter(char c, CharacterLocation characterLocation) {
 		this(c);
 		this.characterLocation=characterLocation;
 	}
-	
-    public SqlCharacter(char c, CharacterLocation characterLocation, Category category) {
-    	this(c,characterLocation);
-        this.category=category;
-    }
-    
-    public SqlCharacter(char c,Category category) {
+
+	public SqlCharacter(char c, CharacterLocation characterLocation, Category category) {
+		this(c,characterLocation);
+		this.category=category;
+	}
+
+	public SqlCharacter(char c,Category category) {
 		this(c);
-        this.category=category;
-    }
-	
+		this.category=category;
+	}
+
 	public char getChar() {
 		return c;
 	}
@@ -34,14 +34,14 @@ public class SqlCharacter {
 	public CharacterLocation getLocation() {
 		return characterLocation;
 	}
-	
+
 	public boolean isSpace() {
 		return c==' ';
 	}
 
-    public boolean isWhiteSpace() {
-        return c==' ' || c=='\t';
-    }
+	public boolean isWhiteSpace() {
+		return c==' ' || c=='\t';
+	}
 
 	public boolean isSemicolon() {
 		return c==';';
@@ -58,7 +58,7 @@ public class SqlCharacter {
 	public void setChar(char c) {
 		this.c=c;
 	}
-	
+
 	public String getBackgroundColor() {
 		return backgroundColor;
 	}

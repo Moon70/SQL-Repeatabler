@@ -1,7 +1,7 @@
 package lunartools.sqlrepeatabler.statement.actions;
 
-import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
+import lunartools.sqlrepeatabler.parser.TableName;
 import lunartools.sqlrepeatabler.parser.Token;
 
 public abstract class AlterTableAction {
@@ -21,5 +21,5 @@ public abstract class AlterTableAction {
 		return name;
 	}
 
-    public abstract void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName)throws Exception;
+	public abstract void toSqlCharacters(SqlBlock sqlBlock,Token tokenStatement,TableName tableName);
 }

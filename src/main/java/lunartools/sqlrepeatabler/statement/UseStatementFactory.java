@@ -1,5 +1,7 @@
 package lunartools.sqlrepeatabler.statement;
 
+import java.io.EOFException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +18,7 @@ public class UseStatementFactory extends StatementFactory{
 	}
 
 	@Override
-	public Statement createStatement(SqlScript sqlScript) throws Exception{
+	public Statement createStatement(SqlScript sqlScript) throws EOFException{
 		if(!match(sqlScript.peekLineAsString())) {
 			throw new RuntimeException("Illegal factory call");
 		}

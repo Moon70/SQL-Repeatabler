@@ -2,11 +2,11 @@ package lunartools.sqlrepeatabler.statement;
 
 import java.util.ArrayList;
 
-import lunartools.sqlrepeatabler.common.TableName;
 import lunartools.sqlrepeatabler.parser.Category;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlCharacter;
 import lunartools.sqlrepeatabler.parser.SqlString;
+import lunartools.sqlrepeatabler.parser.TableName;
 import lunartools.sqlrepeatabler.parser.Token;
 import lunartools.sqlrepeatabler.statement.actions.AlterColumnAction;
 import lunartools.sqlrepeatabler.statement.actions.AlterTableAction;
@@ -24,10 +24,10 @@ public class AlterTableStatement implements Statement {
 	}
 
 	@Override
-	public void toSqlCharacters(SqlBlock sqlBlock) throws Exception {
+	public void toSqlCharacters(SqlBlock sqlBlock){
 		SqlCharacter sqlCharacter=tokenStatement.getFirstCharacter();
 		String statementBackgroundColor=sqlCharacter.getBackgroundColor();
-		
+
 		boolean hasAlterColumnAction=false;
 
 		SqlBlock sqlblockTemp=new SqlBlock();

@@ -13,12 +13,12 @@ public enum Category {
 	PARAMETER(		"#8B008B",	"bold",		null,		null),
 	INSERTED(		"#4682B4",	"bold",		null,		null),
 	ERROR(			"#222222",	"bold",		null,		null);
-	
+
 	private final String color;
 	private final String fontWeight;
 	private final String fontStyle;
 	private final String textDecoration;
-	
+
 	private Category(String color, String fontWeight, String fontStyle, String textDecoration) {
 		this.color=color;
 		this.fontWeight=fontWeight;
@@ -33,7 +33,7 @@ public enum Category {
 	public String getFontWeight() {
 		return fontWeight;
 	}
-	
+
 	public String getCss() {
 		StringBuilder sb=new StringBuilder();
 		sb.append(".").append(this.toString()).append(" {");
@@ -50,5 +50,5 @@ public enum Category {
 		sb.append("}");
 		return sb.toString();
 	}
-	
+
 }

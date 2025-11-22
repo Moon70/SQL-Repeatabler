@@ -19,7 +19,7 @@ public class IOPanel extends JPanel{
 	private JSplitPane jSplitPaneHorizontal;
 	private JScrollPane scrollPaneLeft;
 	private JScrollPane scrollPaneRight;
-	
+
 	public IOPanel(SqlRepeatablerModel model, int sqlFileIndex) {
 		this.sqlFileIndex=sqlFileIndex;
 
@@ -44,7 +44,7 @@ public class IOPanel extends JPanel{
 		scrollPaneRight.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneRight.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		jSplitPaneHorizontal.setRightComponent(scrollPaneRight);
-		
+
 		jSplitPaneHorizontal.setResizeWeight(1.0);
 
 		add(jSplitPaneHorizontal,BorderLayout.CENTER);
@@ -52,8 +52,8 @@ public class IOPanel extends JPanel{
 		SwingUtilities.invokeLater(() -> {
 			applyDividerLocation();
 			jSplitPaneHorizontal.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, evt -> {
-			    int newLocation=(int)evt.getNewValue();
-			    Settings.getInstance().setDividerlocationScript(newLocation);
+				int newLocation=(int)evt.getNewValue();
+				Settings.getInstance().setDividerlocationScript(newLocation);
 			});
 		});
 	}

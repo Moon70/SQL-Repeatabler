@@ -16,13 +16,13 @@ public class OneLineCommentStatementFactory extends StatementFactory{
 	}
 
 	@Override
-	public Statement createStatement(SqlScript sqlScript) throws Exception{
-	    SqlString sqlScriptLine=sqlScript.readLine();
+	public Statement createStatement(SqlScript sqlScript){
+		SqlString sqlScriptLine=sqlScript.readLine();
 		if(!match(sqlScriptLine.toString())) {
 			throw new RuntimeException("Illegal factory call");
 		}
 
-        sqlScriptLine.setCategory(Category.COMMENT);
+		sqlScriptLine.setCategory(Category.COMMENT);
 		logger.info("Statement: comment");
 		int endIndex=sqlScript.getIndex();
 		int startIndex=endIndex-1;
