@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>lunartools</groupId>
-	<artifactId>sql-repeatenabler</artifactId>
-	<version>2.1.7-snapshot</version>
+	<artifactId>sqlrepeatabler</artifactId>
+	<version>2.2.0</version>
 	<name>SQL-Repeatenabler</name>
 	<description>Modifies a SQL-Script (MS flavour) so that it can run more than once, without generating errors like 'table already exists'.</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
-		<lunartools.lunartools.version>1.3.0-SNAPSHOT</lunartools.lunartools.version>
+		<lunartools.lunartools.version>1.3.0</lunartools.lunartools.version>
 		<org.slf4j.slf4j-api.version>1.7.32</org.slf4j.slf4j-api.version>
 		<ch.qos.logback.logback-classic.version>1.2.10</ch.qos.logback.logback-classic.version>
 		<ch.qos.logback.logback-core.version>1.2.10</ch.qos.logback.logback-core.version>

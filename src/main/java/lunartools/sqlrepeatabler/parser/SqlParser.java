@@ -23,18 +23,6 @@ public class SqlParser {
 	private static Logger logger = LoggerFactory.getLogger(SqlParser.class);
 	public static final String CRLF="\r\n";
 
-//	public static StringBuilder parse(Path path) throws Exception {
-//		try(BufferedReader bufferedReader=Files.newBufferedReader(path, StandardCharsets.UTF_8)){
-//			return parse(bufferedReader);
-//		}
-//	}
-//
-//	public static StringBuilder parse(File file) throws Exception {
-//		try(BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))){
-//			return parse(bufferedReader);
-//		}
-//	}
-
 	public static SqlBlock parse(SqlScript sqlScript) throws Exception {
 		BackgroundColorProvider.getInstance().reset();
 		SqlBlock sqlBlockResult=new SqlBlock();
@@ -59,7 +47,7 @@ public class SqlParser {
 				if(statementFactory.match(sqlString.toString())) {
 					statement=statementFactory.createStatement(sqlScript);
 					if(statements.size()==0 && statement instanceof WhitespaceLineStatement) {
-					    logger.info("Ignoring leading whitespace lines");
+					    logger.debug("Ignoring leading whitespace lines");
 					    break;
 					}
 					statements.add(statement);

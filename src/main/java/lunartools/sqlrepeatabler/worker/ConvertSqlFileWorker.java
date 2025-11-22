@@ -35,7 +35,7 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, SwingWorkerUpdate<?>
 
 			for(int i=0;i<files.size();i++) {
 				file=files.get(i);
-				logger.info("Reading: "+file);
+				logger.debug("Reading: "+file);
 				ConverterService converterService=new ConverterService(model);
 				SqlScript sqlScript=converterService.createSqlScript(file);
 				sqlScripts.add(sqlScript);
