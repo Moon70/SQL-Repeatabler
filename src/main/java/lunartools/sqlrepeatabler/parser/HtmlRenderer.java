@@ -2,7 +2,6 @@ package lunartools.sqlrepeatabler.parser;
 
 import java.util.ArrayList;
 
-import lunartools.sqlrepeatabler.common.BackgroundColorProvider;
 import lunartools.sqlrepeatabler.settings.Settings;
 
 public class HtmlRenderer {
@@ -22,7 +21,7 @@ public class HtmlRenderer {
 	}
 
 	private void render(StringBuilder sbHtml,SqlString sqlString) {
-		isBackgroundColorEnabled=Settings.getInstance().isBackgroundColorEnabled() && BackgroundColorProvider.getInstance().getNumberOfColorsUsed()>1;
+		isBackgroundColorEnabled=Settings.getInstance().isBackgroundColorEnabled();
 		ArrayList<SqlCharacter> sqlCharacters=sqlString.getCharacters();
 		StringBuilder sbFragement=new StringBuilder();
 		Category category=Category.UNCATEGORIZED;
