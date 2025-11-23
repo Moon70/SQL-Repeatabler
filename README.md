@@ -1,5 +1,9 @@
 # SQL-Repeatabler
 
+![Java](https://img.shields.io/badge/Java-8-blue)
+![Maven](https://img.shields.io/badge/Build-Maven-green)
+![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
+
 <div>
 <table>
   <tr>
