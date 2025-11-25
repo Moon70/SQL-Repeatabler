@@ -174,56 +174,44 @@ public class TableName {
 
 	public Token getDatabaseNameWithoutDelimiter() {
 		if(databaseName!=null) {
-			try {
-				Token token = (Token)databaseName.clone();
-				token.removeEnclosing('[',']');
-				token.removeEnclosing('\"');
-				return token;
-			} catch (CloneNotSupportedException e) {
-				throw new RuntimeException("Unexpected error cloning a token",e);
-			}
+			Token token = databaseName.clone();
+			token.removeEnclosing('[',']');
+			token.removeEnclosing('\"');
+			return token;
 		}
 		return null;
 	}
 
 	public Token getSchemaNameWithoutDelimiter(){
 		if(schemaName!=null) {
-			try {
-				Token token=(Token)schemaName.clone();
-				token.removeEnclosing('[',']');
-				token.removeEnclosing('\"');
-				return token;
-			} catch (CloneNotSupportedException e) {
-				throw new RuntimeException("Unexpected error cloning a token",e);
-			}
+			Token token=schemaName.clone();
+			token.removeEnclosing('[',']');
+			token.removeEnclosing('\"');
+			return token;
 		}
 		return null;
 	}
 
 	public Token getTableNameWithoutDelimiter(){
 		if(tableName!=null) {
-			try {
-				Token token = (Token)tableName.clone();
-				token.removeEnclosing('[',']');
-				token.removeEnclosing('\"');
-				return token;
-			} catch (CloneNotSupportedException e) {
-				throw new RuntimeException("Unexpected error cloning a token",e);
-			}
+			Token token = tableName.clone();
+			token.removeEnclosing('[',']');
+			token.removeEnclosing('\"');
+			return token;
 		}
 		return null;
 	}
 
 	public Token getFullName() {
-		Token tokenFullname=databaseName;
+		Token tokenFullname=databaseName==null?null:databaseName.clone();
 		if(tokenFullname==null) {
-			tokenFullname=schemaName;
+			tokenFullname=schemaName==null?null:schemaName.clone();
 		}else {
 			tokenFullname.append(new SqlCharacter('.'));
 			tokenFullname.append(schemaName);
 		}
 		if(tokenFullname==null) {
-			tokenFullname=tableName;
+			tokenFullname=tableName.clone();
 		}else {
 			tokenFullname.append(new SqlCharacter('.'));
 			tokenFullname.append(tableName);
@@ -232,9 +220,9 @@ public class TableName {
 	}
 
 	public Token getFullSchemaAndName() {
-		Token tokenFullname=schemaName;
+		Token tokenFullname=schemaName==null?null:schemaName.clone();
 		if(tokenFullname==null) {
-			tokenFullname=tableName;
+			tokenFullname=tableName.clone();
 		}else {
 			tokenFullname.append(new SqlCharacter('.'));
 			tokenFullname.append(tableName);

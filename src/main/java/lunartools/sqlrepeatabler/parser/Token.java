@@ -65,19 +65,15 @@ public class Token extends SqlString{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Token clone() throws CloneNotSupportedException {
+	public Token clone(){
 		return new Token((ArrayList<SqlCharacter>)sqlCharacters.clone());
 	}
 
 	public Token cloneWithoutDelimiters(){
-		try {
-			Token token = (Token)this.clone();
-			token.removeEnclosing('[',']');
-			token.removeEnclosing('"');
-			return token;
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException("Unexpected error cloning a token",e);
-		}
+		Token token = (Token)this.clone();
+		token.removeEnclosing('[',']');
+		token.removeEnclosing('"');
+		return token;
 	}
 
 	private void trim() {

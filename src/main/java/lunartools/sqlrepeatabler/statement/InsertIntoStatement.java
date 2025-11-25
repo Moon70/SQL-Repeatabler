@@ -40,11 +40,7 @@ public class InsertIntoStatement implements Statement{
 		ArrayList<Token> tokensToBeMarkedAsWarning=new ArrayList<>();
 		for(int i=0;i<columnValuesTokensList.size();i++) {
 			Token tokenAllValues;
-			try {
-				tokenAllValues = columnValuesTokensList.get(i).clone();
-			} catch (CloneNotSupportedException e) {
-				throw new RuntimeException("Unexpected error cloning a token",e);
-			}
+			tokenAllValues = columnValuesTokensList.get(i).clone();
 			tokenAllValues.removeEnclosing('(',')');
 			Token[] columnValues=tokenAllValues.split(',');
 			Token tokenFirstColumnValue=columnValues[0];
@@ -78,14 +74,10 @@ public class InsertIntoStatement implements Statement{
 	}
 
 	private Token getFirstValueFromCsvToken(Token token){
-		try {
-			Token tokenClone = token.clone();
-			tokenClone.removeEnclosing('(',')');
-			Token[] tokenArray=tokenClone.split(',');
-			return tokenArray[0];
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException("Unexpected error cloning a token",e);
-		}
+		Token tokenClone = token.clone();
+		tokenClone.removeEnclosing('(',')');
+		Token[] tokenArray=tokenClone.split(',');
+		return tokenArray[0];
 	}
 
 }
