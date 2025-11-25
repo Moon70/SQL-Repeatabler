@@ -33,10 +33,11 @@ public class InsertIntoStatement implements Statement{
 
 		Token tokenFirstColumnName=getFirstValueFromCsvToken(tokenColumnNames);
 		if(!tokenFirstColumnName.toString().equalsIgnoreCase("ID")){
-			logger.warn("INSERT INTO: First column name is '"+tokenFirstColumnName.toString()+"', usually it is 'ID' !");
+			logger.warn(String.format("INSERT INTO: Unique key column name is '%s', usually it is 'ID' !",tokenFirstColumnName));
 		}
 		Token tokenValues=new Token("VALUES",Category.COMMAND);
 
+		ArrayList<Token> tokensToBeMarkedAsWarning=new ArrayList<>();
 		for(int i=0;i<columnValuesTokensList.size();i++) {
 			Token tokenAllValues;
 			try {
@@ -47,6 +48,11 @@ public class InsertIntoStatement implements Statement{
 			tokenAllValues.removeEnclosing('(',')');
 			Token[] columnValues=tokenAllValues.split(',');
 			Token tokenFirstColumnValue=columnValues[0];
+			try {
+                Long.parseLong(tokenFirstColumnValue.toString());
+            } catch (Exception e) {
+                tokensToBeMarkedAsWarning.add(tokenFirstColumnValue);
+            }
 			sqlBlockStatement.add(SqlString.createSqlStringFromString("IF NOT EXISTS (SELECT 1 FROM %s WHERE %s=%s)", Category.INSERTED,tableName.getFullName(),tokenFirstColumnName,tokenFirstColumnValue));
 			sqlBlockStatement.add(SqlString.createSqlStringFromString("BEGIN", Category.INSERTED));
 			sqlBlockStatement.add(SqlString.createSqlStringFromString("\tSET IDENTITY_INSERT %s ON;",Category.INSERTED,tableName.getFullSchemaAndName()));
@@ -59,9 +65,15 @@ public class InsertIntoStatement implements Statement{
 				sqlBlockStatement.add(SqlString.EMPTY_LINE);
 			}
 		}
-
+		
 		SqlCharacter sqlCharacter=tokenStatement.getFirstCharacter();
 		sqlBlockStatement.setBackgroundColor(sqlCharacter.getBackgroundColor());
+		if(tokensToBeMarkedAsWarning.size()>0) {
+		    logger.warn(String.format("INSERT INTO: %d unique key values are not integers. This is fine if the column is just unique, but it may be a mistake if it is the primary key. %s",tokensToBeMarkedAsWarning.size(),tokensToBeMarkedAsWarning.get(0).getLocation()));
+		    for(Token token:tokensToBeMarkedAsWarning) {
+		        token.markWarn();
+		    }
+		}
 		sqlBlock.add(sqlBlockStatement);
 	}
 

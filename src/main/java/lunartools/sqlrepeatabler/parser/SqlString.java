@@ -113,10 +113,15 @@ public class SqlString {
 		}
 	}
 
-	public void markError() {
-		setCategory(Category.ERROR);
-		setBackgroundColor(BackgroundColorProvider.ERROR);
-	}
+    public void markWarn() {
+        setCategory(Category.WARN);
+        setBackgroundColor(BackgroundColorProvider.WARN);
+    }
+
+    public void markError() {
+        setCategory(Category.ERROR);
+        setBackgroundColor(BackgroundColorProvider.ERROR);
+    }
 
 	@Override
 	public String toString() {

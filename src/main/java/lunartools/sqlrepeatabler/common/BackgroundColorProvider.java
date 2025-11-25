@@ -1,7 +1,8 @@
 package lunartools.sqlrepeatabler.common;
 
 public class BackgroundColorProvider {
-	public static final String ERROR="ff4444";
+	public static final String WARN="ffaa22";
+    public static final String ERROR="ff4444";
 	private final String[] colors= {
 			"eeeeee",
 			"eeffff",
