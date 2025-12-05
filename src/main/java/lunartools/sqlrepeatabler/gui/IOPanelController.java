@@ -6,11 +6,12 @@ import javax.swing.JPopupMenu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.gui.actions.CloseScriptAction;
 import lunartools.sqlrepeatabler.gui.actions.CopyToClipboardAction;
+import lunartools.sqlrepeatabler.gui.icon.IconProvider;
+import lunartools.sqlrepeatabler.gui.icon.Icons;
 import lunartools.sqlrepeatabler.parser.HtmlRenderer;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 
@@ -38,13 +39,13 @@ public class IOPanelController {
 
 	private JMenuItem createCloseScriptJMenuItem(IOPanel ioPanel) {
 		JMenuItem jMenuItemCloseScript=new JMenuItem(new CloseScriptAction(model, ioPanel));
-		jMenuItemCloseScript.setIcon(ImageTools.createImageIcon("/icons/tab_close_16.png"));
+		jMenuItemCloseScript.setIcon(IconProvider.getFlatSvgIcon(Icons.CLOSE,jMenuItemCloseScript));
 		return jMenuItemCloseScript;
 	}
 
 	private JMenuItem createCopyToClipboardJMenuItem(IOPanel ioPanel) {
 		JMenuItem jMenuItemCopyToClipboard=new JMenuItem(new CopyToClipboardAction(model,ioPanel));
-		jMenuItemCopyToClipboard.setIcon(ImageTools.createImageIcon("/icons/content_copy_16.png"));
+		jMenuItemCopyToClipboard.setIcon(IconProvider.getFlatSvgIcon(Icons.COPY,jMenuItemCopyToClipboard));
 		return jMenuItemCopyToClipboard;
 	}
 

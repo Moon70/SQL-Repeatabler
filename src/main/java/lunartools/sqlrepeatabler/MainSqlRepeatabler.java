@@ -1,10 +1,11 @@
 package lunartools.sqlrepeatabler;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.formdev.flatlaf.FlatLightLaf;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
@@ -32,9 +33,10 @@ public class MainSqlRepeatabler {
 	private static Logger logger = LoggerFactory.getLogger(MainSqlRepeatabler.class);
 
 	public static void main(String[] args) {
+		FlatLightLaf.setup();
 		SwingUtilities.invokeLater(() -> {
 			try{
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				SwingBufferingLogBackAppender swingAppender = setupLogger(Level.INFO);
 
 				SqlRepeatablerModel model=new SqlRepeatablerModel();

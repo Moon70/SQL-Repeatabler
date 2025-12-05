@@ -1,8 +1,11 @@
 # SQL-Repeatabler
 
-![Java](https://img.shields.io/badge/Java-8-blue)
-![Maven](https://img.shields.io/badge/Build-Maven-green)
+![GitHub release](https://img.shields.io/github/v/release/Moon70/SQL-Repeatabler)
 ![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
+![FlatLaf](https://img.shields.io/badge/FlatLaf-v3.6.2-blue)
+![Java](https://img.shields.io/badge/Java-11-blue)
+![Maven](https://img.shields.io/badge/Build-Maven-blue)
+![Downloads](https://img.shields.io/github/downloads/Moon70/SQL-Repeatabler/total)
 
 <div>
 <table>
@@ -50,7 +53,7 @@ A 'create table' statement will fail when running the second time, because the t
   <li>After start, the tool shows one of a few ape related AI generated images. Yes this is part of the core functionality, because the ape is our friendly team mascot ;-)</li>
   <li>Drag´n´drop one or more .sql files on the image</li>
   <li>The tool opens a view with a tab for each file, showing the original script on the left, the converted script on the right side</li>
-  <li>Manual check the generated script</li>
+  <li>Manually check the generated script</li>
   <li>Use file menu 'Save As' to save all generated scripts to one file</li>
 </ol> 
 </td>

@@ -3,13 +3,18 @@
 	<groupId>lunartools</groupId>
 	<artifactId>sqlrepeatabler</artifactId>
 	<version>2.2.3</version>
-	<name>SQL-Repeatenabler</name>
+	<name>Sql-Repeatenabler</name>
 	<description>Modifies a SQL-Script (MS flavour) so that it can run more than once, without generating errors like 'table already exists'.</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<lunartools.lunartools.version>1.3.0</lunartools.lunartools.version>
+		<maven.compiler.target>1.11</maven.compiler.target>
+		<maven.compiler.source>1.11</maven.compiler.source>
+		<java.release.version>11</java.release.version>
+		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+		<org.codehaus.mojo.build-helper-maven-plugin.version>3.5.0</org.codehaus.mojo.build-helper-maven-plugin.version>
+		<com.formdev.flatlaf.version>3.6.2</com.formdev.flatlaf.version>
+		<com.formdev.flatlaf-extras.version>3.6.2</com.formdev.flatlaf-extras.version>
+		<lunartools.lunartools.version>1.4.0-snapshot</lunartools.lunartools.version>
 		<org.slf4j.slf4j-api.version>1.7.32</org.slf4j.slf4j-api.version>
 		<ch.qos.logback.logback-classic.version>1.2.10</ch.qos.logback.logback-classic.version>
 		<ch.qos.logback.logback-core.version>1.2.10</ch.qos.logback.logback-core.version>
@@ -23,7 +28,7 @@
 				<directory>src/main/resources</directory>
 				<includes>
 					<include>project.properties</include>
-					<include>About_SQL-Repeatabler.html</include>
+					<include>About_Sql-Repeatabler.html</include>
 				</includes>
 			</resource>
 			<resource>
@@ -31,11 +36,19 @@
 				<directory>src/main/resources</directory>
 				<excludes>
 					<exclude>project.properties</exclude>
-					<exclude>About_SQL-Repeatabler.html</exclude>
+					<exclude>About_Sql-Repeatabler.html</exclude>
 				</excludes>
 			</resource>
 		</resources>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<release>${java.release.version}</release>
+				</configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
@@ -57,8 +70,25 @@
 					</archive>
 					<appendAssemblyId>false</appendAssemblyId>
 					<attach>false</attach>
-					<finalName>SQL-Repeatabler-${project.version}</finalName>  
+					<finalName>Sql-Repeatabler-${project.version}</finalName>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>${org.codehaus.mojo.build-helper-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>add-timestamp</id>
+						<goals>
+							<goal>timestamp-property</goal>
+						</goals>
+						<configuration>
+							<name>build.timestamp</name>
+							<pattern>yyyy-MM-dd HH:mm:ss</pattern>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -69,34 +99,46 @@
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		    <version>${org.slf4j.slf4j-api.version}</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${org.slf4j.slf4j-api.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
 		<dependency>
-		    <groupId>ch.qos.logback</groupId>
-		    <artifactId>logback-classic</artifactId>
-		    <version>${ch.qos.logback.logback-classic.version}</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${ch.qos.logback.logback-classic.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
 		<dependency>
-		    <groupId>ch.qos.logback</groupId>
-		    <artifactId>logback-core</artifactId>
-		    <version>${ch.qos.logback.logback-core.version}</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${ch.qos.logback.logback-core.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.formdev/flatlaf -->
+		<dependency>
+			<groupId>com.formdev</groupId>
+			<artifactId>flatlaf</artifactId>
+			<version>${com.formdev.flatlaf.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.formdev/flatlaf-extras -->
+		<dependency>
+			<groupId>com.formdev</groupId>
+			<artifactId>flatlaf-extras</artifactId>
+			<version>${com.formdev.flatlaf-extras.version}</version>
 		</dependency>
 		<!-- https://github.com/Moon70/LunarTools/packages -->
 		<dependency>
 			<groupId>lunartools</groupId>
 			<artifactId>lunartools</artifactId>
- 			<version>${lunartools.lunartools.version}</version>
+			<version>${lunartools.lunartools.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 		<dependency>
-		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter</artifactId>
-		    <version>${org.junit.jupiter.junit-jupiter.version}</version>
-		    <scope>test</scope>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>${org.junit.jupiter.junit-jupiter.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

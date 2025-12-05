@@ -14,6 +14,8 @@ import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
+import lunartools.sqlrepeatabler.gui.icon.IconProvider;
+import lunartools.sqlrepeatabler.gui.icon.Icons;
 import lunartools.sqlrepeatabler.settings.ProcessingOrder;
 import lunartools.sqlrepeatabler.settings.Settings;
 
@@ -56,25 +58,25 @@ public class MenuModel {
 		menuFile=new JMenu("File");
 
 		menuFileItemOpen=new JMenuItem(actionFactory.createOpenAction());
-		menuFileItemOpen.setIcon(ImageTools.createImageIcon("/icons/file_open_16.png"));
+		menuFileItemOpen.setIcon(IconProvider.getFlatSvgIcon(Icons.FILE_OPEN,menuFileItemOpen));
 		menuFileItemOpen.setEnabled(true);
 		menuFile.add(menuFileItemOpen);
 
 		menuFileItemSaveAs=new JMenuItem(actionFactory.createSaveAsAction());
-		menuFileItemSaveAs.setIcon(ImageTools.createImageIcon("/icons/save_as_16.png"));
+		menuFileItemSaveAs.setIcon(IconProvider.getFlatSvgIcon(Icons.SAVE_AS,menuFileItemSaveAs));
 		menuFileItemSaveAs.setEnabled(true);
 		menuFile.add(menuFileItemSaveAs);
 
 		menuFileItemReload=new JMenuItem(actionFactory.createReloadAction());
-		menuFileItemReload.setIcon(ImageTools.createImageIcon("/icons/refresh_16.png"));
+		menuFileItemReload.setIcon(IconProvider.getFlatSvgIcon(Icons.REFRESH,menuFileItemReload));
 		menuFile.add(menuFileItemReload);
 
 		menuFileItemReset=new JMenuItem(actionFactory.createResetAction());
-		menuFileItemReset.setIcon(ImageTools.createImageIcon("/icons/restart_alt_16.png"));
+		menuFileItemReset.setIcon(IconProvider.getFlatSvgIcon(Icons.RESTART,menuFileItemReset));
 		menuFile.add(menuFileItemReset);
 
 		menuFileItemExitProgram=new JMenuItem(actionFactory.createExitProgramAction());
-		menuFileItemExitProgram.setIcon(ImageTools.createImageIcon("/icons/logout_16.png"));
+		menuFileItemExitProgram.setIcon(IconProvider.getFlatSvgIcon(Icons.EXIT,menuFileItemExitProgram));
 		menuFile.add(menuFileItemExitProgram);
 
 		return menuFile;
@@ -85,7 +87,7 @@ public class MenuModel {
 
 		menuProcessFiles=new JMenu("File processing order-");
 		menuPreferences.add(menuProcessFiles);
-		menuProcessFiles.setIcon(ImageTools.createImageIcon("/icons/sort_16.png"));
+		menuProcessFiles.setIcon(IconProvider.getFlatSvgIcon(Icons.EXIT,menuProcessFiles));
 		ButtonGroup buttonGroup = new ButtonGroup();
 
 		radioButtonProcessAsAdded=new JRadioButtonMenuItem(actionFactory.createAsAddedRadioButtonAction());
