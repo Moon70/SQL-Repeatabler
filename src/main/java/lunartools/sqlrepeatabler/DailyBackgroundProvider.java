@@ -10,7 +10,7 @@ import java.util.Calendar;
 
 import lunartools.FileTools;
 import lunartools.ImageTools;
-import lunartools.sqlrepeatabler.common.SSKPFilterInputStream;
+import lunartools.SSKPFilterInputStream;
 
 public class DailyBackgroundProvider {
 	private static Image imageBackground;
@@ -20,10 +20,7 @@ public class DailyBackgroundProvider {
 			"Affenparadies",
 			"Soldering Ape",
 			"Titanic Apeisode One",
-			"Apewise",
-			"Batape",
 			"Darth Ape",
-			"Jason",
 			"SQL Pirate",
 			"Titanic Apeisode Two",
 			"Ape Lisa",
@@ -34,7 +31,6 @@ public class DailyBackgroundProvider {
 			"2001 An Ape Odyssey",
 			"Sphinx",
 			"Apemaid",
-			"Ape3PO",
 			"Wyatt Ape"			
 			));
 
