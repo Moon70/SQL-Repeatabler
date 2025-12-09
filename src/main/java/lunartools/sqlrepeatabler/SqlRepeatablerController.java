@@ -11,6 +11,12 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+
 import lunartools.AbstractSettings;
 import lunartools.sqlrepeatabler.common.SwingBufferingLogBackAppender;
 import lunartools.sqlrepeatabler.gui.IOPanel;
@@ -20,6 +26,7 @@ import lunartools.sqlrepeatabler.gui.MainPanel;
 import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
 import lunartools.sqlrepeatabler.settings.Settings;
+import lunartools.sqlrepeatabler.settings.Theme;
 import lunartools.sqlrepeatabler.worker.ConvertSqlFileWorker;
 
 public class SqlRepeatablerController{
@@ -56,9 +63,10 @@ public class SqlRepeatablerController{
 		});
 
 		model.addChangeListener(this::updateModelChanges);
+		ThemeManager.getInstance().addChangeListener(this::updateThemeChanges);
+		activateTheme();
 		view.validate();
 		view.setVisible(true);
-
 	}
 
 	public SqlRepeatablerModel getModel() {
@@ -102,6 +110,36 @@ public class SqlRepeatablerController{
 			}
 			ioPanelControllers.clear();
 		}
+	}
+	public void updateThemeChanges(Object object) {
+		if(logger.isTraceEnabled()) {
+			logger.trace("update: "+object);
+		}
+		if(object==SimpleEvents.THEMEMANAGER_THEME_CHANGED) {
+			activateTheme();
+			model.reload();
+		}
+	}
+
+	private void activateTheme() {
+		Theme theme=ThemeManager.getInstance().getTheme();
+		switch(theme) {
+		case LIGHT:
+			FlatLaf.setup(new FlatLightLaf());
+			break;
+		case DARK:
+			FlatLaf.setup(new FlatDarkLaf());
+			break;
+		case INTELLIJ:
+			FlatLaf.setup(new FlatIntelliJLaf());
+			break;
+		case DARCULA:
+			FlatLaf.setup(new FlatDarculaLaf());
+			break;
+		default:
+			break;
+		}
+		FlatLaf.updateUI();
 	}
 
 	public void shutdown() {

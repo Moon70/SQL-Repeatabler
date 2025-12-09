@@ -19,6 +19,7 @@ public class Settings extends AbstractSettings{
 	public static final String DIVIDERLOCATION_CONSOLE=	"DividerLocationConsole";
 	public static final String DIVIDERLOCATION_SCRIPT=	"DividerLocationScript";
 	public static final String BACKGROUND_COLOR=		"BackgroundColor";
+	public static final String THEME =					"Theme";
 
 	public static Settings getInstance() {
 		if(instance==null) {
@@ -56,6 +57,19 @@ public class Settings extends AbstractSettings{
 
 	public void setProcessingOrder(ProcessingOrder processingOrder) {
 		setString(PROCESSING_ORDER, processingOrder.getKey());
+	}
+	
+	public Theme getTheme() {
+		String themeString=getString(THEME, Theme.LIGHT.getKey());
+		Theme theme=Theme.fromKey(themeString);
+		if(theme==null) {
+			return Theme.LIGHT;
+		}
+		return theme;
+	}
+
+	public void setTheme(Theme theme) {
+		setString(THEME, theme.getKey());
 	}
 
 	public int getDividerlocationConsole() {

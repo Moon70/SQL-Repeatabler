@@ -20,7 +20,6 @@ public class DailyBackgroundProvider {
 			"Affenparadies",
 			"Soldering Ape",
 			"Titanic Apeisode One",
-			"Darth Ape",
 			"SQL Pirate",
 			"Titanic Apeisode Two",
 			"Ape Lisa",

@@ -8,8 +8,10 @@ import javax.swing.JCheckBoxMenuItem;
 
 import lunartools.sqlrepeatabler.SqlRepeatablerController;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.ThemeManager;
 import lunartools.sqlrepeatabler.settings.CheckboxSettings;
 import lunartools.sqlrepeatabler.settings.ProcessingOrder;
+import lunartools.sqlrepeatabler.settings.Theme;
 
 public class ActionFactory {
 	private SqlRepeatablerController controller;
@@ -72,6 +74,38 @@ public class ActionFactory {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				boolean checked = item.isSelected();
 				controller.getModel().enableBackgroundColor(checked);
+			}
+		};
+	}
+
+	public Action createLightThemeRadioButtonAction() {
+		return new AbstractAction(Theme.LIGHT.getLabel()) {
+			@Override public void actionPerformed(ActionEvent e) {
+				ThemeManager.getInstance().applyTheme(Theme.LIGHT);
+			}
+		};
+	}
+
+	public Action createDarkThemeRadioButtonAction() {
+		return new AbstractAction(Theme.DARK.getLabel()) {
+			@Override public void actionPerformed(ActionEvent e) {
+				ThemeManager.getInstance().applyTheme(Theme.DARK);
+			}
+		};
+	}
+
+	public Action createIntellijThemeRadioButtonAction() {
+		return new AbstractAction(Theme.INTELLIJ.getLabel()) {
+			@Override public void actionPerformed(ActionEvent e) {
+				ThemeManager.getInstance().applyTheme(Theme.INTELLIJ);
+			}
+		};
+	}
+
+	public Action createDarculaThemeRadioButtonAction() {
+		return new AbstractAction(Theme.DARCULA.getLabel()) {
+			@Override public void actionPerformed(ActionEvent e) {
+				ThemeManager.getInstance().applyTheme(Theme.DARCULA);
 			}
 		};
 	}

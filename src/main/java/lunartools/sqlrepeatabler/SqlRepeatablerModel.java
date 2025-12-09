@@ -23,7 +23,7 @@ import lunartools.sqlrepeatabler.settings.Settings;
 
 public class SqlRepeatablerModel implements ChangeListenerSupport{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerModel.class);
-	public static final String PROGRAMNAME = "SQL-Repeatabler";
+	public static final String PROGRAMNAME = "Sql-Repeatabler";
 	private static String versionProgram=SwingTools.determineProgramVersion();
 	private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>();
 

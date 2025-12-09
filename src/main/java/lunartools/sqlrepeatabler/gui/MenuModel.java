@@ -13,11 +13,13 @@ import org.slf4j.LoggerFactory;
 import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.SimpleEvents;
 import lunartools.sqlrepeatabler.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.ThemeManager;
 import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
 import lunartools.sqlrepeatabler.gui.icon.IconProvider;
 import lunartools.sqlrepeatabler.gui.icon.Icons;
 import lunartools.sqlrepeatabler.settings.ProcessingOrder;
 import lunartools.sqlrepeatabler.settings.Settings;
+import lunartools.sqlrepeatabler.settings.Theme;
 
 public class MenuModel {
 	private static Logger logger = LoggerFactory.getLogger(MenuModel.class);
@@ -38,6 +40,11 @@ public class MenuModel {
 	private JRadioButtonMenuItem radioButtonProcessByCreationDate;
 	private JRadioButtonMenuItem radioButtonProcessAlphabetically;
 	private JCheckBoxMenuItem checkboxBackgroundColor;
+	private JMenu menuTheme;
+	private JRadioButtonMenuItem radioButtonThemeFlatLightLaf;
+	private JRadioButtonMenuItem radioButtonThemeFlatDarkLaf;
+	private JRadioButtonMenuItem radioButtonThemeFlatIntelliJLaf;
+	private JRadioButtonMenuItem radioButtonThemeFlatDarculaLaf;
 
 	private JMenu menuHelp;
 	private JMenuItem menuHelpItemAbout;
@@ -105,6 +112,26 @@ public class MenuModel {
 		checkboxBackgroundColor=new JCheckBoxMenuItem(actionFactory.createBackgroundColorCheckboxAction());
 		menuPreferences.add(checkboxBackgroundColor);
 
+		menuTheme=new JMenu("Theme");
+		menuPreferences.add(menuTheme);
+		buttonGroup = new ButtonGroup();
+		
+		radioButtonThemeFlatLightLaf=new JRadioButtonMenuItem(actionFactory.createLightThemeRadioButtonAction());
+		menuTheme.add(radioButtonThemeFlatLightLaf);
+		buttonGroup.add(radioButtonThemeFlatLightLaf);
+		
+		radioButtonThemeFlatDarkLaf=new JRadioButtonMenuItem(actionFactory.createDarkThemeRadioButtonAction());
+		menuTheme.add(radioButtonThemeFlatDarkLaf);
+		buttonGroup.add(radioButtonThemeFlatDarkLaf);
+		
+		radioButtonThemeFlatIntelliJLaf=new JRadioButtonMenuItem(actionFactory.createIntellijThemeRadioButtonAction());
+		menuTheme.add(radioButtonThemeFlatIntelliJLaf);
+		buttonGroup.add(radioButtonThemeFlatIntelliJLaf);
+		
+		radioButtonThemeFlatDarculaLaf=new JRadioButtonMenuItem(actionFactory.createDarculaThemeRadioButtonAction());
+		menuTheme.add(radioButtonThemeFlatDarculaLaf);
+		buttonGroup.add(radioButtonThemeFlatDarculaLaf);
+		
 		return menuPreferences;
 	}
 
@@ -174,5 +201,10 @@ public class MenuModel {
 		radioButtonProcessByCreationDate.setSelected(processingOrder==ProcessingOrder.CREATIONDATE);
 		radioButtonProcessAlphabetically.setSelected(processingOrder==ProcessingOrder.ALPHABETICALLY);
 		checkboxBackgroundColor.setSelected(settings.isBackgroundColorEnabled());
+		Theme theme=ThemeManager.getInstance().getTheme();
+		radioButtonThemeFlatLightLaf.setSelected(theme==Theme.LIGHT);
+		radioButtonThemeFlatDarkLaf.setSelected(theme==Theme.DARK);
+		radioButtonThemeFlatIntelliJLaf.setSelected(theme==Theme.INTELLIJ);
+		radioButtonThemeFlatDarculaLaf.setSelected(theme==Theme.DARCULA);
 	}
 }
