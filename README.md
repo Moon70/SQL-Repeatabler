@@ -69,8 +69,9 @@ A 'create table' statement will fail when running the second time, because the t
  <ul>
  <br>
   <li>Java IDE: <a href="https://www.eclipse.org">Eclipse</a></li>
-     <li>Icons: <a href="https://fonts.google.com/icons">Google Material Icons</></a></li>
-  <li>AI image generation: <a href="https://github.com/comfyanonymous/ComfyUI">ComfyUI</a></li>
+  <li>Swing Look-and-Feel: <a href="https://www.formdev.com/flatlaf/">FlatLaf</a></li>
+  <li>Icons: <a href="https://fonts.google.com/icons">Google Material Icons</></a></li>
+  <li>Images AI generated using: <a href="https://github.com/comfyanonymous/ComfyUI">ComfyUI</a></li>
   <li>Text2Image model: <a href="https://flux1ai.com/de/dev">FLUX.1 dev</a></li>
   <li>Coding buddy: <a href="https://chatgpt.com">ChatGPT</a></li>
 </ul>
