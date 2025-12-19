@@ -115,6 +115,25 @@ public class StatementTokenizer {
 		return consumeNextToken(charactersOfStatement,c);
 	}
 
+    public Token nextTokenUntil(String s) throws SqlParserException{
+        if(charactersOfStatement.size()==0 || charactersOfStatement.get(0).isSemicolon()) {
+            return null;
+        }
+        SqlString sqlString=new SqlString(charactersOfStatement);
+        int p=sqlString.toString().toUpperCase().indexOf(s.toUpperCase());
+        if(p==-1) {
+            sqlString.markError();
+            throw new SqlParserException(String.format("Clause '%s' not found", s),charactersOfStatement.get(0).getLocation());
+        }
+        return nextTokenUntil(p);
+    }
+
+    public Token nextTokenUntil(int length){
+        SqlString sqlString=new SqlString(new ArrayList<SqlCharacter>(charactersOfStatement.subList(0, length)));
+        charactersOfStatement=new ArrayList<SqlCharacter>(charactersOfStatement.subList(length, charactersOfStatement.size()));
+        return new Token(sqlString);
+    }
+
 	public boolean hasNext() {
 		return charactersOfStatement.size()>0 && !charAt(0).isSemicolon();
 	}

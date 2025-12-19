@@ -15,6 +15,7 @@ import lunartools.sqlrepeatabler.statement.SetIdentityInsertStatementFactory;
 import lunartools.sqlrepeatabler.statement.SpRenameStatementFactory;
 import lunartools.sqlrepeatabler.statement.Statement;
 import lunartools.sqlrepeatabler.statement.StatementFactory;
+import lunartools.sqlrepeatabler.statement.UpdateStatementFactory;
 import lunartools.sqlrepeatabler.statement.UseStatementFactory;
 import lunartools.sqlrepeatabler.statement.WhitespaceLineStatement;
 import lunartools.sqlrepeatabler.statement.WhitespaceLineStatementFactory;
@@ -36,7 +37,8 @@ public class SqlParser {
 		sqlStatementFactories.add(new SetIdentityInsertStatementFactory());
 		sqlStatementFactories.add(new SpRenameStatementFactory());
 		sqlStatementFactories.add(new WhitespaceLineStatementFactory());
-		sqlStatementFactories.add(new UseStatementFactory());
+        sqlStatementFactories.add(new UseStatementFactory());
+        sqlStatementFactories.add(new UpdateStatementFactory());
 
 		while(sqlScript.hasCurrentLine()) {
 			SqlString sqlString=sqlScript.peekLine();
