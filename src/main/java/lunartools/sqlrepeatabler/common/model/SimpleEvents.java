@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler;
+package lunartools.sqlrepeatabler.common.model;
 
 public enum SimpleEvents {
 	EXIT,

@@ -11,15 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.ImageTools;
-import lunartools.sqlrepeatabler.SimpleEvents;
-import lunartools.sqlrepeatabler.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.ThemeManager;
-import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
-import lunartools.sqlrepeatabler.gui.icon.IconProvider;
-import lunartools.sqlrepeatabler.gui.icon.Icons;
-import lunartools.sqlrepeatabler.settings.ProcessingOrder;
-import lunartools.sqlrepeatabler.settings.Settings;
-import lunartools.sqlrepeatabler.settings.Theme;
+import lunartools.sqlrepeatabler.common.action.ActionFactory;
+import lunartools.sqlrepeatabler.common.model.SimpleEvents;
+import lunartools.sqlrepeatabler.common.ui.IconProvider;
+import lunartools.sqlrepeatabler.common.ui.Icons;
+import lunartools.sqlrepeatabler.common.ui.ThemeManager;
+import lunartools.sqlrepeatabler.infrastructure.config.ProcessingOrder;
+import lunartools.sqlrepeatabler.infrastructure.config.Settings;
+import lunartools.sqlrepeatabler.infrastructure.config.Theme;
+import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 
 public class MenuModel {
 	private static Logger logger = LoggerFactory.getLogger(MenuModel.class);

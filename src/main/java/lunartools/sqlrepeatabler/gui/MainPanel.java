@@ -16,10 +16,10 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.DailyBackgroundProvider;
-import lunartools.sqlrepeatabler.SimpleEvents;
-import lunartools.sqlrepeatabler.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.settings.Settings;
+import lunartools.sqlrepeatabler.common.model.SimpleEvents;
+import lunartools.sqlrepeatabler.common.ui.DailyBackgroundProvider;
+import lunartools.sqlrepeatabler.infrastructure.config.Settings;
+import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 
 public class MainPanel extends JPanel{
 	private static Logger logger = LoggerFactory.getLogger(MainPanel.class);

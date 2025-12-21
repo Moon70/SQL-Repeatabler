@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.gui.icon;
+package lunartools.sqlrepeatabler.common.ui;
 
 public enum Icons {
 	CLOSE		("tab_close_24px.svg"),

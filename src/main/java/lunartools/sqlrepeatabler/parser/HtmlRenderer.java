@@ -2,7 +2,7 @@ package lunartools.sqlrepeatabler.parser;
 
 import java.util.ArrayList;
 
-import lunartools.sqlrepeatabler.settings.Settings;
+import lunartools.sqlrepeatabler.infrastructure.config.Settings;
 
 public class HtmlRenderer {
 	private boolean isBackgroundColorEnabled;

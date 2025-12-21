@@ -1,6 +1,4 @@
-package lunartools.sqlrepeatabler.common;
-
-import lunartools.sqlrepeatabler.ThemeManager;
+package lunartools.sqlrepeatabler.common.ui;
 
 public class BackgroundColorProvider {
 	public static final String WARN="ffaa22";

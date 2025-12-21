@@ -9,8 +9,8 @@ import javax.swing.JSplitPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
-import lunartools.sqlrepeatabler.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.settings.Settings;
+import lunartools.sqlrepeatabler.infrastructure.config.Settings;
+import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 
 public class IOPanel extends JPanel{
 	private SqlEditorPane inputPane;

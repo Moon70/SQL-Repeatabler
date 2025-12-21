@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.settings;
+package lunartools.sqlrepeatabler.infrastructure.config;
 
 import java.util.HashMap;
 import java.util.Map;

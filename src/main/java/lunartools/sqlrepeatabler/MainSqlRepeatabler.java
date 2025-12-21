@@ -7,11 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.filter.ThresholdFilter;
-import lunartools.sqlrepeatabler.common.SwingBufferingLogBackAppender;
-import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
+import lunartools.sqlrepeatabler.bootstrap.ApplicationBootstrap;
 
 /*
  * Copyright (c) 2025 Thomas Mattel
@@ -36,13 +32,7 @@ public class MainSqlRepeatabler {
 		FlatLightLaf.setup();
 		SwingUtilities.invokeLater(() -> {
 			try{
-				//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				SwingBufferingLogBackAppender swingAppender = setupLogger(Level.INFO);
-
-				SqlRepeatablerModel model=new SqlRepeatablerModel();
-				SqlRepeatablerView view=new SqlRepeatablerView(model);
-				new SqlRepeatablerController(model,view,swingAppender);
-				logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
+				ApplicationBootstrap.start();
 			}catch(Throwable e){
 				if(logger.isErrorEnabled()) {
 					logger.error("Unexpected error",e);
@@ -51,26 +41,6 @@ public class MainSqlRepeatabler {
 				}
 			}
 		});
-	}
-
-	public static SwingBufferingLogBackAppender setupLogger(Level level) {
-		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-		SwingBufferingLogBackAppender swingBufferingAppender = new SwingBufferingLogBackAppender();
-		swingBufferingAppender.setContext(loggerContext);
-		swingBufferingAppender.setName(SqlRepeatablerModel.PROGRAMNAME);
-
-		ThresholdFilter tresholdFilter = new ThresholdFilter();
-		tresholdFilter.setLevel(level.toString());
-		tresholdFilter.setContext(loggerContext);
-		tresholdFilter.start();
-
-		swingBufferingAppender.addFilter(tresholdFilter);
-		swingBufferingAppender.start();
-
-		ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		rootLogger.addAppender(swingBufferingAppender);
-
-		return swingBufferingAppender;
 	}
 
 }

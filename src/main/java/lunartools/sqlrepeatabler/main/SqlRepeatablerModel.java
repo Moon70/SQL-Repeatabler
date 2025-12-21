@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler;
+package lunartools.sqlrepeatabler.main;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,10 +16,11 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.ChangeListenerSupport;
 import lunartools.SwingTools;
+import lunartools.sqlrepeatabler.common.model.SimpleEvents;
+import lunartools.sqlrepeatabler.infrastructure.config.ProcessingOrder;
+import lunartools.sqlrepeatabler.infrastructure.config.Settings;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.settings.ProcessingOrder;
-import lunartools.sqlrepeatabler.settings.Settings;
 
 public class SqlRepeatablerModel implements ChangeListenerSupport{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerModel.class);

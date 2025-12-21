@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.gui.icon;
+package lunartools.sqlrepeatabler.common.ui;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;

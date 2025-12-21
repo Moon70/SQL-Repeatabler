@@ -1,12 +1,12 @@
-package lunartools.sqlrepeatabler.settings;
+package lunartools.sqlrepeatabler.infrastructure.config;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
 import lunartools.AbstractSettings;
 import lunartools.SwingTools;
-import lunartools.sqlrepeatabler.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
+import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.main.SqlRepeatablerView;
 
 public class Settings extends AbstractSettings{
 	private static Settings instance;

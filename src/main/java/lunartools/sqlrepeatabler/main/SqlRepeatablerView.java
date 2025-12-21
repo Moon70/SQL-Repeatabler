@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.gui;
+package lunartools.sqlrepeatabler.main;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -19,31 +19,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.SwingTools;
-import lunartools.sqlrepeatabler.About;
-import lunartools.sqlrepeatabler.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
+import lunartools.sqlrepeatabler.common.action.ActionFactory;
+import lunartools.sqlrepeatabler.gui.MainPanel;
+import lunartools.sqlrepeatabler.gui.MenuModel;
+import lunartools.sqlrepeatabler.infrastructure.config.Settings;
 
-public class SqlRepeatablerView extends JFrame{
+public class SqlRepeatablerView{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerView.class);
 	private static final int WINDOW_MINIMUM_WIDTH=1280;
 	private static final int WINDOW_MINIMUM_HEIGHT=(int)(WINDOW_MINIMUM_WIDTH/SwingTools.SECTIOAUREA);
 	public static final Dimension MINIMUM_FRAME_SIZE=new Dimension(WINDOW_MINIMUM_WIDTH,WINDOW_MINIMUM_HEIGHT);
 
 	private SqlRepeatablerModel model;
+	private final JFrame jFrame;
 	private MainPanel mainPanel;
 	private MenuModel menuModel;
 
 	public SqlRepeatablerView(SqlRepeatablerModel model) {
-		super.setTitle(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
 		this.model=model;
-		setLayout(new BorderLayout());
-		setResizable(true);
-		this.setIconImages(SwingTools.getDefaultIconImages());
+		jFrame = new JFrame(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
+		jFrame.setLayout(new BorderLayout());
+		jFrame.setResizable(true);
+		jFrame.setIconImages(SwingTools.getDefaultIconImages());
+		Settings settings=Settings.getInstance();
+		jFrame.setBounds(settings.getViewBounds());
 
 		mainPanel=new MainPanel(model);
-		add(mainPanel);
+		jFrame.add(mainPanel);
 
-		JPanel glass=(JPanel)getGlassPane();
+		JPanel glass=(JPanel)jFrame.getGlassPane();
 		glass.setVisible(true);
 		glass.setOpaque(false);
 		glass.setDropTarget(new DropTarget() {
@@ -69,10 +73,10 @@ public class SqlRepeatablerView extends JFrame{
 			}
 		});
 
-		addComponentListener(new ComponentAdapter() {
+		jFrame.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-				repaint(100);
+				jFrame.repaint(100);
 			}
 		});
 	}
@@ -83,7 +87,7 @@ public class SqlRepeatablerView extends JFrame{
 
 	public void setActionFactory(ActionFactory actionFactory) {
 		this.menuModel=new MenuModel(model,actionFactory);
-		setJMenuBar(menuModel.getMenuBar());
+		jFrame.setJMenuBar(menuModel.getMenuBar());
 		//refreshView();
 	}
 
@@ -93,13 +97,16 @@ public class SqlRepeatablerView extends JFrame{
 		//menuModel.getMenuFileItemReset().setEnabled(convertedDataAvailable);
 	}
 
-	public void showMessageboxAbout() {
-		logger.debug("Opening 'About' dialogue...");
-		About.showAboutDialog(this);
-	}
-
 	public MainPanel getMainPanel() {
 		return mainPanel;
+	}
+
+	public JFrame getJFrame() {
+		return jFrame;
+	}
+
+	public void setVisible(boolean b) {
+		jFrame.setVisible(b);
 	}
 
 }

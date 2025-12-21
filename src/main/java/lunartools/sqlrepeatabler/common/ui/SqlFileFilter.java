@@ -1,10 +1,10 @@
-package lunartools.sqlrepeatabler;
+package lunartools.sqlrepeatabler.common.ui;
 
 import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
-public class TextFileFilter extends FileFilter{
+public class SqlFileFilter extends FileFilter{
 	public static final String FILEEXTENSION=".sql".toLowerCase();
 
 	@Override

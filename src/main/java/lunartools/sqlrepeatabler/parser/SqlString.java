@@ -2,7 +2,7 @@ package lunartools.sqlrepeatabler.parser;
 
 import java.util.ArrayList;
 
-import lunartools.sqlrepeatabler.common.BackgroundColorProvider;
+import lunartools.sqlrepeatabler.common.ui.BackgroundColorProvider;
 
 public class SqlString {
 	public static final SqlString EMPTY_LINE=SqlString.createSqlStringFromString("",Category.UNCATEGORIZED);

@@ -6,12 +6,12 @@ import javax.swing.JPopupMenu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.SimpleEvents;
-import lunartools.sqlrepeatabler.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.gui.actions.CloseScriptAction;
-import lunartools.sqlrepeatabler.gui.actions.CopyToClipboardAction;
-import lunartools.sqlrepeatabler.gui.icon.IconProvider;
-import lunartools.sqlrepeatabler.gui.icon.Icons;
+import lunartools.sqlrepeatabler.common.action.CloseScriptAction;
+import lunartools.sqlrepeatabler.common.action.CopyToClipboardAction;
+import lunartools.sqlrepeatabler.common.model.SimpleEvents;
+import lunartools.sqlrepeatabler.common.ui.IconProvider;
+import lunartools.sqlrepeatabler.common.ui.Icons;
+import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.parser.HtmlRenderer;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 

@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.gui.actions;
+package lunartools.sqlrepeatabler.common.action;
 
 import java.awt.event.ActionEvent;
 
@@ -6,12 +6,12 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
 
-import lunartools.sqlrepeatabler.SqlRepeatablerController;
-import lunartools.sqlrepeatabler.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.ThemeManager;
-import lunartools.sqlrepeatabler.settings.CheckboxSettings;
-import lunartools.sqlrepeatabler.settings.ProcessingOrder;
-import lunartools.sqlrepeatabler.settings.Theme;
+import lunartools.sqlrepeatabler.common.ui.ThemeManager;
+import lunartools.sqlrepeatabler.infrastructure.config.CheckboxSettings;
+import lunartools.sqlrepeatabler.infrastructure.config.ProcessingOrder;
+import lunartools.sqlrepeatabler.infrastructure.config.Theme;
+import lunartools.sqlrepeatabler.main.SqlRepeatablerController;
+import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 
 public class ActionFactory {
 	private SqlRepeatablerController controller;
@@ -21,11 +21,11 @@ public class ActionFactory {
 	}
 
 	public Action createOpenAction() {
-		return new OpenAction(controller);
+		return new OpenAction(controller.getModel(),controller.getView().getJFrame());
 	}
 
 	public Action createSaveAsAction() {
-		return new SaveAsAction(controller);
+		return new SaveAsAction(controller.getModel(), controller.getFileController(), controller.getView().getJFrame());
 	}
 
 	public Action createReloadAction() {

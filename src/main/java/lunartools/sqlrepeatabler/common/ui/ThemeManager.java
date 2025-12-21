@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler;
+package lunartools.sqlrepeatabler.common.ui;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -7,9 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.ChangeListenerSupport;
+import lunartools.sqlrepeatabler.common.model.SimpleEvents;
+import lunartools.sqlrepeatabler.infrastructure.config.Settings;
+import lunartools.sqlrepeatabler.infrastructure.config.Theme;
 import lunartools.sqlrepeatabler.parser.Category;
-import lunartools.sqlrepeatabler.settings.Settings;
-import lunartools.sqlrepeatabler.settings.Theme;
 
 public class ThemeManager implements ChangeListenerSupport{
 	private static Logger logger = LoggerFactory.getLogger(ThemeManager.class);

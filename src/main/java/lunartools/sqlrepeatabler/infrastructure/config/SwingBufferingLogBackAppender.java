@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.common;
+package lunartools.sqlrepeatabler.infrastructure.config;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;

@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler;
+package lunartools.sqlrepeatabler.main;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -18,30 +18,38 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import lunartools.AbstractSettings;
-import lunartools.sqlrepeatabler.common.SwingBufferingLogBackAppender;
+import lunartools.sqlrepeatabler.common.action.ActionFactory;
+import lunartools.sqlrepeatabler.common.model.SimpleEvents;
+import lunartools.sqlrepeatabler.common.ui.Dialogs;
+import lunartools.sqlrepeatabler.common.ui.ThemeManager;
+import lunartools.sqlrepeatabler.controller.FileController;
 import lunartools.sqlrepeatabler.gui.IOPanel;
 import lunartools.sqlrepeatabler.gui.IOPanelController;
 import lunartools.sqlrepeatabler.gui.LogEditorPane;
 import lunartools.sqlrepeatabler.gui.MainPanel;
-import lunartools.sqlrepeatabler.gui.SqlRepeatablerView;
-import lunartools.sqlrepeatabler.gui.actions.ActionFactory;
-import lunartools.sqlrepeatabler.settings.Settings;
-import lunartools.sqlrepeatabler.settings.Theme;
+import lunartools.sqlrepeatabler.infrastructure.config.Settings;
+import lunartools.sqlrepeatabler.infrastructure.config.SwingBufferingLogBackAppender;
+import lunartools.sqlrepeatabler.infrastructure.config.Theme;
 import lunartools.sqlrepeatabler.worker.ConvertSqlFileWorker;
 
 public class SqlRepeatablerController{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerController.class);
 	private SqlRepeatablerModel model;
 	private SqlRepeatablerView view;
+	private FileController fileController;
 	private ArrayList<IOPanelController> ioPanelControllers=new ArrayList<>();
 
-	public SqlRepeatablerController(SqlRepeatablerModel model,SqlRepeatablerView view,SwingBufferingLogBackAppender swingAppender) {
+	public SqlRepeatablerController(
+			SqlRepeatablerModel model,
+			SqlRepeatablerView view,
+			FileController fileController,
+			SwingBufferingLogBackAppender swingAppender) {
 		Settings settings=Settings.getInstance();
 		this.model=model;
 		this.view=view;
-		view.setBounds(settings.getViewBounds());
+		this.fileController=fileController;
 		this.view.setActionFactory(new ActionFactory(this));
-		this.view.addWindowListener(new WindowAdapter(){
+		this.view.getJFrame().addWindowListener(new WindowAdapter(){
 
 			@Override
 			public void windowClosing(WindowEvent event){
@@ -51,8 +59,8 @@ public class SqlRepeatablerController{
 			@Override
 			public void windowOpened(WindowEvent e) {
 				SwingUtilities.invokeLater(() -> {
-					view.revalidate();
-					view.repaint();
+					view.getJFrame().revalidate();
+					view.getJFrame().repaint();
 				});
 			}
 		});
@@ -65,8 +73,7 @@ public class SqlRepeatablerController{
 		model.addChangeListener(this::updateModelChanges);
 		ThemeManager.getInstance().addChangeListener(this::updateThemeChanges);
 		activateTheme();
-		view.validate();
-		view.setVisible(true);
+		view.getJFrame().validate();
 	}
 
 	public SqlRepeatablerModel getModel() {
@@ -144,18 +151,22 @@ public class SqlRepeatablerController{
 
 	public void shutdown() {
 		AbstractSettings settings=Settings.getInstance();
-		settings.setRectangle(Settings.VIEW_BOUNDS, view.getBounds());
+		settings.setRectangle(Settings.VIEW_BOUNDS, view.getJFrame().getBounds());
 		try {
 			settings.saveSettings();
 		} catch (IOException e) {
 			logger.error("error while saving settings",e);
 		}
-		view.setVisible(false);
-		view.dispose();
+		view.getJFrame().setVisible(false);
+		view.getJFrame().dispose();
+	}
+
+	public FileController getFileController() {
+		return fileController;
 	}
 
 	public void openAboutDialogue() {
-		view.showMessageboxAbout();
+		Dialogs.showAboutDialog(view.getJFrame());
 	}
 
 }

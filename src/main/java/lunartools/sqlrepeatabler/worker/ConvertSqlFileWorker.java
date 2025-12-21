@@ -9,8 +9,8 @@ import javax.swing.SwingWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.common.SwingWorkerUpdate;
+import lunartools.sqlrepeatabler.common.ui.SwingWorkerUpdate;
+import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 import lunartools.sqlrepeatabler.services.ConverterService;

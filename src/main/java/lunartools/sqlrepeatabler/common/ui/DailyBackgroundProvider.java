@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler;
+package lunartools.sqlrepeatabler.common.ui;
 
 import java.awt.Image;
 import java.awt.Toolkit;

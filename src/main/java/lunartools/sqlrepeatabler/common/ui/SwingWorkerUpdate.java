@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.common;
+package lunartools.sqlrepeatabler.common.ui;
 
 public class SwingWorkerUpdate<T> {
 	public final Enum<?> step;

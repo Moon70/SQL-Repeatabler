@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.gui.actions;
+package lunartools.sqlrepeatabler.common.action;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -10,8 +10,8 @@ import javax.swing.AbstractAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.gui.IOPanel;
+import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
 
 public class CopyToClipboardAction extends AbstractAction {

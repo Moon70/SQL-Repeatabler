@@ -6,7 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.common.BackgroundColorProvider;
+import lunartools.sqlrepeatabler.common.ui.BackgroundColorProvider;
 
 public class StatementTokenizer {
 	private static Logger logger = LoggerFactory.getLogger(StatementTokenizer.class);

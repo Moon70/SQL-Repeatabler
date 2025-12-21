@@ -4,8 +4,8 @@ import java.awt.Insets;
 
 import javax.swing.JEditorPane;
 
-import lunartools.sqlrepeatabler.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.ThemeManager;
+import lunartools.sqlrepeatabler.common.ui.ThemeManager;
+import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 
 public class SqlEditorPane extends JEditorPane{
 
