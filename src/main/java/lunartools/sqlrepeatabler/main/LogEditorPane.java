@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.gui;
+package lunartools.sqlrepeatabler.main;
 
 import java.awt.Color;
 import java.awt.Insets;
@@ -9,7 +9,6 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.ThrowableProxyUtil;
-import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 
 public class LogEditorPane extends JEditorPane{
 	private final String htmlIntro;
@@ -49,22 +48,22 @@ public class LogEditorPane extends JEditorPane{
 		switch(loggingEvent.getLevel().levelInt) {
 		case Level.DEBUG_INT:
 			sbHtmlLines.append("<div class=\"debug\">");
-			sbHtmlLines.append(loggingEvent.getMessage());
+			sbHtmlLines.append(loggingEvent.getFormattedMessage());
 			sbHtmlLines.append("</div>");
 			break;
 		case Level.INFO_INT:
 			sbHtmlLines.append("<div class=\"info\">");
-			sbHtmlLines.append(loggingEvent.getMessage());
+			sbHtmlLines.append(loggingEvent.getFormattedMessage());
 			sbHtmlLines.append("</div>");
 			break;
 		case Level.WARN_INT:
 			sbHtmlLines.append("<div class=\"warn\">");
-			sbHtmlLines.append(loggingEvent.getMessage());
+			sbHtmlLines.append(loggingEvent.getFormattedMessage());
 			sbHtmlLines.append("</div>");
 			break;
 		case Level.ERROR_INT:
 			sbHtmlLines.append("<div class=\"error\">");
-			sbHtmlLines.append(loggingEvent.getMessage());
+			sbHtmlLines.append(loggingEvent.getFormattedMessage());
 			sbHtmlLines.append("</div>");
 			IThrowableProxy throwableProxy=loggingEvent.getThrowableProxy();
 			String[] sa=ThrowableProxyUtil.asString(throwableProxy).split("\t");
@@ -79,7 +78,7 @@ public class LogEditorPane extends JEditorPane{
 			break;
 		default:
 			sbHtmlLines.append("<div class=\"debug\">");
-			sbHtmlLines.append(loggingEvent.getMessage());
+			sbHtmlLines.append(loggingEvent.getFormattedMessage());
 			sbHtmlLines.append("</div>");
 			break;
 		}

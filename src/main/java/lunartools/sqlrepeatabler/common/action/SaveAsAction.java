@@ -9,9 +9,6 @@ import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import lunartools.SwingTools;
 import lunartools.sqlrepeatabler.common.ui.Dialogs;
 import lunartools.sqlrepeatabler.common.ui.SqlFileFilter;
@@ -20,7 +17,6 @@ import lunartools.sqlrepeatabler.infrastructure.config.Settings;
 import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 
 class SaveAsAction extends AbstractAction {
-	private static Logger logger = LoggerFactory.getLogger(SaveAsAction.class);
 	private SqlRepeatablerModel model;
 	private final FileController fileController;
 	private final JFrame parentFrame;

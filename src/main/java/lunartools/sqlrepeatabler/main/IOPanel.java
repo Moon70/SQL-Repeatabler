@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.gui;
+package lunartools.sqlrepeatabler.main;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -10,7 +10,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
 import lunartools.sqlrepeatabler.infrastructure.config.Settings;
-import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 
 public class IOPanel extends JPanel{
 	private SqlEditorPane inputPane;

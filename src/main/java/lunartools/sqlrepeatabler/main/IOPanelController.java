@@ -1,17 +1,12 @@
-package lunartools.sqlrepeatabler.gui;
+package lunartools.sqlrepeatabler.main;
 
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.common.action.CloseScriptAction;
-import lunartools.sqlrepeatabler.common.action.CopyToClipboardAction;
 import lunartools.sqlrepeatabler.common.model.SimpleEvents;
-import lunartools.sqlrepeatabler.common.ui.IconProvider;
-import lunartools.sqlrepeatabler.common.ui.Icons;
-import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.common.ui.ContextMenuView;
 import lunartools.sqlrepeatabler.parser.HtmlRenderer;
 import lunartools.sqlrepeatabler.parser.SqlScript;
 
@@ -20,33 +15,21 @@ public class IOPanelController {
 	private final SqlRepeatablerModel model;
 	private IOPanel ioPanel;
 
-	public IOPanelController(SqlRepeatablerModel model,IOPanel ioPanel) {
+	public IOPanelController(SqlRepeatablerModel model,IOPanel ioPanel,ContextMenuView contextMenuView) {
 		this.model=model;
 		this.ioPanel=ioPanel;
 
 		JPopupMenu popupMenuOutputPane = new JPopupMenu();
-		popupMenuOutputPane.add(createCloseScriptJMenuItem(ioPanel));
-		popupMenuOutputPane.add(createCopyToClipboardJMenuItem(ioPanel));
+		popupMenuOutputPane.add(contextMenuView.createCloseScriptJMenuItem(ioPanel));
+		popupMenuOutputPane.add(contextMenuView.createCopyToClipboardJMenuItem(ioPanel));
 		ioPanel.getOutputPane().setComponentPopupMenu(popupMenuOutputPane);
 
 		JPopupMenu popupMenuInputPane = new JPopupMenu();
-		popupMenuInputPane.add(createCloseScriptJMenuItem(ioPanel));
+		popupMenuInputPane.add(contextMenuView.createCloseScriptJMenuItem(ioPanel));
 		ioPanel.getInputPane().setComponentPopupMenu(popupMenuInputPane);
 
 
 		model.addChangeListener(this::updateModelChanges);
-	}
-
-	private JMenuItem createCloseScriptJMenuItem(IOPanel ioPanel) {
-		JMenuItem jMenuItemCloseScript=new JMenuItem(new CloseScriptAction(model, ioPanel));
-		jMenuItemCloseScript.setIcon(IconProvider.getFlatSvgIcon(Icons.CLOSE,jMenuItemCloseScript));
-		return jMenuItemCloseScript;
-	}
-
-	private JMenuItem createCopyToClipboardJMenuItem(IOPanel ioPanel) {
-		JMenuItem jMenuItemCopyToClipboard=new JMenuItem(new CopyToClipboardAction(model,ioPanel));
-		jMenuItemCopyToClipboard.setIcon(IconProvider.getFlatSvgIcon(Icons.COPY,jMenuItemCopyToClipboard));
-		return jMenuItemCopyToClipboard;
 	}
 
 	public void updateModelChanges(Object object) {

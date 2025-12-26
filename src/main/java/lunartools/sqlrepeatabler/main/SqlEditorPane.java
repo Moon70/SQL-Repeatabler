@@ -1,11 +1,10 @@
-package lunartools.sqlrepeatabler.gui;
+package lunartools.sqlrepeatabler.main;
 
 import java.awt.Insets;
 
 import javax.swing.JEditorPane;
 
 import lunartools.sqlrepeatabler.common.ui.ThemeManager;
-import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 
 public class SqlEditorPane extends JEditorPane{
 

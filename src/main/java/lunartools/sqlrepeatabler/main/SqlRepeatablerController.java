@@ -5,6 +5,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import javax.swing.SwingUtilities;
 
@@ -18,37 +19,31 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import lunartools.AbstractSettings;
-import lunartools.sqlrepeatabler.common.action.ActionFactory;
 import lunartools.sqlrepeatabler.common.model.SimpleEvents;
+import lunartools.sqlrepeatabler.common.ui.ContextMenuView;
 import lunartools.sqlrepeatabler.common.ui.Dialogs;
 import lunartools.sqlrepeatabler.common.ui.ThemeManager;
 import lunartools.sqlrepeatabler.controller.FileController;
-import lunartools.sqlrepeatabler.gui.IOPanel;
-import lunartools.sqlrepeatabler.gui.IOPanelController;
-import lunartools.sqlrepeatabler.gui.LogEditorPane;
-import lunartools.sqlrepeatabler.gui.MainPanel;
 import lunartools.sqlrepeatabler.infrastructure.config.Settings;
 import lunartools.sqlrepeatabler.infrastructure.config.SwingBufferingLogBackAppender;
 import lunartools.sqlrepeatabler.infrastructure.config.Theme;
-import lunartools.sqlrepeatabler.worker.ConvertSqlFileWorker;
 
 public class SqlRepeatablerController{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerController.class);
-	private SqlRepeatablerModel model;
-	private SqlRepeatablerView view;
-	private FileController fileController;
+	private final SqlRepeatablerModel model;
+	private final SqlRepeatablerView view;
+	private final FileController fileController;
 	private ArrayList<IOPanelController> ioPanelControllers=new ArrayList<>();
+	private ContextMenuView contextMenuView;
 
 	public SqlRepeatablerController(
 			SqlRepeatablerModel model,
 			SqlRepeatablerView view,
 			FileController fileController,
 			SwingBufferingLogBackAppender swingAppender) {
-		Settings settings=Settings.getInstance();
 		this.model=model;
 		this.view=view;
 		this.fileController=fileController;
-		this.view.setActionFactory(new ActionFactory(this));
 		this.view.getJFrame().addWindowListener(new WindowAdapter(){
 
 			@Override
@@ -84,6 +79,14 @@ public class SqlRepeatablerController{
 		return view;
 	}
 
+	public FileController getFileController() {
+		return fileController;
+	}
+
+	public void setContextMenuView(ContextMenuView contextMenuView) {
+		this.contextMenuView=contextMenuView;
+	}
+
 	public void updateModelChanges(Object object) {
 		if(logger.isTraceEnabled()) {
 			logger.trace("update: "+object);
@@ -91,6 +94,7 @@ public class SqlRepeatablerController{
 		if(object==SimpleEvents.EXIT) {
 			shutdown();
 		}else if(object==SimpleEvents.MODEL_SQLINPUTFILESCHANGED) {
+			Objects.requireNonNull(contextMenuView);
 			MainPanel mainPanel=view.getMainPanel();
 			for(IOPanelController ioPanelController:ioPanelControllers) {
 				model.removeChangeListener(ioPanelController::updateModelChanges);
@@ -100,17 +104,13 @@ public class SqlRepeatablerController{
 			mainPanel.getTabbedPane().removeAll();
 			for(int i=0;i<files.size();i++) {
 				IOPanel ioPanel=new IOPanel(model,i);
-				ioPanelControllers.add(new IOPanelController(model, ioPanel));
+				ioPanelControllers.add(new IOPanelController(model, ioPanel,contextMenuView));
 				mainPanel.addTab(files.get(i).getName(), ioPanel);
 			}
 			mainPanel.revalidate();
 			mainPanel.repaint();
 
-			ConvertSqlFileWorker worker=new ConvertSqlFileWorker(model);
-			worker.execute();
-			view.refreshView();
-		}else if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
-			view.refreshView();
+			fileController.loadFiles();
 		}else if(object==SimpleEvents.MODEL_RESET) {
 			for(IOPanelController ioPanelController:ioPanelControllers) {
 				model.removeChangeListener(ioPanelController::updateModelChanges);
@@ -118,6 +118,7 @@ public class SqlRepeatablerController{
 			ioPanelControllers.clear();
 		}
 	}
+
 	public void updateThemeChanges(Object object) {
 		if(logger.isTraceEnabled()) {
 			logger.trace("update: "+object);
@@ -159,10 +160,6 @@ public class SqlRepeatablerController{
 		}
 		view.getJFrame().setVisible(false);
 		view.getJFrame().dispose();
-	}
-
-	public FileController getFileController() {
-		return fileController;
 	}
 
 	public void openAboutDialogue() {

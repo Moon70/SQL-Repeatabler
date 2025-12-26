@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.gui;
+package lunartools.sqlrepeatabler.main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import lunartools.sqlrepeatabler.common.model.SimpleEvents;
 import lunartools.sqlrepeatabler.common.ui.DailyBackgroundProvider;
 import lunartools.sqlrepeatabler.infrastructure.config.Settings;
-import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 
 public class MainPanel extends JPanel{
 	private static Logger logger = LoggerFactory.getLogger(MainPanel.class);

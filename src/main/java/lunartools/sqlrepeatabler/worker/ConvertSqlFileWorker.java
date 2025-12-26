@@ -3,58 +3,47 @@ package lunartools.sqlrepeatabler.worker;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.common.ui.Dialogs;
 import lunartools.sqlrepeatabler.common.ui.SwingWorkerUpdate;
 import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
+import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.services.ConverterService;
+import lunartools.sqlrepeatabler.services.FileService;
 
 public class ConvertSqlFileWorker extends SwingWorker<Void, SwingWorkerUpdate<?>> {
 	private static Logger logger = LoggerFactory.getLogger(ConvertSqlFileWorker.class);
-	private SqlRepeatablerModel model;
+	private final SqlRepeatablerModel model;
+	private final FileService fileService;
 	private ArrayList<SqlBlock> convertedSqlScriptBlocks=new ArrayList<>();
-	private ArrayList<SqlScript> sqlScripts=new ArrayList<>();
 	public enum Step {SQLSCRIPT}
 
-	public ConvertSqlFileWorker(SqlRepeatablerModel model) {
+	public ConvertSqlFileWorker(SqlRepeatablerModel model,FileService fileService) {
 		this.model=model;
+		this.fileService=fileService;
 	}
 
 	@Override
-	public Void doInBackground() {
-		File file=null;
-		try {
-			model.clearConvertedSqlScriptBlocks();
-			model.clearInputPanel();
-			ArrayList<File> files=model.getSqlInputFiles();
+	public Void doInBackground() throws Exception {
+		ArrayList<SqlScript> sqlScripts=fileService.loadFiles(model);
 
-			for(int i=0;i<files.size();i++) {
-				file=files.get(i);
-				logger.debug("Reading: "+file);
-				ConverterService converterService=new ConverterService(model);
-				SqlScript sqlScript=converterService.createSqlScript(file);
-				sqlScripts.add(sqlScript);
-			}
+		publish(new SwingWorkerUpdate<>(Step.SQLSCRIPT,sqlScripts));
 
-			publish(new SwingWorkerUpdate<>(Step.SQLSCRIPT,sqlScripts));
-
-			for(int i=0;i<files.size();i++) {
-				file=files.get(i);
-				logger.info("Processing: "+file);
-				ConverterService converterService=new ConverterService(model);
-				SqlScript sqlScript=sqlScripts.get(i);
-				SqlBlock sqlBlock=converterService.parseFile(sqlScript);
-				convertedSqlScriptBlocks.add(sqlBlock);
-			}
-		} catch (Exception e) {
-			logger.error(String.format("Error processing sql file: %s",file),e);
+		ArrayList<File> files=model.getSqlInputFiles();
+		for(int i=0;i<files.size();i++) {
+			logger.info("Processing: "+files.get(i));
+			SqlScript sqlScript=sqlScripts.get(i);
+			SqlBlock sqlBlock=SqlParser.parse(sqlScript);
+			convertedSqlScriptBlocks.add(sqlBlock);
 		}
+
 		return null;
 	}
 
@@ -75,10 +64,13 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, SwingWorkerUpdate<?>
 	protected void done() {
 		super.done();
 		try {
+			get();
 			model.setConvertedSqlScriptBlocks(convertedSqlScriptBlocks);
+		} catch (ExecutionException e) {
+			logger.error("Error converting files",e);
 		} catch (Exception e) {
 			logger.error("error setting converted data",e);
-			throw e;
+			Dialogs.showErrorMessage("Error processing file:\n" + e.getMessage());
 		}
 	}
 

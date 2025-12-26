@@ -1,5 +1,7 @@
 package lunartools.sqlrepeatabler;
 
+import java.util.Objects;
+
 import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
@@ -8,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import lunartools.sqlrepeatabler.bootstrap.ApplicationBootstrap;
+import lunartools.sqlrepeatabler.common.ui.Dialogs;
 
 /*
  * Copyright (c) 2025 Thomas Mattel
@@ -34,11 +37,9 @@ public class MainSqlRepeatabler {
 			try{
 				ApplicationBootstrap.start();
 			}catch(Throwable e){
-				if(logger.isErrorEnabled()) {
-					logger.error("Unexpected error",e);
-				}else {
-					e.printStackTrace();
-				}
+				logger.error("Unexpected error during application startup",e);
+				Dialogs.showErrorMessage("Application failed to start:\n"+Objects.toString(e.getMessage(), e.getClass().getName()));
+				System.exit(1);
 			}
 		});
 	}

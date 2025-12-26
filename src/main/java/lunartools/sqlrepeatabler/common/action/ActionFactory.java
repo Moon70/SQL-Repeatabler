@@ -1,23 +1,34 @@
 package lunartools.sqlrepeatabler.common.action;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.Objects;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import lunartools.sqlrepeatabler.common.ui.Dialogs;
 import lunartools.sqlrepeatabler.common.ui.ThemeManager;
 import lunartools.sqlrepeatabler.infrastructure.config.CheckboxSettings;
 import lunartools.sqlrepeatabler.infrastructure.config.ProcessingOrder;
 import lunartools.sqlrepeatabler.infrastructure.config.Theme;
 import lunartools.sqlrepeatabler.main.SqlRepeatablerController;
 import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.parser.SqlBlock;
 
 public class ActionFactory {
 	private SqlRepeatablerController controller;
 
 	public ActionFactory(SqlRepeatablerController controller) {
-		this.controller=controller;
+		this.controller=Objects.requireNonNull(controller);
 	}
 
 	public Action createOpenAction() {
@@ -29,19 +40,38 @@ public class ActionFactory {
 	}
 
 	public Action createReloadAction() {
-		return new ReloadAction(controller);
+		return new AbstractAction("Reload") {
+			@Override public void actionPerformed(ActionEvent e) {
+				controller.getModel().reload();
+			}
+		};
 	}
 
 	public Action createResetAction() {
-		return new ResetAction(controller);
+		return new AbstractAction("Reset") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.getModel().reset();
+			}
+		};
 	}
 
 	public Action createExitProgramAction() {
-		return new ExitProgramAction(controller);
+		return new AbstractAction("Exit") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.shutdown();
+			}
+		};
 	}
 
 	public Action createAboutAction() {
-		return new AboutAction(controller);
+		return new AbstractAction("About "+SqlRepeatablerModel.PROGRAMNAME) {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.openAboutDialogue();
+			}
+		};
 	}
 
 	public Action createAsAddedRadioButtonAction() {
@@ -110,60 +140,33 @@ public class ActionFactory {
 		};
 	}
 
-	private class ExitProgramAction extends AbstractAction {
-		private SqlRepeatablerController controller;
-
-		public ExitProgramAction(SqlRepeatablerController controller) {
-			this.controller = controller;
-			this.putValue(NAME, "Exit");
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			controller.shutdown();
-		}
+	public Action createCloseScriptAction(int index,JComponent parentComponent) {
+		return new AbstractAction("Close") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SqlRepeatablerModel model=controller.getModel();
+				File file=model.getSqlInputFile(index);
+				if(!Dialogs.userCanceledFileExistsDialogue("OK to close file?\n"+file.getAbsolutePath(), parentComponent)) {
+					return;
+				}
+				model.closeScript(index);
+			}
+		};
 	}
 
-	private class ReloadAction extends AbstractAction {
-		private SqlRepeatablerController controller;
-
-		public ReloadAction(SqlRepeatablerController controller) {
-			this.controller = controller;
-			this.putValue(NAME, "Reload");
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			controller.getModel().reload();
-		}
-	}
-
-	private class ResetAction extends AbstractAction {
-		private SqlRepeatablerController controller;
-
-		public ResetAction(SqlRepeatablerController controller) {
-			this.controller = controller;
-			this.putValue(NAME, "Reset");
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			controller.getModel().reset();
-		}
-	}
-
-	private class AboutAction extends AbstractAction {
-		private SqlRepeatablerController controller;
-
-		public AboutAction(SqlRepeatablerController controller) {
-			this.controller = controller;
-			this.putValue(NAME, "About "+SqlRepeatablerModel.PROGRAMNAME);
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			controller.openAboutDialogue();
-		}
+	public Action createCopyToClipboardAction(int index,JComponent parentComponent) {
+		return new AbstractAction("Copy to clipboard") {
+			private Logger logger = LoggerFactory.getLogger(AbstractAction.class);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SqlRepeatablerModel model=controller.getModel();
+				SqlBlock sqlBlock=model.getSingleConvertedSqlScriptBlock(index);
+				StringSelection stringSelection = new StringSelection(sqlBlock.toString());
+				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+				clipboard.setContents(stringSelection, null);
+				logger.info("Copied script to clipboard");
+			}
+		};
 	}
 
 }

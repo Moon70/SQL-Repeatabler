@@ -1,4 +1,4 @@
-package lunartools.sqlrepeatabler.gui;
+package lunartools.sqlrepeatabler.common.ui;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
@@ -7,24 +7,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import lunartools.ImageTools;
 import lunartools.sqlrepeatabler.common.action.ActionFactory;
-import lunartools.sqlrepeatabler.common.model.SimpleEvents;
-import lunartools.sqlrepeatabler.common.ui.IconProvider;
-import lunartools.sqlrepeatabler.common.ui.Icons;
-import lunartools.sqlrepeatabler.common.ui.ThemeManager;
-import lunartools.sqlrepeatabler.infrastructure.config.ProcessingOrder;
-import lunartools.sqlrepeatabler.infrastructure.config.Settings;
-import lunartools.sqlrepeatabler.infrastructure.config.Theme;
-import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
 
-public class MenuModel {
-	private static Logger logger = LoggerFactory.getLogger(MenuModel.class);
-	private SqlRepeatablerModel model;
-	private ActionFactory actionFactory;
+public class MenuView {
+	private final ActionFactory actionFactory;
 	private JMenuBar menuBar;
 
 	private JMenu menuFile;
@@ -49,16 +36,12 @@ public class MenuModel {
 	private JMenu menuHelp;
 	private JMenuItem menuHelpItemAbout;
 
-	public MenuModel(SqlRepeatablerModel model, ActionFactory actionFactory) {
-		this.model=model;
+	public MenuView(ActionFactory actionFactory) {
 		this.actionFactory=actionFactory;
 		menuBar=new JMenuBar();
 		menuBar.add(createFileMenu());
 		menuBar.add(createPreferencesMenu());
 		menuBar.add(createHelpMenu());
-		refreshMenuItems();
-		refresh();
-		model.addChangeListener(this::updateModelChanges);
 	}
 
 	private JMenu createFileMenu(){
@@ -115,23 +98,23 @@ public class MenuModel {
 		menuTheme=new JMenu("Theme");
 		menuPreferences.add(menuTheme);
 		buttonGroup = new ButtonGroup();
-		
+
 		radioButtonThemeFlatLightLaf=new JRadioButtonMenuItem(actionFactory.createLightThemeRadioButtonAction());
 		menuTheme.add(radioButtonThemeFlatLightLaf);
 		buttonGroup.add(radioButtonThemeFlatLightLaf);
-		
+
 		radioButtonThemeFlatDarkLaf=new JRadioButtonMenuItem(actionFactory.createDarkThemeRadioButtonAction());
 		menuTheme.add(radioButtonThemeFlatDarkLaf);
 		buttonGroup.add(radioButtonThemeFlatDarkLaf);
-		
+
 		radioButtonThemeFlatIntelliJLaf=new JRadioButtonMenuItem(actionFactory.createIntellijThemeRadioButtonAction());
 		menuTheme.add(radioButtonThemeFlatIntelliJLaf);
 		buttonGroup.add(radioButtonThemeFlatIntelliJLaf);
-		
+
 		radioButtonThemeFlatDarculaLaf=new JRadioButtonMenuItem(actionFactory.createDarculaThemeRadioButtonAction());
 		menuTheme.add(radioButtonThemeFlatDarculaLaf);
 		buttonGroup.add(radioButtonThemeFlatDarculaLaf);
-		
+
 		return menuPreferences;
 	}
 
@@ -147,64 +130,49 @@ public class MenuModel {
 		return menuBar;
 	}
 
-	public JMenu getMenuFile() {
-		return menuFile;
-	}
-
-	public JMenuItem getMenuFileItemOpen() {
-		return menuFileItemOpen;
-	}
 
 	public JMenuItem getMenuFileItemSaveAs() {
 		return menuFileItemSaveAs;
+	}
+
+	public JMenuItem getMenuFileItemReload() {
+		return menuFileItemReload;
 	}
 
 	public JMenuItem getMenuFileItemReset() {
 		return menuFileItemReset;
 	}
 
-	public JMenuItem getMenuFileItemExitProgram() {
-		return menuFileItemExitProgram;
+	public JRadioButtonMenuItem getRadioButtonProcessAsAdded() {
+		return radioButtonProcessAsAdded;
 	}
 
-	public JMenu getMenuHelp() {
-		return menuHelp;
+	public JRadioButtonMenuItem getRadioButtonProcessByCreationDate() {
+		return radioButtonProcessByCreationDate;
 	}
 
-	public JMenuItem getMenuHelpItemAbout() {
-		return menuHelpItemAbout;
+	public JRadioButtonMenuItem getRadioButtonProcessAlphabetically() {
+		return radioButtonProcessAlphabetically;
 	}
 
-	public void updateModelChanges(Object object) {
-		if(logger.isTraceEnabled()) {
-			logger.trace("update: "+object);
-		}
-		if(object==SimpleEvents.MODEL_SQLINPUTFILESCHANGED) {
-			refreshMenuItems();
-		}else if(object==SimpleEvents.MODEL_CONVERTEDSQLSCRIPTCHANGED) {
-			refreshMenuItems();
-		}else if(object==SimpleEvents.MODEL_RESET) {
-			refreshMenuItems();
-		}
+	public JCheckBoxMenuItem getCheckboxBackgroundColor() {
+		return checkboxBackgroundColor;
 	}
 
-	private void refreshMenuItems() {
-		menuFileItemReload.setEnabled(model.hasSqlInputFiles());
-		menuFileItemReset.setEnabled(model.hasSqlInputFiles());
-		menuFileItemSaveAs.setEnabled(model.hasSqlConvertedScripts());
+	public JRadioButtonMenuItem getRadioButtonThemeFlatLightLaf() {
+		return radioButtonThemeFlatLightLaf;
 	}
 
-	private void refresh() {
-		Settings settings=Settings.getInstance();
-		ProcessingOrder processingOrder=settings.getProcessingOrder();
-		radioButtonProcessAsAdded.setSelected(processingOrder==ProcessingOrder.ASADDED);
-		radioButtonProcessByCreationDate.setSelected(processingOrder==ProcessingOrder.CREATIONDATE);
-		radioButtonProcessAlphabetically.setSelected(processingOrder==ProcessingOrder.ALPHABETICALLY);
-		checkboxBackgroundColor.setSelected(settings.isBackgroundColorEnabled());
-		Theme theme=ThemeManager.getInstance().getTheme();
-		radioButtonThemeFlatLightLaf.setSelected(theme==Theme.LIGHT);
-		radioButtonThemeFlatDarkLaf.setSelected(theme==Theme.DARK);
-		radioButtonThemeFlatIntelliJLaf.setSelected(theme==Theme.INTELLIJ);
-		radioButtonThemeFlatDarculaLaf.setSelected(theme==Theme.DARCULA);
+	public JRadioButtonMenuItem getRadioButtonThemeFlatDarkLaf() {
+		return radioButtonThemeFlatDarkLaf;
 	}
+
+	public JRadioButtonMenuItem getRadioButtonThemeFlatIntelliJLaf() {
+		return radioButtonThemeFlatIntelliJLaf;
+	}
+
+	public JRadioButtonMenuItem getRadioButtonThemeFlatDarculaLaf() {
+		return radioButtonThemeFlatDarculaLaf;
+	}
+
 }

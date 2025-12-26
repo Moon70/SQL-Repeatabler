@@ -19,9 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.SwingTools;
-import lunartools.sqlrepeatabler.common.action.ActionFactory;
-import lunartools.sqlrepeatabler.gui.MainPanel;
-import lunartools.sqlrepeatabler.gui.MenuModel;
+import lunartools.sqlrepeatabler.common.ui.MenuView;
 import lunartools.sqlrepeatabler.infrastructure.config.Settings;
 
 public class SqlRepeatablerView{
@@ -33,7 +31,6 @@ public class SqlRepeatablerView{
 	private SqlRepeatablerModel model;
 	private final JFrame jFrame;
 	private MainPanel mainPanel;
-	private MenuModel menuModel;
 
 	public SqlRepeatablerView(SqlRepeatablerModel model) {
 		this.model=model;
@@ -81,20 +78,8 @@ public class SqlRepeatablerView{
 		});
 	}
 
-	public MenuModel getMenuModel() {
-		return menuModel;
-	}
-
-	public void setActionFactory(ActionFactory actionFactory) {
-		this.menuModel=new MenuModel(model,actionFactory);
-		jFrame.setJMenuBar(menuModel.getMenuBar());
-		//refreshView();
-	}
-
-	public void refreshView() {
-		//boolean convertedDataAvailable=model.hasSqlConvertedScripts();
-		//menuModel.getMenuFileItemSaveAs().setEnabled(convertedDataAvailable);
-		//menuModel.getMenuFileItemReset().setEnabled(convertedDataAvailable);
+	public void setMenuView(MenuView menuView) {
+		jFrame.setJMenuBar(menuView.getMenuBar());
 	}
 
 	public MainPanel getMainPanel() {

@@ -6,7 +6,11 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.filter.ThresholdFilter;
+import lunartools.sqlrepeatabler.common.action.ActionFactory;
+import lunartools.sqlrepeatabler.common.ui.ContextMenuView;
+import lunartools.sqlrepeatabler.common.ui.MenuView;
 import lunartools.sqlrepeatabler.controller.FileController;
+import lunartools.sqlrepeatabler.controller.MenuPresenter;
 import lunartools.sqlrepeatabler.infrastructure.config.SwingBufferingLogBackAppender;
 import lunartools.sqlrepeatabler.main.SqlRepeatablerController;
 import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
@@ -23,11 +27,20 @@ public class ApplicationBootstrap {
 
 		SqlRepeatablerModel model=new SqlRepeatablerModel();
 		SqlRepeatablerView view=new SqlRepeatablerView(model);
-		
+
 		FileService fileService=new FileService();
 		FileController fileController=new FileController(model,fileService);
 
 		SqlRepeatablerController controller=new SqlRepeatablerController(model,view,fileController,swingAppender);
+
+		ActionFactory actionFactory=new ActionFactory(controller);
+		MenuView menuView=new MenuView(actionFactory);
+		view.setMenuView(menuView);
+		new MenuPresenter(model,menuView);
+		
+		ContextMenuView contextMenuView=new ContextMenuView(actionFactory);
+		controller.setContextMenuView(contextMenuView);
+
 		view.setVisible(true);
 		logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
 	}
