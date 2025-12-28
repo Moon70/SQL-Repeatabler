@@ -16,21 +16,23 @@ public class DailyBackgroundProvider {
 	private static Image imageBackground;
 
 	private static final ArrayList<String> affenvisionen=new ArrayList<>(Arrays.asList(
-			"Ar-Es-Tschi pirate",
+			"2001 An Ape Odyssey",
 			"Affenparadies",
 			"Soldering Ape",
-			"Titanic Apeisode One",
 			"SQL Pirate",
-			"Titanic Apeisode Two",
+			"Titanic",
 			"Ape Lisa",
 			"Albert Apestein",
 			"Fortune Teller",
 			"First Ape on the Moon",
 			"Count Apeula",
-			"2001 An Ape Odyssey",
 			"Sphinx",
 			"Apemaid",
-			"Wyatt Ape"			
+			"Wyatt Ape",
+			"Apetopus",
+			"Biomech Ape",
+			"Graveyard",
+			"SpiderApe"
 			));
 
 	public static Image getImage() {
