@@ -32,7 +32,7 @@ public class Dialogs {
 		dialog.setIconImage(getTitleIcon().getImage());
 		dialog.setVisible(true);
 		Object value=jOptionPane.getValue();
-		return value instanceof Integer && ((Integer)value)==JOptionPane.OK_OPTION;
+		return value instanceof Integer && ((Integer)value)!=JOptionPane.OK_OPTION;
 	}
 
 	public static void showErrorMessage(String message) {

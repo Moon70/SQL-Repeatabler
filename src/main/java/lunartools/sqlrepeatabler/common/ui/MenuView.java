@@ -77,7 +77,7 @@ public class MenuView {
 
 		menuProcessFiles=new JMenu("File processing order-");
 		menuPreferences.add(menuProcessFiles);
-		menuProcessFiles.setIcon(IconProvider.getFlatSvgIcon(Icons.EXIT,menuProcessFiles));
+		menuProcessFiles.setIcon(IconProvider.getFlatSvgIcon(Icons.SORT,menuProcessFiles));
 		ButtonGroup buttonGroup = new ButtonGroup();
 
 		radioButtonProcessAsAdded=new JRadioButtonMenuItem(actionFactory.createAsAddedRadioButtonAction());

@@ -90,7 +90,7 @@ public class ThemeManager implements ChangeListenerSupport{
 			};
 		}else {
 			backgroundColors=new String[]{
-					"eeeeee",
+					"e8e8e8",
 					"eeffff",
 					"ffeeff",
 					"ffffee",
@@ -98,7 +98,7 @@ public class ThemeManager implements ChangeListenerSupport{
 					"ffeeee",
 					"eeffee",
 
-					"dddddd",
+					"d8d8d8",
 					"ddffff",
 					"ffddff",
 					"ffffdd",

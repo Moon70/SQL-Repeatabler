@@ -7,8 +7,8 @@
 	<description>Modifies a SQL-Script (MS flavour) so that it can run more than once, without generating errors like 'table already exists'.</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.target>1.11</maven.compiler.target>
-		<maven.compiler.source>1.11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
 		<java.release.version>11</java.release.version>
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 		<org.codehaus.mojo.build-helper-maven-plugin.version>3.5.0</org.codehaus.mojo.build-helper-maven-plugin.version>

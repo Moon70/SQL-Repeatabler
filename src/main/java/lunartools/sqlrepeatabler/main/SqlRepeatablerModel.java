@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -130,6 +132,9 @@ public class SqlRepeatablerModel implements ChangeListenerSupport{
 	public StringBuffer getConvertedSqlScriptCharactersAsStringBuffer() {
 		StringBuffer sbConvertedScripts=new StringBuffer();
 		sbConvertedScripts.append("-- "+SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion()+System.lineSeparator());
+		sbConvertedScripts.append(String.format("-- created: %s, %s\n",
+				LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+				System.getProperty("user.name")));
 		for(int i=0;i<sqlConvertedScriptBlocks.size();i++) {
 			SqlBlock sqlBlock=sqlConvertedScriptBlocks.get(i);
 			sbConvertedScripts.append(System.lineSeparator());
