@@ -10,13 +10,13 @@ import javax.swing.SwingWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.common.ui.Dialogs;
-import lunartools.sqlrepeatabler.common.ui.SwingWorkerUpdate;
-import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.common.util.Dialogs;
+import lunartools.sqlrepeatabler.common.util.SwingWorkerUpdate;
+import lunartools.sqlrepeatabler.core.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.core.service.FileService;
 import lunartools.sqlrepeatabler.parser.SqlBlock;
 import lunartools.sqlrepeatabler.parser.SqlParser;
 import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.services.FileService;
 
 public class ConvertSqlFileWorker extends SwingWorker<Void, SwingWorkerUpdate<?>> {
 	private static Logger logger = LoggerFactory.getLogger(ConvertSqlFileWorker.class);

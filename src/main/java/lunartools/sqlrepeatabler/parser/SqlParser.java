@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.common.ui.BackgroundColorProvider;
+import lunartools.sqlrepeatabler.common.service.BackgroundColorProvider;
 import lunartools.sqlrepeatabler.statement.AlterTableStatementFactory;
 import lunartools.sqlrepeatabler.statement.CreateTableStatementFactory;
 import lunartools.sqlrepeatabler.statement.InsertIntoStatementFactory;

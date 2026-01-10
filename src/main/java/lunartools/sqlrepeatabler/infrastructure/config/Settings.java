@@ -5,8 +5,9 @@ import java.awt.Rectangle;
 
 import lunartools.AbstractSettings;
 import lunartools.SwingTools;
-import lunartools.sqlrepeatabler.main.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.main.SqlRepeatablerView;
+import lunartools.sqlrepeatabler.common.ui.Theme;
+import lunartools.sqlrepeatabler.core.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.core.SqlRepeatablerView;
 
 public class Settings extends AbstractSettings{
 	private static Settings instance;

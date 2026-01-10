@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
-import lunartools.sqlrepeatabler.bootstrap.ApplicationBootstrap;
-import lunartools.sqlrepeatabler.common.ui.Dialogs;
+import lunartools.sqlrepeatabler.bootstrap.SqlRepeatablerBootstrap;
+import lunartools.sqlrepeatabler.common.util.Dialogs;
 
 /*
  * Copyright (c) 2025 Thomas Mattel
@@ -35,7 +35,7 @@ public class MainSqlRepeatabler {
 		FlatLightLaf.setup();
 		SwingUtilities.invokeLater(() -> {
 			try{
-				ApplicationBootstrap.start();
+				SqlRepeatablerBootstrap.start();
 			}catch(Throwable e){
 				logger.error("Unexpected error during application startup",e);
 				Dialogs.showErrorMessage("Application failed to start:\n"+Objects.toString(e.getMessage(), e.getClass().getName()));
