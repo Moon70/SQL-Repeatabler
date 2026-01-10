@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import lunartools.sqlrepeatabler.TestHelper;
-import lunartools.sqlrepeatabler.parser.SqlBlock;
-import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.statement.SetIdentityInsertStatementFactory;
-import lunartools.sqlrepeatabler.statement.Statement;
+import lunartools.sqlrepeatabler.core.model.SetIdentityInsertStatementFactory;
+import lunartools.sqlrepeatabler.core.model.SqlBlock;
+import lunartools.sqlrepeatabler.core.model.SqlScript;
+import lunartools.sqlrepeatabler.core.model.Statement;
 
 class SetIdentityInsertStatementTest {
 	private static final String TESTDATAFOLDER="/SetIdentityInsertStatement/";

@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import lunartools.sqlrepeatabler.core.model.SqlScript;
+import lunartools.sqlrepeatabler.core.processing.SqlParser;
+
 class SqlScriptTest {
 
 	@Test

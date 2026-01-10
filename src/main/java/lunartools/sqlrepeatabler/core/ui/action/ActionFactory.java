@@ -20,9 +20,9 @@ import lunartools.sqlrepeatabler.common.util.Dialogs;
 import lunartools.sqlrepeatabler.common.util.ThemeManager;
 import lunartools.sqlrepeatabler.core.SqlRepeatablerController;
 import lunartools.sqlrepeatabler.core.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.core.model.SqlBlock;
 import lunartools.sqlrepeatabler.infrastructure.config.CheckboxSettings;
 import lunartools.sqlrepeatabler.infrastructure.config.ProcessingOrder;
-import lunartools.sqlrepeatabler.parser.SqlBlock;
 
 public class ActionFactory {
 	private SqlRepeatablerController controller;

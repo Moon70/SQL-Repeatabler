@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.common.util.Dialogs;
 import lunartools.sqlrepeatabler.core.SqlRepeatablerModel;
+import lunartools.sqlrepeatabler.core.service.ConvertSqlFileWorker;
 import lunartools.sqlrepeatabler.core.service.FileService;
-import lunartools.sqlrepeatabler.worker.ConvertSqlFileWorker;
 
 public class FileController {
 	private static Logger logger = LoggerFactory.getLogger(FileController.class);

@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.core.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.core.model.SqlScript;
 
 public class FileService {
 	private static Logger logger = LoggerFactory.getLogger(FileService.class);

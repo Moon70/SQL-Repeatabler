@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import lunartools.sqlrepeatabler.TestHelper;
-import lunartools.sqlrepeatabler.parser.SqlBlock;
-import lunartools.sqlrepeatabler.parser.SqlScript;
-import lunartools.sqlrepeatabler.statement.SpRenameStatementFactory;
-import lunartools.sqlrepeatabler.statement.Statement;
+import lunartools.sqlrepeatabler.core.model.SpRenameStatementFactory;
+import lunartools.sqlrepeatabler.core.model.SqlBlock;
+import lunartools.sqlrepeatabler.core.model.SqlScript;
+import lunartools.sqlrepeatabler.core.model.Statement;
 
 class SpRenameStatementTest {
 	private static final String TESTDATAFOLDER="/SpRenameStatement/";

@@ -19,10 +19,10 @@ import org.slf4j.LoggerFactory;
 import lunartools.ChangeListenerSupport;
 import lunartools.SwingTools;
 import lunartools.sqlrepeatabler.common.model.SimpleEvents;
+import lunartools.sqlrepeatabler.core.model.SqlBlock;
+import lunartools.sqlrepeatabler.core.model.SqlScript;
 import lunartools.sqlrepeatabler.infrastructure.config.ProcessingOrder;
 import lunartools.sqlrepeatabler.infrastructure.config.Settings;
-import lunartools.sqlrepeatabler.parser.SqlBlock;
-import lunartools.sqlrepeatabler.parser.SqlScript;
 
 public class SqlRepeatablerModel implements ChangeListenerSupport{
 	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerModel.class);

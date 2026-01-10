@@ -6,6 +6,11 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import lunartools.sqlrepeatabler.core.model.Category;
+import lunartools.sqlrepeatabler.core.model.SqlCharacter;
+import lunartools.sqlrepeatabler.core.model.SqlString;
+import lunartools.sqlrepeatabler.core.model.Token;
+
 class TokenTest {
 
 	@Test

@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import lunartools.sqlrepeatabler.common.model.SimpleEvents;
 import lunartools.sqlrepeatabler.common.view.ContextMenuView;
 import lunartools.sqlrepeatabler.core.SqlRepeatablerModel;
-import lunartools.sqlrepeatabler.parser.HtmlRenderer;
-import lunartools.sqlrepeatabler.parser.SqlScript;
+import lunartools.sqlrepeatabler.core.model.SqlScript;
+import lunartools.sqlrepeatabler.core.processing.HtmlRenderer;
 
 public class IOPanelController {
 	private static Logger logger = LoggerFactory.getLogger(IOPanelController.class);

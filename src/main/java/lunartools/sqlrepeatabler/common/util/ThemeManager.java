@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import lunartools.ChangeListenerSupport;
 import lunartools.sqlrepeatabler.common.model.SimpleEvents;
 import lunartools.sqlrepeatabler.common.ui.Theme;
+import lunartools.sqlrepeatabler.core.model.Category;
 import lunartools.sqlrepeatabler.infrastructure.config.Settings;
-import lunartools.sqlrepeatabler.parser.Category;
 
 public class ThemeManager implements ChangeListenerSupport{
 	private static Logger logger = LoggerFactory.getLogger(ThemeManager.class);
