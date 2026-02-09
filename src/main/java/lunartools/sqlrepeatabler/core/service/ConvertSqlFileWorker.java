@@ -66,7 +66,7 @@ public class ConvertSqlFileWorker extends SwingWorker<Void, SwingWorkerUpdate<?>
 			get();
 			model.setConvertedSqlScriptBlocks(convertedSqlScriptBlocks);
 		} catch (ExecutionException e) {
-			logger.error("Error converting files",e);
+			logger.error("Error converting files",e.getCause());
 		} catch (Exception e) {
 			logger.error("error setting converted data",e);
 			Dialogs.showErrorMessage("Error processing file:\n" + e.getMessage());

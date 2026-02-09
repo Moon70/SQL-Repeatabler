@@ -7,26 +7,26 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import lunartools.sqlrepeatabler.TestHelper;
-import lunartools.sqlrepeatabler.core.model.InsertIntoStatementFactory;
+import lunartools.sqlrepeatabler.core.model.InsertStatementFactory;
 import lunartools.sqlrepeatabler.core.model.SqlBlock;
 import lunartools.sqlrepeatabler.core.model.SqlScript;
 import lunartools.sqlrepeatabler.core.model.Statement;
 
-class InsertIntoStatementTest {
-	private static final String TESTDATAFOLDER="/InsertIntoStatement/";
-	private InsertIntoStatementFactory factory=new InsertIntoStatementFactory();
+class InsertStatementTest {
+	private static final String TESTDATAFOLDER="/InsertStatement/";
+	private InsertStatementFactory factory=new InsertStatementFactory();
 
 	@Test
-	void nonInsertIntoLineIsNotAccepted() throws Exception {
-		String filenameTestdata=	TESTDATAFOLDER+"OneNonInsertIntoLine_Testdata.sql";
+	void nonInsertLineIsNotAccepted() throws Exception {
+		String filenameTestdata=	TESTDATAFOLDER+"OneNonInsertLine_Testdata.sql";
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
 		assertFalse(factory.match(sqlScript.peekLineAsString()));
 	}
 
 	@Test
 	void insert_OneColumn() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_OneRow_Testdata.sql";
-		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_OneRow_Expected.sql";
+		String filenameTestdata=	TESTDATAFOLDER+"Insert_OneRow_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"Insert_OneRow_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -41,8 +41,8 @@ class InsertIntoStatementTest {
 
 	@Test
 	void insert_ThreeColumns() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_ThreeRows_Testdata.sql";
-		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_ThreeRows_Expected.sql";
+		String filenameTestdata=	TESTDATAFOLDER+"Insert_ThreeRows_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"Insert_ThreeRows_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
@@ -57,8 +57,8 @@ class InsertIntoStatementTest {
 
 	@Test
 	void insert_OneColumn_ColumnWithFunction() throws Exception{
-		String filenameTestdata=	TESTDATAFOLDER+"InsertInto_OneRow_ColumnWithFunction_Testdata.sql";
-		String filenameExpecteddata=TESTDATAFOLDER+"InsertInto_OneRow_ColumnWithFunction_Expected.sql";
+		String filenameTestdata=	TESTDATAFOLDER+"Insert_OneRow_ColumnWithFunction_Testdata.sql";
+		String filenameExpecteddata=TESTDATAFOLDER+"Insert_OneRow_ColumnWithFunction_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));

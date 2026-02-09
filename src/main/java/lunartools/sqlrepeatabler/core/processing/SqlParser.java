@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import lunartools.sqlrepeatabler.common.service.BackgroundColorProvider;
 import lunartools.sqlrepeatabler.core.model.AlterTableStatementFactory;
 import lunartools.sqlrepeatabler.core.model.CreateTableStatementFactory;
-import lunartools.sqlrepeatabler.core.model.InsertIntoStatementFactory;
+import lunartools.sqlrepeatabler.core.model.InsertStatementFactory;
 import lunartools.sqlrepeatabler.core.model.MultiLineCommentStatementFactory;
 import lunartools.sqlrepeatabler.core.model.OneLineCommentStatementFactory;
 import lunartools.sqlrepeatabler.core.model.SetIdentityInsertStatementFactory;
@@ -35,7 +35,7 @@ public class SqlParser {
 		ArrayList<Statement> statements=new ArrayList<>();
 		sqlStatementFactories.add(new AlterTableStatementFactory());
 		sqlStatementFactories.add(new CreateTableStatementFactory());
-		sqlStatementFactories.add(new InsertIntoStatementFactory());
+		sqlStatementFactories.add(new InsertStatementFactory());
 		sqlStatementFactories.add(new MultiLineCommentStatementFactory());
 		sqlStatementFactories.add(new OneLineCommentStatementFactory());
 		sqlStatementFactories.add(new SetIdentityInsertStatementFactory());

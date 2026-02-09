@@ -211,6 +211,7 @@ public class StatementTokenizer {
 	}
 
 	public boolean consumeCommandIgnoreCaseAndSpace(String command) {
+        stripWhiteSpaceLeft();
 		if(startsWithIgnoreCase(command)) {
 			for(int i=0;i<command.length();i++) {
 				charactersOfStatement.get(0).setCategory(Category.COMMAND);

@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class InsertIntoStatement implements Statement{
-	private static Logger logger = LoggerFactory.getLogger(InsertIntoStatement.class);
-	public static final String COMMAND="INSERT INTO";
+public class InsertStatement implements Statement{
+	private static Logger logger = LoggerFactory.getLogger(InsertStatement.class);
+	public static final String COMMAND="INSERT";
 	private Token tokenStatement;
 	private TableName tableName;
 	private Token tokenColumnNames;
 	private ArrayList<Token> columnValuesTokensList;
 
-	public InsertIntoStatement(Token statement,TableName tableName,Token tokenColumnNames,ArrayList<Token> columnValuesTokensList) {
+	public InsertStatement(Token statement,TableName tableName,Token tokenColumnNames,ArrayList<Token> columnValuesTokensList) {
 		this.tokenStatement=statement;
 		this.tableName=tableName;
 		this.tokenColumnNames=tokenColumnNames;

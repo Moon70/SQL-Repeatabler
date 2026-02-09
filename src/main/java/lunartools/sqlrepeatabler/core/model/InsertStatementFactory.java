@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory;
 
 import lunartools.sqlrepeatabler.core.processing.StatementTokenizer;
 
-public class InsertIntoStatementFactory extends StatementFactory{
-	private static Logger logger = LoggerFactory.getLogger(InsertIntoStatementFactory.class);
+public class InsertStatementFactory extends StatementFactory{
+	private static Logger logger = LoggerFactory.getLogger(InsertStatementFactory.class);
 
 	@Override
 	public boolean match(String line) {
-		return line.trim().toUpperCase().startsWith(InsertIntoStatement.COMMAND);
+		return line.trim().toUpperCase().startsWith(InsertStatement.COMMAND);
 	}
 
 	@Override
@@ -25,10 +25,12 @@ public class InsertIntoStatementFactory extends StatementFactory{
 		logger.debug("Statement: "+statementTokenizer.toString());
 		statementTokenizer.setBackgroundColor(null);
 
-		Token tokenStatement=statementTokenizer.nextToken(InsertIntoStatement.COMMAND);
+		Token tokenStatement=statementTokenizer.nextToken(InsertStatement.COMMAND);
 		tokenStatement.setCategory(Category.STATEMENT);
 		tokenStatement=tokenStatement.toUpperCase();
 
+		statementTokenizer.consumeCommandIgnoreCaseAndSpace("INTO");
+		
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug("Table: "+tableName.toString());
 
@@ -43,15 +45,17 @@ public class InsertIntoStatementFactory extends StatementFactory{
 
 		ArrayList<Token> columnValuesTokensList= new ArrayList<>();
 		while(statementTokenizer.hasNext()) {
-			if(statementTokenizer.charAt(0).getChar()==',') {
-				statementTokenizer.deleteCharAt(0);
+		    Token tokenValues=statementTokenizer.nextToken('(', ')');
+		    tokenValues.setCategory(Category.COLUMNPARAMETER);
+		    columnValuesTokensList.add(tokenValues);
+		    statementTokenizer.stripWhiteSpaceLeft();
+			if(statementTokenizer.charAt(0).getChar()!=',') {
+			    break;
 			}
-			Token tokenValues=statementTokenizer.nextToken('(', ')');
-			tokenValues.setCategory(Category.COLUMNPARAMETER);
-			columnValuesTokensList.add(tokenValues);
+			statementTokenizer.deleteCharAt(0);
 		}
 
-		return new InsertIntoStatement(tokenStatement,tableName,tokenColumnNames,columnValuesTokensList);
+		return new InsertStatement(tokenStatement,tableName,tokenColumnNames,columnValuesTokensList);
 	}
 
 }

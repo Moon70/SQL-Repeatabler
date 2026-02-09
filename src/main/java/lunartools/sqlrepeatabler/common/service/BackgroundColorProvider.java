@@ -9,7 +9,6 @@ public class BackgroundColorProvider {
 	private static BackgroundColorProvider instance;
 	private int primaryIndex;
 	private int secondaryIndex;
-	private int numberOfColorsUsed;
 
 	private BackgroundColorProvider() {
 		reset();
@@ -23,21 +22,22 @@ public class BackgroundColorProvider {
 	}
 
 	public synchronized String getNextPrimaryColor() {
-		numberOfColorsUsed++;
-		return ThemeManager.getInstance().getBackgroundColors()[primaryIndex++];
+	    String[] backgroundColors=ThemeManager.getInstance().getBackgroundColors();
+	    int index=primaryIndex++;
+	    primaryIndex=primaryIndex % backgroundColors.length;
+		return backgroundColors[index];
 	}
 
 	public synchronized String getNextSecondaryColor() {
-		numberOfColorsUsed++;
-		return ThemeManager.getInstance().getBackgroundColors()[--secondaryIndex];
-	}
-
-	public int getNumberOfColorsUsed() {
-		return numberOfColorsUsed;
+        String[] backgroundColors=ThemeManager.getInstance().getBackgroundColors();
+        if(--secondaryIndex<0) {
+            secondaryIndex+=backgroundColors.length;
+        }
+		return ThemeManager.getInstance().getBackgroundColors()[secondaryIndex];
 	}
 
 	public void reset(){
-		primaryIndex=numberOfColorsUsed=0;
+		primaryIndex=0;
 		secondaryIndex=ThemeManager.getInstance().getBackgroundColors().length;
 	}
 }
