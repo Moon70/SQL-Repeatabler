@@ -19,7 +19,7 @@ public class UpdateStatement implements Statement{
     @Override
     public void toSqlCharacters(SqlBlock sqlBlock){
         SqlBlock sqlBlockStatement=new SqlBlock();
-        sqlBlockStatement.add(SqlString.createSqlStringFromString(  "%s %s ("  ,Category.INSERTED,tokenStatement,tableName.getFullName()));
+        sqlBlockStatement.add(SqlString.createSqlStringFromString(  "%s %s"  ,Category.INSERTED,tokenStatement,tableName.getFullName()));
         sqlBlockStatement.add(SqlString.createSqlStringFromString(  "  %s %s"   ,Category.INSERTED,tokenSetClause,tokenSetData));
         sqlBlockStatement.add(SqlString.createSqlStringFromString(  "  %s %s;"   ,Category.INSERTED,tokenWhereClause,tokenWhereData));
 
