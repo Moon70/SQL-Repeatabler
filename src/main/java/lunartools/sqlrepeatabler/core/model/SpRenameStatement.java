@@ -34,9 +34,9 @@ public class SpRenameStatement implements Statement{
 		sqlBlockStatement.add(SqlString.createSqlStringFromString("            AND c.name = '%s'"               ,Category.INSERTED,newName.cloneWithoutDelimiters()));
 		sqlBlockStatement.add(SqlString.createSqlStringFromString("    )"                                       ,Category.INSERTED));
 		sqlBlockStatement.add(SqlString.createSqlStringFromString("BEGIN"                                       ,Category.INSERTED));
-		sqlBlockStatement.add(SqlString.createSqlStringFromString("    EXEC %s '%s.%s',"                        ,Category.INSERTED,tokenStatement, tableFullnameWithoutDelimiter,oldName.cloneWithoutDelimiters()));
-		sqlBlockStatement.add(SqlString.createSqlStringFromString("                   '%s',"                    ,Category.INSERTED,newName.cloneWithoutDelimiters()));
-		sqlBlockStatement.add(SqlString.createSqlStringFromString("                   '%s';"                    ,Category.INSERTED,type.cloneWithoutDelimiters()));
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("    EXEC %s @objname = '%s.%s',"                        ,Category.INSERTED,tokenStatement, tableFullnameWithoutDelimiter,oldName.cloneWithoutDelimiters()));
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("                   @newname = '%s',"                    ,Category.INSERTED,newName.cloneWithoutDelimiters()));
+		sqlBlockStatement.add(SqlString.createSqlStringFromString("                   @objtype = '%s';"                    ,Category.INSERTED,type.cloneWithoutDelimiters()));
 		sqlBlockStatement.add(SqlString.createSqlStringFromString("END;"                                        ,Category.INSERTED));
 
 		SqlCharacter sqlCharacter=tokenStatement.getFirstCharacter();

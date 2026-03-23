@@ -11,7 +11,7 @@ IF EXISTS (
             AND c.name = 'new_column_name'
     )
 BEGIN
-    EXEC sp_rename 'dbo.table_name.column_name',
-                   'new_column_name',
-                   'COLUMN';
+    EXEC sp_rename @objname = 'dbo.table_name.column_name',
+                   @newname = 'new_column_name',
+                   @objtype = 'COLUMN';
 END;
