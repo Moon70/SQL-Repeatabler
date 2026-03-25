@@ -71,4 +71,21 @@ class InsertStatementTest {
 		assertEquals(expected,TestHelper.removeCR(sb).toString());
 	}
 
+	//TODO: add implementation for this test case
+    //@Test
+    void insert_ThreeColumnsWithoutSemicolon() throws Exception{
+        String filenameTestdata=    TESTDATAFOLDER+"Insert_ThreeRowsWithoutSemicolon_Testdata.sql";
+        String filenameExpecteddata=TESTDATAFOLDER+"Insert_ThreeRowsWithoutSemicolon_Expected.sql";
+        String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
+
+        SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+        assertTrue(factory.match(sqlScript.peekLineAsString()));
+
+        Statement statement=factory.createStatement(sqlScript);
+        SqlBlock sqlBlock=new SqlBlock();
+        statement.toSqlCharacters(sqlBlock);
+        StringBuilder sb=sqlBlock.toStringBuilder();
+        assertEquals(expected,TestHelper.removeCR(sb).toString());
+    }
+
 }
