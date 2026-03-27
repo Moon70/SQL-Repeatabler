@@ -18,51 +18,52 @@ import lunartools.sqlrepeatabler.core.ui.action.ActionFactory;
 import lunartools.sqlrepeatabler.infrastructure.util.SwingBufferingLogBackAppender;
 
 public class SqlRepeatablerBootstrap {
-	private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerBootstrap.class);
+    private static Logger logger = LoggerFactory.getLogger(SqlRepeatablerBootstrap.class);
 
-	private SqlRepeatablerBootstrap() {}
+    private SqlRepeatablerBootstrap() {}
 
-	public static void start() {
-		SwingBufferingLogBackAppender swingAppender = setupLogger(Level.INFO);
+    public static void start() {
+        SwingBufferingLogBackAppender swingAppender = setupLogger(Level.INFO);
 
-		SqlRepeatablerModel model=new SqlRepeatablerModel();
-		SqlRepeatablerView view=new SqlRepeatablerView(model);
+        SqlRepeatablerModel model=new SqlRepeatablerModel();
+        SqlRepeatablerView view=new SqlRepeatablerView(model);
 
-		FileService fileService=new FileService();
-		FileController fileController=new FileController(model,fileService);
+        FileService fileService=new FileService();
+        FileController fileController=new FileController(model,fileService);
 
-		SqlRepeatablerController controller=new SqlRepeatablerController(model,view,fileController,swingAppender);
+        SqlRepeatablerController controller=new SqlRepeatablerController(model,view,fileController,swingAppender);
 
-		ActionFactory actionFactory=new ActionFactory(controller);
-		MenuView menuView=new MenuView(actionFactory);
-		view.setMenuView(menuView);
-		new MenuPresenter(model,menuView);
-		
-		ContextMenuView contextMenuView=new ContextMenuView(actionFactory);
-		controller.setContextMenuView(contextMenuView);
+        ActionFactory actionFactory=new ActionFactory(controller);
+        MenuView menuView=new MenuView(actionFactory);
+        view.setMenuView(menuView);
+        new MenuPresenter(model,menuView);
 
-		view.setVisible(true);
-		logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
-	}
+        ContextMenuView contextMenuView=new ContextMenuView(actionFactory);
+        controller.setContextMenuView(contextMenuView);
 
-	private static SwingBufferingLogBackAppender setupLogger(Level level) {
-		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-		SwingBufferingLogBackAppender swingBufferingAppender = new SwingBufferingLogBackAppender();
-		swingBufferingAppender.setContext(loggerContext);
-		swingBufferingAppender.setName(SqlRepeatablerModel.PROGRAMNAME);
+        view.setVisible(true);
+        logger.info(SqlRepeatablerModel.PROGRAMNAME+" "+SqlRepeatablerModel.getProgramVersion());
+        ConsoleBanner.logCuteLittleAnsiApe();
+    }
 
-		ThresholdFilter tresholdFilter = new ThresholdFilter();
-		tresholdFilter.setLevel(level.toString());
-		tresholdFilter.setContext(loggerContext);
-		tresholdFilter.start();
+    private static SwingBufferingLogBackAppender setupLogger(Level level) {
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        SwingBufferingLogBackAppender swingBufferingAppender = new SwingBufferingLogBackAppender();
+        swingBufferingAppender.setContext(loggerContext);
+        swingBufferingAppender.setName(SqlRepeatablerModel.PROGRAMNAME);
 
-		swingBufferingAppender.addFilter(tresholdFilter);
-		swingBufferingAppender.start();
+        ThresholdFilter tresholdFilter = new ThresholdFilter();
+        tresholdFilter.setLevel(level.toString());
+        tresholdFilter.setContext(loggerContext);
+        tresholdFilter.start();
 
-		ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		rootLogger.addAppender(swingBufferingAppender);
+        swingBufferingAppender.addFilter(tresholdFilter);
+        swingBufferingAppender.start();
 
-		return swingBufferingAppender;
-	}
+        ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+        rootLogger.addAppender(swingBufferingAppender);
+
+        return swingBufferingAppender;
+    }
 
 }
