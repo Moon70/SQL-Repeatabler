@@ -11,18 +11,12 @@ public class InsertStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(InsertStatementFactory.class);
 
 	@Override
-	public boolean match(String line) {
-		return line.trim().toUpperCase().startsWith(InsertStatement.COMMAND);
-	}
-
-	@Override
-	public Statement createStatement(SqlScript sqlScript) throws SqlParserException{
-		if(!match(sqlScript.peekLineAsString())) {
-			throw new RuntimeException("Illegal factory call");
+	public Statement createStatement(StatementTokenizer statementTokenizer) throws SqlParserException{
+	    if(!statementTokenizer.startsWithIgnoreCase(InsertStatement.COMMAND)) {
+            return null;
 		}
+	    logger.debug("Statement: "+statementTokenizer.toString());
 
-		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
-		logger.debug("Statement: "+statementTokenizer.toString());
 		statementTokenizer.setBackgroundColor(null);
 
 		Token tokenStatement=statementTokenizer.nextToken(InsertStatement.COMMAND);
@@ -49,7 +43,9 @@ public class InsertStatementFactory extends StatementFactory{
 		    tokenValues.setCategory(Category.COLUMNPARAMETER);
 		    columnValuesTokensList.add(tokenValues);
 		    statementTokenizer.stripWhiteSpaceLeft();
-			if(statementTokenizer.charAt(0).getChar()!=',') {
+		    SqlCharacter sqlCharacter=statementTokenizer.getFirstCharacter();
+		    if(sqlCharacter==null || sqlCharacter.getChar()!=',') {
+//			if(statementTokenizer.charAt(0).getChar()!=',') {
 			    break;
 			}
 			statementTokenizer.deleteCharAt(0);

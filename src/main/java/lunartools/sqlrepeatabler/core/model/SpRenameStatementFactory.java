@@ -9,18 +9,12 @@ public class SpRenameStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(SpRenameStatementFactory.class);
 
 	@Override
-	public boolean match(String line) {
-		return line.trim().toUpperCase().startsWith(SpRenameStatement.COMMAND);
-	}
-
-	@Override
-	public Statement createStatement(SqlScript sqlScript) throws SqlParserException{
-		if(!match(sqlScript.peekLineAsString())) {
-			throw new RuntimeException("Illegal factory call");
+	public Statement createStatement(StatementTokenizer statementTokenizer) throws SqlParserException{
+	    if(!statementTokenizer.startsWithIgnoreCase(SpRenameStatement.COMMAND)) {
+			return null;
 		}
+	    logger.debug("Statement: "+statementTokenizer.toString());
 
-		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
-		logger.debug("Statement: "+statementTokenizer.toString());
 		statementTokenizer.setBackgroundColor(null);
 
 		Token tokenStatement=statementTokenizer.nextToken(SpRenameStatement.COMMAND);

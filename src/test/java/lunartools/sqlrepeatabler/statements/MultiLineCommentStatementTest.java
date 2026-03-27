@@ -1,8 +1,6 @@
 package lunartools.sqlrepeatabler.statements;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +9,7 @@ import lunartools.sqlrepeatabler.core.model.MultiLineCommentStatementFactory;
 import lunartools.sqlrepeatabler.core.model.SqlBlock;
 import lunartools.sqlrepeatabler.core.model.SqlScript;
 import lunartools.sqlrepeatabler.core.model.Statement;
+import lunartools.sqlrepeatabler.core.processing.StatementTokenizer;
 
 class MultiLineCommentStatementTest {
 	private static final String TESTDATAFOLDER="/MultiLineCommentStatement/";
@@ -20,7 +19,9 @@ class MultiLineCommentStatementTest {
 	void nonMultiLineCommentIsNotAccepted() throws Exception {
 		String filenameTestdata=	TESTDATAFOLDER+"OneNonMultiLineCommentLine_Testdata.sql";
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertFalse(factory.match(sqlScript.peekLineAsString()));
+        StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
+        Statement statement=factory.createStatement(statementTokenizer);
+        assertNull(statement);
 	}
 
 	@Test
@@ -30,9 +31,10 @@ class MultiLineCommentStatementTest {
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
 		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
-		assertTrue(factory.match(sqlScript.peekLineAsString()));
+        StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
+        Statement statement=factory.createStatement(statementTokenizer);
+        assertNotNull(statement);
 
-		Statement statement=factory.createStatement(sqlScript);
 		SqlBlock sqlBlock=new SqlBlock();
 		statement.toSqlCharacters(sqlBlock);
 		StringBuilder sb=sqlBlock.toStringBuilder();

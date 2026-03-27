@@ -225,6 +225,9 @@ public class StatementTokenizer {
 	}
 
 	public boolean startsWithIgnoreCase(String s) {
+	    if(s.length()>size()) {
+	        return false;
+	    }
 		s=s.toLowerCase();
 		for(int i=0;i<s.length();i++) {
 			if(Character.toLowerCase(charactersOfStatement.get(i).getChar())!=s.charAt(i)) {
@@ -239,6 +242,18 @@ public class StatementTokenizer {
 			return null;
 		}
 		return charactersOfStatement.get(0);
+	}
+	
+	public boolean consumeCharacter(SqlCharacter sqlCharacter) {
+        if(charactersOfStatement.size()==0) {
+            return false;
+        }
+	    if(sqlCharacter.getChar()==getFirstCharacter().getChar()) {
+	        charactersOfStatement.remove(0);
+	        return true;
+	    }else {
+	        return false;
+	    }
 	}
 
 	public CharacterLocation getLocation() {
@@ -263,5 +278,36 @@ public class StatementTokenizer {
 			sqlCharacter.setBackgroundColor(backgroundColor);
 		}
 	}
+
+    public int size() {
+        return charactersOfStatement.size();
+    }
+
+    public SqlString consumeLine() {
+        int row=charactersOfStatement.get(0).getLocation().getRow();
+        SqlString sqlString=new SqlString();
+        while(true) {
+            if(charactersOfStatement.size()==0) {
+                break;
+            }
+            SqlCharacter sqlCharacter=charactersOfStatement.get(0);
+            CharacterLocation characterLocation=sqlCharacter.getLocation();
+            if(characterLocation==null) {
+                charactersOfStatement.remove(0);
+                continue;
+            }
+            if(characterLocation.getRow()!=row) {
+                break;
+            }
+            sqlString.append(sqlCharacter);
+            charactersOfStatement.remove(0);
+        }
+        return sqlString;
+    }
+
+    public void markError() {
+        setCategory(Category.ERROR);
+        setBackgroundColor(BackgroundColorProvider.ERROR);
+    }
 
 }

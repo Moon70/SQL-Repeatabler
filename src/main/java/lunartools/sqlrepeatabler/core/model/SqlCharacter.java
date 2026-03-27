@@ -2,6 +2,7 @@ package lunartools.sqlrepeatabler.core.model;
 
 public class SqlCharacter {
 	public static final SqlCharacter SEPARATOR=new SqlCharacter(' ');
+    public static final SqlCharacter OPTIONAL_STATEMENT_SEPARATOR=new SqlCharacter(';');
 	private char c;
 	private CharacterLocation characterLocation;
 	private Category category=Category.UNCATEGORIZED;

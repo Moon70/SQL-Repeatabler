@@ -1,46 +1,38 @@
 package lunartools.sqlrepeatabler.core.model;
 
 import java.io.EOFException;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import lunartools.sqlrepeatabler.core.processing.StatementTokenizer;
 
 public class MultiLineCommentStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(MultiLineCommentStatementFactory.class);
 
 	@Override
-	public boolean match(String line) {
-		return line.trim().startsWith(MultiLineCommentStatement.COMMAND);
-	}
+	public Statement createStatement(StatementTokenizer statementTokenizer) throws EOFException{
+        if(!statementTokenizer.startsWithIgnoreCase(MultiLineCommentStatement.COMMAND)){
+            return null;
+        }
+        logger.debug("Statement: multiline comment");
+        
+        ArrayList<SqlString> commentLines=new ArrayList<>();
 
-	@Override
-	public Statement createStatement(SqlScript sqlScript) throws EOFException{
-		SqlString sqlScriptLine=sqlScript.readLine();
-		String line=sqlScriptLine.toString();
-		if(!match(line)) {
-			throw new RuntimeException("Illegal factory call");
-		}
+        while(true) {
+            if(statementTokenizer.size()==0) {
+                throw new EOFException("Multiline comment not closed");
+            }
+            SqlString sqlScriptLine=statementTokenizer.consumeLine();
+            commentLines.add(sqlScriptLine);
+            sqlScriptLine.setCategory(Category.COMMENT);
+            if(sqlScriptLine.endsWithIgnoreCase("*/")) {
+                break;
+            }
+        }
 
-		sqlScriptLine.setCategory(Category.COMMENT);
-		logger.debug("Statement: comment");
-		int endIndex=sqlScript.getIndex();
-		int startIndex=endIndex-1;
-		if(!line.endsWith("*/")) {
-			while(true) {
-				sqlScriptLine=sqlScript.readLine();
-				sqlScriptLine.setCategory(Category.COMMENT);
-				line=sqlScriptLine.toString();
-
-				if(line==null) {
-					throw new EOFException("Multiline comment not closed");
-				}
-				endIndex++;
-				if(line.endsWith("*/")) {
-					break;
-				}
-			}
-		}
-		return new MultiLineCommentStatement(sqlScript,startIndex,endIndex);
+		return new MultiLineCommentStatement(commentLines);
 	}
 
 }

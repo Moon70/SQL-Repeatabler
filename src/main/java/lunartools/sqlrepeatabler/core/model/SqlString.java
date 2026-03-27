@@ -131,4 +131,21 @@ public class SqlString {
 		}
 		return sb.toString();
 	}
+
+    public int size() {
+        return sqlCharacters.size();
+    }
+
+    public boolean endsWithIgnoreCase(String s) {
+        int size=sqlCharacters.size();
+        if(s.length()>size()) {
+            return false;
+        }
+        for(int i=0;i<s.length();i++) {
+            if(s.charAt(i)!=sqlCharacters.get(size-s.length()+i).getChar()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -1,36 +1,30 @@
 package lunartools.sqlrepeatabler.core.model;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import lunartools.sqlrepeatabler.core.processing.StatementTokenizer;
 
 public class OneLineCommentStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(OneLineCommentStatementFactory.class);
 
 	@Override
-	public boolean match(String line) {
-		return line.trim().startsWith(OneLineCommentStatement.COMMAND);
-	}
+	public Statement createStatement(StatementTokenizer statementTokenizer){
+        if(!statementTokenizer.startsWithIgnoreCase(OneLineCommentStatement.COMMAND)) {
+            return null;
+        }
+        logger.debug("Statement: singleline comment");
+        
+        ArrayList<SqlString> commentLines=new ArrayList<>();
 
-	@Override
-	public Statement createStatement(SqlScript sqlScript){
-		SqlString sqlScriptLine=sqlScript.readLine();
-		if(!match(sqlScriptLine.toString())) {
-			throw new RuntimeException("Illegal factory call");
-		}
-
-		sqlScriptLine.setCategory(Category.COMMENT);
-		logger.debug("Statement: comment");
-		int endIndex=sqlScript.getIndex();
-		int startIndex=endIndex-1;
-		while((sqlScriptLine=sqlScript.peekLine())!=null) {
-			if(!match(sqlScriptLine.toString())){
-				break;
-			}
-			sqlScriptLine.setCategory(Category.COMMENT);
-			endIndex++;
-			sqlScript.readLineAsString();
-		}
-		return new OneLineCommentStatement(sqlScript,startIndex,endIndex);
+        while(statementTokenizer.startsWithIgnoreCase(OneLineCommentStatement.COMMAND)) {
+            SqlString sqlScriptLine=statementTokenizer.consumeLine();
+            commentLines.add(sqlScriptLine);
+            sqlScriptLine.setCategory(Category.COMMENT);
+        }
+		return new OneLineCommentStatement(commentLines);
 	}
 
 }

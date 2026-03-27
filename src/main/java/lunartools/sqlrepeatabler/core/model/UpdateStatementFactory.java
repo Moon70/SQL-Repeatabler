@@ -9,17 +9,10 @@ public class UpdateStatementFactory extends StatementFactory{
     private static Logger logger = LoggerFactory.getLogger(UpdateStatementFactory.class);
 
     @Override
-    public boolean match(String line) {
-        return line.trim().toUpperCase().startsWith(UpdateStatement.COMMAND);
-    }
-
-    @Override
-    public Statement createStatement(SqlScript sqlScript) throws SqlParserException{
-        if(!match(sqlScript.peekLineAsString())) {
-            throw new RuntimeException("Illegal factory call");
+    public Statement createStatement(StatementTokenizer statementTokenizer) throws SqlParserException{
+        if(!statementTokenizer.startsWithIgnoreCase(UpdateStatement.COMMAND)) {
+            return null;
         }
-
-        StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         logger.debug("Statement: "+statementTokenizer.toString());
 
         Token tokenStatement=statementTokenizer.nextToken(UpdateStatement.COMMAND);

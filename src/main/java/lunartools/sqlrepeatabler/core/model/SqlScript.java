@@ -147,6 +147,9 @@ public class SqlScript {
 			if(sqlStringLine==null) {
 				break;
 			}
+			if(sqlStringLine.size()==0) {
+			    break;
+			}
 			if(sqlStringStatement.size()>0 && !sqlStringStatement.get(sqlStringStatement.size()-1).isWhiteSpace()) {
 				sqlStringStatement.add(SqlCharacter.SEPARATOR);
 			}
@@ -171,6 +174,7 @@ public class SqlScript {
 	private ArrayList<SqlCharacter> stripWhitespace(ArrayList<SqlCharacter> characterList){
 		boolean singleQuoteOpen=false;
 		boolean doubleQuoteOpen=false;
+		boolean multiLineCommentOpen=false;
 		boolean space=false;
 		boolean whitespace=true;
 
@@ -197,7 +201,7 @@ public class SqlScript {
 			}
 
 			if(sqlCharacter.isSpace()) {
-				if(!singleQuoteOpen && !doubleQuoteOpen && space || whitespace) {
+				if(!singleQuoteOpen && !doubleQuoteOpen && !multiLineCommentOpen && space || whitespace) {
 					continue;
 				}else {
 					space=true;
@@ -209,6 +213,12 @@ public class SqlScript {
 			if(sqlCharacter.getChar()=='"'){
 				doubleQuoteOpen=!doubleQuoteOpen;
 			}
+			if(sqlCharacter.getChar()=='/' && characterList.size()>i+1 && characterList.get(i+1).getChar()=='*') {
+			    multiLineCommentOpen=true;
+			}
+            if(sqlCharacter.getChar()=='*' && characterList.size()>i+1 && characterList.get(i+1).getChar()=='/') {
+                multiLineCommentOpen=true;
+            }
 			strippedCharacterList.add(sqlCharacter);
 		}
 		return strippedCharacterList;

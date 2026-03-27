@@ -9,18 +9,12 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 	private static Logger logger = LoggerFactory.getLogger(SetIdentityInsertStatementFactory.class);
 
 	@Override
-	public boolean match(String line) {
-		return line.trim().toUpperCase().startsWith(SetIdentityInsertStatement.COMMAND);
-	}
-
-	@Override
-	public Statement createStatement(SqlScript sqlScript) throws SqlParserException{
-		if(!match(sqlScript.peekLineAsString())) {
-			throw new RuntimeException("Illegal factory call");
+	public Statement createStatement(StatementTokenizer statementTokenizer) throws SqlParserException{
+	    if(!statementTokenizer.startsWithIgnoreCase(SetIdentityInsertStatement.COMMAND)) {
+            return null;
 		}
+	    logger.debug("Statement: "+statementTokenizer.toString());
 
-		StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
-		logger.debug("Statement: "+statementTokenizer.toString());
 
 		Token tokenStatement=statementTokenizer.nextToken(SetIdentityInsertStatement.COMMAND);
 		tokenStatement.setCategory(Category.STATEMENT);

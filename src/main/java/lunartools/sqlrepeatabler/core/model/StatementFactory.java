@@ -2,10 +2,10 @@ package lunartools.sqlrepeatabler.core.model;
 
 import java.io.EOFException;
 
+import lunartools.sqlrepeatabler.core.processing.StatementTokenizer;
+
 public abstract class StatementFactory {
 
-	public abstract boolean match(String line);
-
-	public abstract Statement createStatement(SqlScript sqlScript) throws SqlParserException,EOFException;
+	public abstract Statement createStatement(StatementTokenizer statementTokenizer) throws SqlParserException,EOFException;
 
 }

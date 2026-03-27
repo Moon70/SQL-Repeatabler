@@ -1,23 +1,20 @@
 package lunartools.sqlrepeatabler.core.model;
 
+import java.util.ArrayList;
+
 public class OneLineCommentStatement implements Statement{
 	public static final String COMMAND="--";
-	private SqlScript sqlScript;
-	private int startIndex;
-	private int endIndex;
+    private ArrayList<SqlString> commentLines;
 
-	public OneLineCommentStatement(SqlScript sqlScript, int startIndex,int endIndex) {
-		this.sqlScript=sqlScript;
-		this.startIndex=startIndex;
-		this.endIndex=endIndex;
+	public OneLineCommentStatement(ArrayList<SqlString> commentLines) {
+        this.commentLines=commentLines;
 	}
 
 	@Override
 	public void toSqlCharacters(SqlBlock sqlBlock){
-		for(int i=startIndex;i<endIndex;i++) {
-			SqlString sqlString=SqlString.createSqlStringFromString(sqlScript.getLineAt(i),Category.COMMENT);
-			sqlBlock.add(sqlString);
-		}
+        for(SqlString sqlString:commentLines) {
+            sqlBlock.add(sqlString);
+        }
 	}
 
 }
