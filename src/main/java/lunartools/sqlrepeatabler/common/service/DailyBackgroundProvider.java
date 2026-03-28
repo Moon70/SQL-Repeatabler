@@ -32,7 +32,10 @@ public class DailyBackgroundProvider {
 			"Apetopus",
 			"Biomech Ape",
 			"Graveyard",
-			"SpiderApe"
+			"SpiderApe",
+			"FishingApe",
+			"Larry Dotter",
+			"Steamtrain"
 			));
 
 	public static Image getImage() {
