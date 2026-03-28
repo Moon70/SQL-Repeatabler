@@ -1,2 +1,2 @@
    alter table [table_name] 
-       add [column1_name] nvarchar(255);
+       add [COLUMN1_NAME] nvarchar(255);

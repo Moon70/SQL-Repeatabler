@@ -1,17 +1,17 @@
-IF COL_LENGTH ('table_name','column1_name') IS NULL
+IF COL_LENGTH ('table_name','COLUMN1_NAME') IS NULL
 BEGIN
     ALTER TABLE [table_name]
-        ADD [column1_name] INT NULL;
+        ADD [COLUMN1_NAME] INT NULL;
 END;
 
-IF COL_LENGTH ('table_name','column2_name') IS NULL
+IF COL_LENGTH ('table_name','COLUMN2_NAME') IS NULL
 BEGIN
     ALTER TABLE [table_name]
-        ADD [column2_name] NVARCHAR(100) NULL;
+        ADD [COLUMN2_NAME] NVARCHAR(100) NULL;
 END;
 
-IF COL_LENGTH ('table_name','column3_name') IS NULL
+IF COL_LENGTH ('table_name','COLUMN3_NAME') IS NULL
 BEGIN
     ALTER TABLE [table_name]
-        ADD [column3_name] DATETIME NULL;
+        ADD [COLUMN3_NAME] DATETIME NULL;
 END;

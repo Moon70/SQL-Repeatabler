@@ -1,5 +1,5 @@
 alter table [table_name]
    add
-      [column1_name] INT NULL,
-      [column2_name] NVARCHAR(100) NULL,
-      [column3_name] DATETIME NULL;
+      [COLUMN1_NAME] INT NULL,
+      [COLUMN2_NAME] NVARCHAR(100) NULL,
+      [COLUMN3_NAME] DATETIME NULL;

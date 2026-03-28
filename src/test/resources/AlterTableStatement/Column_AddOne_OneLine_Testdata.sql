@@ -1,1 +1,1 @@
-ALTER TABLE [table_name] ADD [column1_name] nvarchar(255);
+ALTER TABLE [table_name] ADD [COLUMN1_NAME] nvarchar(255);

@@ -1,5 +1,5 @@
-IF COL_LENGTH ('table_name','column1_name') IS NULL
+IF COL_LENGTH ('table_name','COLUMN1_NAME') IS NULL
 BEGIN
     ALTER TABLE [table_name]
-        ADD [column1_name] nvarchar(255);
+        ADD [COLUMN1_NAME] nvarchar(255);
 END;
