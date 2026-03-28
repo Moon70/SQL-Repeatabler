@@ -70,7 +70,6 @@ public class SqlParser {
 					}
 				}
 				if(statement==null) {
-					//sqlString.markError();
 					Token token=statementTokenizer.nextToken();
 					BackgroundColorProvider.getInstance().getNextPrimaryColor();//consume one color, so that in case the second statement of a two statement script fails, the first statement shows a background color
 					if(token!=null) {

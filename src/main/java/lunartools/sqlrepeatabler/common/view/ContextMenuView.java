@@ -20,6 +20,12 @@ public class ContextMenuView {
 		return jMenuItemCloseScript;
 	}
 
+	public JMenuItem createReloadScriptJMenuItem(IOPanel ioPanel) {
+		JMenuItem jMenuItemReloadScript=new JMenuItem(actionFactory.createReloadAction());
+		jMenuItemReloadScript.setIcon(IconProvider.getFlatSvgIcon(Icons.REFRESH,jMenuItemReloadScript));
+		return jMenuItemReloadScript;
+	}
+
 	public JMenuItem createCopyToClipboardJMenuItem(IOPanel ioPanel) {
 		JMenuItem jMenuItemCopyToClipboard=new JMenuItem(actionFactory.createCopyToClipboardAction(ioPanel.getSqlFileIndex(), ioPanel));
 		jMenuItemCopyToClipboard.setIcon(IconProvider.getFlatSvgIcon(Icons.COPY,jMenuItemCopyToClipboard));

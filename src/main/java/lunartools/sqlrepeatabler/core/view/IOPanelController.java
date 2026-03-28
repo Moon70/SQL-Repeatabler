@@ -27,6 +27,7 @@ public class IOPanelController {
 
 		JPopupMenu popupMenuInputPane = new JPopupMenu();
 		popupMenuInputPane.add(contextMenuView.createCloseScriptJMenuItem(ioPanel));
+		popupMenuInputPane.add(contextMenuView.createReloadScriptJMenuItem(ioPanel));
 		ioPanel.getInputPane().setComponentPopupMenu(popupMenuInputPane);
 
 
