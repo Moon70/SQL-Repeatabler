@@ -39,6 +39,7 @@ public class MenuPresenter {
 
 	private void updateMenuItemVisibility() {
 		menuView.getMenuFileItemReload().setEnabled(model.hasSqlInputFiles());
+		menuView.getMenuFileItemClearLog().setEnabled(model.hasSqlInputFiles());
 		menuView.getMenuFileItemReset().setEnabled(model.hasSqlInputFiles());
 		menuView.getMenuFileItemSaveAs().setEnabled(model.hasSqlConvertedScripts());
 	}

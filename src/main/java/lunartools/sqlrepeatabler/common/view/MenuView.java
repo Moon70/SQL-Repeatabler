@@ -20,6 +20,7 @@ public class MenuView {
 	private JMenuItem menuFileItemOpen;
 	private JMenuItem menuFileItemSaveAs;
 	private JMenuItem menuFileItemReload;
+	private JMenuItem menuFileItemClearLog;
 	private JMenuItem menuFileItemReset;
 	private JMenuItem menuFileItemExitProgram;
 
@@ -62,6 +63,10 @@ public class MenuView {
 		menuFileItemReload=new JMenuItem(actionFactory.createReloadAction());
 		menuFileItemReload.setIcon(IconProvider.getFlatSvgIcon(Icons.REFRESH,menuFileItemReload));
 		menuFile.add(menuFileItemReload);
+
+		menuFileItemClearLog=new JMenuItem(actionFactory.createClearLogAction());
+		menuFileItemClearLog.setIcon(IconProvider.getFlatSvgIcon(Icons.CLEAR_LOG,menuFileItemClearLog));
+		menuFile.add(menuFileItemClearLog);
 
 		menuFileItemReset=new JMenuItem(actionFactory.createResetAction());
 		menuFileItemReset.setIcon(IconProvider.getFlatSvgIcon(Icons.RESTART,menuFileItemReset));
@@ -139,6 +144,10 @@ public class MenuView {
 
 	public JMenuItem getMenuFileItemReload() {
 		return menuFileItemReload;
+	}
+
+	public JMenuItem getMenuFileItemClearLog() {
+		return menuFileItemClearLog;
 	}
 
 	public JMenuItem getMenuFileItemReset() {

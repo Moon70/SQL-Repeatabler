@@ -6,6 +6,7 @@ public enum Icons {
 	EXIT		("logout_24px.svg"),
 	FILE_OPEN	("file_open_24px.svg"),
 	REFRESH		("refresh_24px.svg"),
+	CLEAR_LOG	("playlist_remove_24px.svg"),
 	RESTART		("restart_alt_24px.svg"),
 	SAVE_AS		("save_as_24px.svg"),
 	SORT		("sort_24px.svg");

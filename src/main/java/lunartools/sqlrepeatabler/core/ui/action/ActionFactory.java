@@ -47,6 +47,14 @@ public class ActionFactory {
 		};
 	}
 
+	public Action createClearLogAction() {
+		return new AbstractAction("Clear Log") {
+			@Override public void actionPerformed(ActionEvent e) {
+				controller.clearLog();
+			}
+		};
+	}
+
 	public Action createResetAction() {
 		return new AbstractAction("Reset") {
 			@Override

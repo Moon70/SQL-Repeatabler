@@ -9,6 +9,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.ThrowableProxyUtil;
+import lunartools.sqlrepeatabler.bootstrap.ConsoleBanner;
 import lunartools.sqlrepeatabler.core.SqlRepeatablerModel;
 
 public class LogEditorPane extends JEditorPane{
@@ -89,6 +90,12 @@ public class LogEditorPane extends JEditorPane{
 		sb.append(sbHtmlLines);
 		sb.append(htmlOutro);
 		setText(sb.toString());
+		setCaretPosition(getDocument().getLength());
+	}
+
+	public void clearLog() {
+		sbHtmlLines=new StringBuilder();
+		ConsoleBanner.logConsoleBanner();
 		setCaretPosition(getDocument().getLength());
 	}
 }

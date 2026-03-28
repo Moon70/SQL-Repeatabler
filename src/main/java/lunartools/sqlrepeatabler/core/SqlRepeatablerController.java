@@ -170,4 +170,8 @@ public class SqlRepeatablerController{
 		Dialogs.showAboutDialog(view.getJFrame());
 	}
 
+	public void clearLog() {
+		view.getMainPanel().getLogPanel().clearLog();
+	}
+
 }
