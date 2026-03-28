@@ -26,6 +26,7 @@ public class StatementTokenizer {
 	private static Token consumeNextToken(ArrayList<SqlCharacter> charactersOfStatement, char tokenDelimiter){
 		boolean doubleQuoteOpen=false;
 		boolean singleQuoteOpen=false;
+		boolean squareParenthesisOpen=false;
 		int parenthesisOpen=0;
 
 		ArrayList<SqlCharacter> tokenCharacters=new ArrayList<>();
@@ -42,11 +43,15 @@ public class StatementTokenizer {
 				parenthesisOpen++;
 			}else if(character.getChar()==')') {
 				parenthesisOpen--;
+			}else if(character.getChar()=='[') {
+				squareParenthesisOpen=true;
+			}else if(character.getChar()==']') {
+				squareParenthesisOpen=false;
 			}else if(parenthesisOpen!=0) {
 				//characters inside parenthesis
 			}else if(character.isSemicolon()) {
 				return new Token(tokenCharacters);
-			}else if(character.getChar()==tokenDelimiter || character.getChar()==',') {
+			}else if(!squareParenthesisOpen && (character.getChar()==tokenDelimiter || character.getChar()==',')) {
 				charactersOfStatement.remove(0);
 				stripWhiteSpaceLeft(charactersOfStatement);
 				return new Token(tokenCharacters);

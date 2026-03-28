@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lunartools.sqlrepeatabler.core.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.core.processing.StatementTokenizer;
 
 public class AlterTableStatementFactory extends StatementFactory{
@@ -82,12 +83,13 @@ public class AlterTableStatementFactory extends StatementFactory{
 					token.setCategory(Category.IGNORED);
 				}
 				Token tokenColumName=statementTokenizer.nextToken().setCategory(Category.COLUMN);
+				verifyColumnName(tokenColumName);
 				Token tokenColumParameter=statementTokenizer.nextTokenUntil(',').setCategory(Category.COLUMNPARAMETER);
 
 				AlterTableAction alterTableAction=new AddColumnAction(tokenColumName,tokenColumParameter);
 				alterTableActions.add(alterTableAction);
 				if(statementTokenizer.startsWithIgnoreCase("ADD")) {
-					logger.warn("Ignoring illegal ADD command. In T-SQL, when adding multiple columns in a single ALTER TABLE...ADD statement, only use one ADD keyword!"+statementTokenizer.getLocation().toString());
+					logger.warn("Ignoring illegal ADD command. In T-SQL, when adding multiple columns in a single ALTER TABLE...ADD statement, only use one ADD keyword! "+statementTokenizer.getLocation().toString());
 					Token tokenIllegal=statementTokenizer.nextToken();
 					tokenIllegal.setCategory(Category.IGNORED);
 				}
@@ -124,6 +126,7 @@ public class AlterTableStatementFactory extends StatementFactory{
 		logger.debug("Parsing ALTER COLUMN action");
 		ArrayList<AlterTableAction> alterTableActions=new ArrayList<>();
 		Token tokenColumnName=statementTokenizer.nextToken();
+		verifyColumnName(tokenColumnName);
 		Token tokenColumnParameter=statementTokenizer.nextTokenUntil(',');
 		AlterTableAction alterTableAction=new AlterColumnAction(tokenColumnName,tokenColumnParameter);
 		alterTableActions.add(alterTableAction);
@@ -143,4 +146,17 @@ public class AlterTableStatementFactory extends StatementFactory{
 						) ;
 	}
 
+	private void verifyColumnName(Token tokenColumnName) throws SqlParserException {
+		String columnNameAsString=tokenColumnName.cloneWithoutDelimiters().toString();
+
+		if(!columnNameAsString.toUpperCase().equals(columnNameAsString)) {
+			tokenColumnName.markWarn();
+			logger.warn(String.format("Column name not uppercase: %s ! %s",tokenColumnName,tokenColumnName.getLocation()));
+		}
+		if(columnNameAsString.charAt(columnNameAsString.length()-1)==' ') {
+			tokenColumnName.markError();
+			throw new SqlParserException(String.format("%s does not allow column names with trailing spaces: %s",SqlRepeatablerModel.PROGRAMNAME,tokenColumnName),tokenColumnName.getLocation());
+		}
+	}
+	
 }
