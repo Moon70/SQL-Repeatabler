@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import lunartools.sqlrepeatabler.common.service.BackgroundColorProvider;
 import lunartools.sqlrepeatabler.core.model.Category;
 import lunartools.sqlrepeatabler.core.model.CharacterLocation;
+import lunartools.sqlrepeatabler.core.model.GoBatchSeparator;
 import lunartools.sqlrepeatabler.core.model.SqlCharacter;
 import lunartools.sqlrepeatabler.core.model.SqlParserException;
 import lunartools.sqlrepeatabler.core.model.SqlString;
@@ -53,7 +54,10 @@ public class StatementTokenizer {
 			tokenCharacters.add(character);
 			charactersOfStatement.remove(0);
 		}
-		logger.warn("Reached end of file while scanning for statement terminating semicolon. Treating eof as semicolon!");
+		Token token=new Token(tokenCharacters);
+		if(!token.toString().equals(GoBatchSeparator.COMMAND)) {
+			logger.warn(String.format("Reached end of statement while scanning for optional statement terminating semicolon: %s %s",token,token.getLocation()));
+		}
 		return new Token(tokenCharacters);
 	}
 
@@ -121,24 +125,24 @@ public class StatementTokenizer {
 		return consumeNextToken(charactersOfStatement,c);
 	}
 
-    public Token nextTokenUntil(String s) throws SqlParserException{
-        if(charactersOfStatement.size()==0 || charactersOfStatement.get(0).isSemicolon()) {
-            return null;
-        }
-        SqlString sqlString=new SqlString(charactersOfStatement);
-        int p=sqlString.toString().toUpperCase().indexOf(s.toUpperCase());
-        if(p==-1) {
-            sqlString.markError();
-            throw new SqlParserException(String.format("Clause '%s' not found", s),charactersOfStatement.get(0).getLocation());
-        }
-        return nextTokenUntil(p);
-    }
+	public Token nextTokenUntil(String s) throws SqlParserException{
+		if(charactersOfStatement.size()==0 || charactersOfStatement.get(0).isSemicolon()) {
+			return null;
+		}
+		SqlString sqlString=new SqlString(charactersOfStatement);
+		int p=sqlString.toString().toUpperCase().indexOf(s.toUpperCase());
+		if(p==-1) {
+			sqlString.markError();
+			throw new SqlParserException(String.format("Clause '%s' not found", s),charactersOfStatement.get(0).getLocation());
+		}
+		return nextTokenUntil(p);
+	}
 
-    public Token nextTokenUntil(int length){
-        SqlString sqlString=new SqlString(new ArrayList<SqlCharacter>(charactersOfStatement.subList(0, length)));
-        charactersOfStatement=new ArrayList<SqlCharacter>(charactersOfStatement.subList(length, charactersOfStatement.size()));
-        return new Token(sqlString);
-    }
+	public Token nextTokenUntil(int length){
+		SqlString sqlString=new SqlString(new ArrayList<SqlCharacter>(charactersOfStatement.subList(0, length)));
+		charactersOfStatement=new ArrayList<SqlCharacter>(charactersOfStatement.subList(length, charactersOfStatement.size()));
+		return new Token(sqlString);
+	}
 
 	public boolean hasNext() {
 		return charactersOfStatement.size()>0 && !charAt(0).isSemicolon();
@@ -211,7 +215,7 @@ public class StatementTokenizer {
 	}
 
 	public boolean consumeCommandIgnoreCaseAndSpace(String command) {
-        stripWhiteSpaceLeft();
+		stripWhiteSpaceLeft();
 		if(startsWithIgnoreCase(command)) {
 			for(int i=0;i<command.length();i++) {
 				charactersOfStatement.get(0).setCategory(Category.COMMAND);
@@ -225,9 +229,9 @@ public class StatementTokenizer {
 	}
 
 	public boolean startsWithIgnoreCase(String s) {
-	    if(s.length()>size()) {
-	        return false;
-	    }
+		if(s.length()>size()) {
+			return false;
+		}
 		s=s.toLowerCase();
 		for(int i=0;i<s.length();i++) {
 			if(Character.toLowerCase(charactersOfStatement.get(i).getChar())!=s.charAt(i)) {
@@ -243,17 +247,17 @@ public class StatementTokenizer {
 		}
 		return charactersOfStatement.get(0);
 	}
-	
+
 	public boolean consumeCharacter(SqlCharacter sqlCharacter) {
-        if(charactersOfStatement.size()==0) {
-            return false;
-        }
-	    if(sqlCharacter.getChar()==getFirstCharacter().getChar()) {
-	        charactersOfStatement.remove(0);
-	        return true;
-	    }else {
-	        return false;
-	    }
+		if(charactersOfStatement.size()==0) {
+			return false;
+		}
+		if(sqlCharacter.getChar()==getFirstCharacter().getChar()) {
+			charactersOfStatement.remove(0);
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	public CharacterLocation getLocation() {
@@ -279,35 +283,39 @@ public class StatementTokenizer {
 		}
 	}
 
-    public int size() {
-        return charactersOfStatement.size();
-    }
+	public int size() {
+		return charactersOfStatement.size();
+	}
 
-    public SqlString consumeLine() {
-        int row=charactersOfStatement.get(0).getLocation().getRow();
-        SqlString sqlString=new SqlString();
-        while(true) {
-            if(charactersOfStatement.size()==0) {
-                break;
-            }
-            SqlCharacter sqlCharacter=charactersOfStatement.get(0);
-            CharacterLocation characterLocation=sqlCharacter.getLocation();
-            if(characterLocation==null) {
-                charactersOfStatement.remove(0);
-                continue;
-            }
-            if(characterLocation.getRow()!=row) {
-                break;
-            }
-            sqlString.append(sqlCharacter);
-            charactersOfStatement.remove(0);
-        }
-        return sqlString;
-    }
+	public SqlString consumeLine() {
+		int row=charactersOfStatement.get(0).getLocation().getRow();
+		SqlString sqlString=new SqlString();
+		while(true) {
+			if(charactersOfStatement.size()==0) {
+				break;
+			}
+			SqlCharacter sqlCharacter=charactersOfStatement.get(0);
+			CharacterLocation characterLocation=sqlCharacter.getLocation();
+			if(characterLocation==null) {
+				charactersOfStatement.remove(0);
+				continue;
+			}
+			if(characterLocation.getRow()!=row) {
+				break;
+			}
+			sqlString.append(sqlCharacter);
+			charactersOfStatement.remove(0);
+		}
+		return sqlString;
+	}
 
-    public void markError() {
-        setCategory(Category.ERROR);
-        setBackgroundColor(BackgroundColorProvider.ERROR);
-    }
+	public void markError() {
+		setCategory(Category.ERROR);
+		setBackgroundColor(BackgroundColorProvider.ERROR);
+	}
+
+	public void markIgnore() {
+		setCategory(Category.IGNORED);
+	}
 
 }

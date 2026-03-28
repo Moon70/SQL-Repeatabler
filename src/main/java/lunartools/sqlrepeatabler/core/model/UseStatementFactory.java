@@ -12,16 +12,15 @@ public class UseStatementFactory extends StatementFactory{
 
 	@Override
 	public Statement createStatement(StatementTokenizer statementTokenizer) throws EOFException{
-	    if(!statementTokenizer.startsWithIgnoreCase(UseStatement.COMMAND)) {
+		if(!statementTokenizer.startsWithIgnoreCase(UseStatement.COMMAND)) {
 			return null;
 		}
-	    logger.debug("Statement: "+statementTokenizer.toString());
+		SqlString sqlString=statementTokenizer.consumeLine();
+		logger.debug("Statement: "+sqlString);
 
 		logger.warn(String.format("Ignoring statement %s. %s", UseStatement.COMMAND,statementTokenizer.getLocation()));
-		statementTokenizer.setCategory(Category.IGNORED);
-		
-		System.out.println(statementTokenizer.consumeLine());
-		
+		sqlString.setCategory(Category.IGNORED);
+
 		return new UseStatement();
 	}
 

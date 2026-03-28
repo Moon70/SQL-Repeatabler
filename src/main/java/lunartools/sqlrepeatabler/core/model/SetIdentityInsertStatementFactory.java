@@ -10,25 +10,26 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 
 	@Override
 	public Statement createStatement(StatementTokenizer statementTokenizer) throws SqlParserException{
-	    if(!statementTokenizer.startsWithIgnoreCase(SetIdentityInsertStatement.COMMAND)) {
-            return null;
+		if(!statementTokenizer.startsWithIgnoreCase(SetIdentityInsertStatement.COMMAND)) {
+			return null;
 		}
-	    logger.debug("Statement: "+statementTokenizer.toString());
-
+		logger.debug("Statement: "+statementTokenizer.toString());
+		statementTokenizer.markIgnore();
 
 		Token tokenStatement=statementTokenizer.nextToken(SetIdentityInsertStatement.COMMAND);
-		tokenStatement.setCategory(Category.STATEMENT);
 		tokenStatement=tokenStatement.toUpperCase();
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
-		logger.debug("Table: "+tableName.toString());
+		tableName.markIgnore();
+		logger.debug("Table: "+tableName);
 
 		statementTokenizer.stripWhiteSpaceRight();
 		if(statementTokenizer.charAt(statementTokenizer.length()-1).getChar()==';') {
 			statementTokenizer.deleteCharAt(statementTokenizer.length()-1);
 		}
-		Token parameters=statementTokenizer.toToken();
-		parameters.setCategory(Category.PARAMETER);
+		Token parameters=statementTokenizer.nextToken();
+		logger.debug("Parameters: "+parameters);
+
 		return new SetIdentityInsertStatement(tokenStatement,tableName,parameters);
 	}
 

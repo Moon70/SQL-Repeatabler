@@ -253,4 +253,14 @@ public class TableName {
 	public String toString() {
 		return String.format("Table: DatabaseName=%s, SchemaName=%s, TableName=%s",databaseName,schemaName,tableName);
 	}
+
+	public void markIgnore() {
+		if(databaseName!=null) {
+			databaseName.setCategory(Category.IGNORED);
+		}
+		if(schemaName!=null) {
+			schemaName.setCategory(Category.IGNORED);
+		}
+		tableName.setCategory(Category.IGNORED);
+	}
 }

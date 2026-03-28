@@ -166,4 +166,8 @@ public class Token extends SqlString{
 		return true;
 	}
 
+	public void markIgnore() {
+		setCategory(Category.IGNORED);
+	}
+
 }
