@@ -15,6 +15,10 @@ public class TableName {
 
 	private TableName(ArrayList<Token> tokens) {
 		this.databaseName=tokens.get(0);
+		if(this.databaseName!=null) {
+			databaseName.markWarn();
+			logger.warn(String.format("Table declaration contains database name, which is unexpected in a deployment script: %s (%s)",databaseName,databaseName.getLocation()));
+		}
 		this.schemaName=tokens.get(1);
 		this.tableName=tokens.get(2);
 	}
