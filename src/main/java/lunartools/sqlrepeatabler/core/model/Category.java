@@ -3,17 +3,17 @@ package lunartools.sqlrepeatabler.core.model;
 public enum Category {
 	//				colorLight	colorDark	weight		style		decoration
 	UNCATEGORIZED(	"#808080",	"#CBCBCB",	null,		null,		null),
-	IGNORED(		"#808080",	"#909090",	null,		null,		"line-through"),
-	STATEMENT(		"#0000ff",	"#DDC3A6",	"bold",		null,		null),
-	TABLE(			"#b22222",	"#C94A66",	"bold",		null,		null),
-	COMMAND(		"#005500",	"#288DFF",	"bold",		null,		null),
-	COLUMN(			"#FF8C00",	"#FF8C00",	"bold",		null,		null),
-	COLUMNPARAMETER("#2a895",	"#72B2C7",	null,		null,		null),
+	IGNORED(		"#808080",	"#a0a0a0",	null,		null,		"line-through"),
+	STATEMENT(		"#0000ff",	"#EEEEEE",	"bold",		null,		null),
+	TABLE(			"#b22222",	"#FF90A0",	"bold",		null,		null),
+	COMMAND(		"#005500",	"#40EDFF",	"bold",		null,		null),
+	COLUMN(			"#FF8C00",	"#FFAC20",	"bold",		null,		null),
+	COLUMNPARAMETER("#2a895",	"#92D2E7",	null,		null,		null),
 	COMMENT(		"#008000",	"#59CC60",	null,		"italic",	null),
-	PARAMETER(		"#8B008B",	"#B857B8",	"bold",		null,		null),
-    INSERTED(       "#4682B4",  "#78A8D0",  "bold",     null,       null),
-    WARN(           "#222222",  "#222222",  "bold",     null,       null),
-	ERROR(			"#222222",	"#222222",	"bold",		null,		null);
+	PARAMETER(		"#8B008B",	"#EDD3B6",	"bold",		null,		null),
+	INSERTED(       "#4682B4",  "#78A8D0",  "bold",     null,       null), 
+	WARN(           "#222222",  "#222222",  "bold",     null,       null),
+	ERROR(			"#222222",	"#000000",	"bold",		null,		null);
 
 	private final String colorLight;
 	private final String colorDark;

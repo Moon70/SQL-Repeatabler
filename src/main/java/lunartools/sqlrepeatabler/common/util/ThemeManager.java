@@ -57,69 +57,61 @@ public class ThemeManager implements ChangeListenerSupport{
 		calculateHtmlIntroAndOuttro(theme.isDark());
 		if(theme.isDark()) {
 			backgroundColors=new String[]{
-					"606060",
-					"605050",
-					"506050",
-					"505060",
-					"606050",
-					"506060",
-					"605060",
-
-					"707070",
-					"705050",
-					"507050",
-					"505070",
-					"707050",
-					"507070",
-					"705070",
-
-					"706050",
-					"607050",
-					"605070",
-
-					"705060",
-					"507060",
-					"506070",
-
-					"706060",
-					"607060",
-					"606070",
-					"707060",
-					"607070",
-					"706070"
+					"606060",//00
+					"605050",//01
+					"506050",//02
+					"505060",//03
+					"606050",//04
+					"506060",//05
+					"605060",//06
+					"707070",//07
+					"705050",//08
+					"507050",//09
+					"505070",//10
+					"707050",//11
+					"507070",//12
+					"705070",//13
+					"506070",//14
+					"706060",//15
+					"607060",//16
+					"705060",//17
+					"507060",//18
+					"706050",//19
+					"607050",//20
+					"605070",//21
+					"707060",//22
+					"606070",//23
+					"607070",//24
+					"706070"//25
 			};
 		}else {
 			backgroundColors=new String[]{
-					"e8e8e8",
-					"eeffff",
-					"ffeeff",
-					"ffffee",
-					"eeeeff",
-					"ffeeee",
-					"eeffee",
-
-					"d8d8d8",
-					"ddffff",
-					"ffddff",
-					"ffffdd",
-					"ddddff",
-					"ffdddd",
-					"ddffdd",
-
-					"ddeeff",
-					"eeddff",
-					"eeffdd",
-
-					"ddffee",
-					"ffddee",
-					"ffeedd",
-
-					"ddeeee",
-					"eeddee",
-					"eeeedd",
-					"ddddee",
-					"eedddd",
-					"ddeedd"
+					"e8e8e8",//00
+					"eeffff",//01
+					"ffeeff",//02
+					"ffffee",//03
+					"eeeeff",//04
+					"ffeeee",//05
+					"eeffee",//06
+					"e2e2e2",//07
+					"ddffff",//08
+					"ffddff",//09
+					"ffffdd",//10
+					"ffddee",//11
+					"ddddff",//12
+					"ddeedd",//13
+					"eeddff",//14
+					"ddeeee",//15
+					"ddffdd",//16
+					"eeddee",//17
+					"ddeeff",//18
+					"eeeedd",//19
+					"ffdddd",//20
+					"ddddee",//21
+					"eeffdd",//22
+					"eedddd",//23
+					"ddffee",//24
+					"ffeedd"//25
 			};
 		}
 	}
