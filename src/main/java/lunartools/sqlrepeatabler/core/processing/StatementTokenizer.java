@@ -78,19 +78,9 @@ public class StatementTokenizer {
 		}
 	}
 
-	public int length() {
-		return charactersOfStatement.size();
-	}
-
 	private static void stripWhiteSpaceLeft(ArrayList<SqlCharacter> characters) {
 		while(characters.get(0).isWhiteSpace()) {
 			characters.remove(0);
-		}
-	}
-
-	public void stripUntil(char c) {
-		while(charactersOfStatement.size()>0 && charAt(0).getChar()!=c) {
-			charactersOfStatement.remove(0);
 		}
 	}
 
@@ -155,10 +145,6 @@ public class StatementTokenizer {
 
 	public SqlCharacter charAt(int i) {
 		return charactersOfStatement.get(i);
-	}
-
-	public Token toToken() {
-		return new Token(charactersOfStatement);
 	}
 
 	@Override

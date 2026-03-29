@@ -18,7 +18,7 @@ class UpdateStatementTest {
 	@Test
 	void nonUpdateLineIsNotAccepted() throws Exception {
 		String filenameTestdata=	TESTDATAFOLDER+"OneNonUpdateLine_Testdata.sql";
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNull(statement);
@@ -30,7 +30,7 @@ class UpdateStatementTest {
 		String filenameExpecteddata=TESTDATAFOLDER+"Update_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNotNull(statement);

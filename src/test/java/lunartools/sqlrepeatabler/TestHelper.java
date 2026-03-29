@@ -7,14 +7,6 @@ import lunartools.FileTools;
 
 public class TestHelper {
 
-	public static StringBuffer removeCR(StringBuffer sb) {
-		int i;
-		while((i=sb.indexOf("\r"))!=-1) {
-			sb.deleteCharAt(i);
-		}
-		return sb;
-	}
-
 	public static StringBuilder removeCR(StringBuilder sb) {
 		int i;
 		while((i=sb.indexOf("\r"))!=-1) {
@@ -23,14 +15,14 @@ public class TestHelper {
 		return sb;
 	}
 
-	public static StringBuffer getResourceAsStringBuffer(String resource) throws IOException {
+	public static StringBuilder getResourceAsStringBuilder(String resource) throws IOException {
 		try(InputStream inputStream=TestHelper.class.getResourceAsStream(resource)){
-			return FileTools.readInputStreamToStringBuffer(inputStream,"UTF-8");
+			return FileTools.readInputStreamToStringBuilder(inputStream,"UTF-8");
 		}
 	}
 
-	public static StringBuffer getCrStrippedResourceAsStringBuffer(String resource) throws IOException {
-		return removeCR(getResourceAsStringBuffer(resource));
+	public static StringBuilder getCrStrippedResourceAsStringBuffer(String resource) throws IOException {
+		return removeCR(getResourceAsStringBuilder(resource));
 	}
 
 }

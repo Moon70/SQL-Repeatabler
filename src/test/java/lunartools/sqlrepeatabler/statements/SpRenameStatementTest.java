@@ -18,7 +18,7 @@ class SpRenameStatementTest {
 	@Test
 	void nonSpRenameLineIsNotAccepted() throws Exception {
 		String filenameTestdata=	TESTDATAFOLDER+"OneNonSpRenameLine_Testdata.sql";
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNull(statement);
@@ -30,7 +30,7 @@ class SpRenameStatementTest {
 		String filenameExpecteddata=TESTDATAFOLDER+"RenameColumn_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNotNull(statement);
@@ -47,7 +47,7 @@ class SpRenameStatementTest {
 		String filenameExpecteddata=TESTDATAFOLDER+"RenameColumn_TableWithSchema_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNotNull(statement);

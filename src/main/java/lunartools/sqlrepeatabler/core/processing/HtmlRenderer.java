@@ -54,7 +54,7 @@ public class HtmlRenderer {
 	}
 
 	private void appendHtmlFragment(Category category, StringBuilder sbHtml, StringBuilder sbFragement,String backgroundColor) {
-		if((isBackgroundColorEnabled && backgroundColor!=null && category!=Category.IGNORED) || category==Category.ERROR) {
+		if((isBackgroundColorEnabled || category==Category.WARN || category==Category.ERROR) && backgroundColor!=null) {
 			sbHtml.append(String.format("<span class=\"%s\" style='background-color: %s;' >",category,backgroundColor));
 		}else {
 			sbHtml.append(String.format("<span class=\"%s\" >",category));

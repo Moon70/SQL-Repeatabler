@@ -18,7 +18,7 @@ class SetIdentityInsertStatementTest {
 	@Test
 	void nonInsertIntoLineIsNotAccepted() throws Exception {
 		String filenameTestdata=	TESTDATAFOLDER+"OneNonSetIdentityInsertLine_Testdata.sql";
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNull(statement);
@@ -28,7 +28,7 @@ class SetIdentityInsertStatementTest {
 	void setIdentityInsert_On() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"SetIdentityInsert_On_Testdata.sql";
 
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNotNull(statement);
@@ -42,7 +42,7 @@ class SetIdentityInsertStatementTest {
 	void setIdentityInsert_Off() throws Exception{
 		String filenameTestdata=	TESTDATAFOLDER+"SetIdentityInsert_Off_Testdata.sql";
 
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNotNull(statement);

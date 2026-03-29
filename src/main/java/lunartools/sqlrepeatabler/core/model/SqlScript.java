@@ -1,7 +1,6 @@
 package lunartools.sqlrepeatabler.core.model;
 
 import java.io.BufferedReader;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -12,14 +11,6 @@ public class SqlScript {
 	private ArrayList<SqlString> sqlCharacterLinesOriginal=new ArrayList<>();
 	private ArrayList<SqlString> sqlStrings;
 	private int index;
-
-	public static SqlScript createInstance(StringBuffer stringBuffer) throws Exception{
-		try(
-				StringReader stringReader=new StringReader(stringBuffer.toString());
-				BufferedReader bufferedReader=new BufferedReader(stringReader)){
-			return createInstance(bufferedReader);
-		}
-	}
 
 	public static SqlScript createInstance(StringBuilder stringBuilder) throws Exception{
 		try(
@@ -90,47 +81,11 @@ public class SqlScript {
 	/**
 	 * @return Current line
 	 */
-	public String peekLineAsString() {
-		if(index==sqlStrings.size()) {
-			return null;
-		}
-		return sqlStrings.get(index).toString();
-	}
-
-	/**
-	 * @return Current line
-	 */
 	public SqlString peekLine() {
 		if(index==sqlStrings.size()) {
 			return null;
 		}
 		return sqlStrings.get(index);
-	}
-
-	public String readLineAsString() {
-		if(index==sqlStrings.size()) {
-			return null;
-		}
-		return sqlStrings.get(index++).toString();
-	}
-
-	public SqlString readLine() {
-		if(index==sqlStrings.size()) {
-			return null;
-		}
-		return sqlStrings.get(index++);
-	}
-
-	/**
-	 * @return line after incrementing the index 
-	 */
-	public String readNextLineAsString() {
-		index++;
-		SqlString sqlScriptLine=peekLine();
-		if(sqlScriptLine==null) {
-			return null;
-		}
-		return sqlScriptLine.toString();
 	}
 
 	private SqlString readLineCharacters() {
@@ -148,7 +103,7 @@ public class SqlScript {
 				break;
 			}
 			if(sqlStringLine.size()==0) {
-			    break;
+				break;
 			}
 			if(sqlStringStatement.size()>0 && !sqlStringStatement.get(sqlStringStatement.size()-1).isWhiteSpace()) {
 				sqlStringStatement.add(SqlCharacter.SEPARATOR);
@@ -159,16 +114,6 @@ public class SqlScript {
 			}
 		}
 		return new StatementTokenizer(stripWhitespace(sqlStringStatement));
-	}
-
-	public StatementTokenizer consumeOneLineStatement() throws EOFException{
-		SqlString sqlString=readLineCharacters();
-		if(sqlString==null) {
-			throw new EOFException("Unexpected end of script");
-		}
-		ArrayList<SqlCharacter> charactersOfStatement=new ArrayList<>();
-		charactersOfStatement.addAll(sqlString.getCharacters());
-		return new StatementTokenizer(stripWhitespace(charactersOfStatement));
 	}
 
 	private ArrayList<SqlCharacter> stripWhitespace(ArrayList<SqlCharacter> characterList){
@@ -214,18 +159,14 @@ public class SqlScript {
 				doubleQuoteOpen=!doubleQuoteOpen;
 			}
 			if(sqlCharacter.getChar()=='/' && characterList.size()>i+1 && characterList.get(i+1).getChar()=='*') {
-			    multiLineCommentOpen=true;
+				multiLineCommentOpen=true;
 			}
-            if(sqlCharacter.getChar()=='*' && characterList.size()>i+1 && characterList.get(i+1).getChar()=='/') {
-                multiLineCommentOpen=true;
-            }
+			if(sqlCharacter.getChar()=='*' && characterList.size()>i+1 && characterList.get(i+1).getChar()=='/') {
+				multiLineCommentOpen=true;
+			}
 			strippedCharacterList.add(sqlCharacter);
 		}
 		return strippedCharacterList;
-	}
-
-	public String getLineAt(int index) {
-		return sqlStrings.get(index).toString();
 	}
 
 	public ArrayList<SqlString> getSqlStrings(){
@@ -237,7 +178,7 @@ public class SqlScript {
 		StringBuilder sb=new StringBuilder();
 		for(int line=0;line<sqlStrings.size();line++) {
 			sb.append(sqlStrings.get(line).toString());
-			sb.append("\r\n");
+			sb.append(System.lineSeparator());
 		}
 		return sb.toString();
 	}

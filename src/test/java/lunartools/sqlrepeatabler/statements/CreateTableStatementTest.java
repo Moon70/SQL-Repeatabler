@@ -18,7 +18,7 @@ class CreateTableStatementTest {
 	@Test
 	void nonCreateTableIsNotAccepted() throws Exception {
 		String filenameTestdata=	TESTDATAFOLDER+"NonCreateTableLine_Testdata.sql";
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNull(statement);
@@ -30,7 +30,7 @@ class CreateTableStatementTest {
 		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_DelimiterSquareBrackets_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNotNull(statement);
@@ -47,7 +47,7 @@ class CreateTableStatementTest {
 		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_DelimiterQuotes_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNotNull(statement);
@@ -64,7 +64,7 @@ class CreateTableStatementTest {
 		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_DelimiterBackticks_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNotNull(statement);
@@ -81,7 +81,7 @@ class CreateTableStatementTest {
 		String filenameExpecteddata=TESTDATAFOLDER+"CreateOneTable_NoDelimiter_Expected.sql";
 		String expected=TestHelper.getCrStrippedResourceAsStringBuffer(filenameExpecteddata).toString();
 
-		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuffer(filenameTestdata));
+		SqlScript sqlScript=SqlScript.createInstance(TestHelper.getResourceAsStringBuilder(filenameTestdata));
         StatementTokenizer statementTokenizer=sqlScript.consumeStatement();
         Statement statement=factory.createStatement(statementTokenizer);
         assertNotNull(statement);

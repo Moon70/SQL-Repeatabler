@@ -24,8 +24,8 @@ public class SetIdentityInsertStatementFactory extends StatementFactory{
 		logger.debug("Table: "+tableName);
 
 		statementTokenizer.stripWhiteSpaceRight();
-		if(statementTokenizer.charAt(statementTokenizer.length()-1).getChar()==';') {
-			statementTokenizer.deleteCharAt(statementTokenizer.length()-1);
+		if(statementTokenizer.charAt(statementTokenizer.size()-1).getChar()==';') {
+			statementTokenizer.deleteCharAt(statementTokenizer.size()-1);
 		}
 		Token parameters=statementTokenizer.nextToken();
 		logger.debug("Parameters: "+parameters);
