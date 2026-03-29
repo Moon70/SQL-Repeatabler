@@ -1,1 +1,1 @@
-   sp_rename '[abc].[table_name].[column_name]', [new_column_name], [COLUMN];
+   sp_rename '[abc].[table_name].[COLUMN_NAME]', [NEW_COLUMN_NAME], [COLUMN];

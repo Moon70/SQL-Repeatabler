@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lunartools.sqlrepeatabler.core.SqlRepeatablerModel;
 import lunartools.sqlrepeatabler.core.processing.StatementTokenizer;
 
 public class AlterTableStatementFactory extends StatementFactory{
@@ -13,10 +12,10 @@ public class AlterTableStatementFactory extends StatementFactory{
 
 	@Override
 	public Statement createStatement(StatementTokenizer statementTokenizer) throws SqlParserException{
-	    if(!statementTokenizer.startsWithIgnoreCase(AlterTableStatement.COMMAND)) {
-            return null;
+		if(!statementTokenizer.startsWithIgnoreCase(AlterTableStatement.COMMAND)) {
+			return null;
 		}
-	    logger.debug("Statement: "+statementTokenizer.toString());
+		logger.debug("Statement: "+statementTokenizer.toString());
 
 		statementTokenizer.setBackgroundColor(null);
 
@@ -146,17 +145,4 @@ public class AlterTableStatementFactory extends StatementFactory{
 						) ;
 	}
 
-	private void verifyColumnName(Token tokenColumnName) throws SqlParserException {
-		String columnNameAsString=tokenColumnName.cloneWithoutDelimiters().toString();
-
-		if(!columnNameAsString.toUpperCase().equals(columnNameAsString)) {
-			tokenColumnName.markWarn();
-			logger.warn(String.format("Column name not uppercase: %s ! %s",tokenColumnName,tokenColumnName.getLocation()));
-		}
-		if(columnNameAsString.charAt(columnNameAsString.length()-1)==' ') {
-			tokenColumnName.markError();
-			throw new SqlParserException(String.format("%s does not allow column names with trailing spaces: %s",SqlRepeatablerModel.PROGRAMNAME,tokenColumnName),tokenColumnName.getLocation());
-		}
-	}
-	
 }

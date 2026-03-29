@@ -109,19 +109,22 @@ public class SqlString {
 
 	public void setBackgroundColor(String backgroundColor) {
 		for(SqlCharacter sqlCharacter:sqlCharacters) {
-			sqlCharacter.setBackgroundColor(backgroundColor);
+			String currentColor=sqlCharacter.getBackgroundColor();
+			if(currentColor!=BackgroundColorProvider.WARN && currentColor!=BackgroundColorProvider.ERROR) {
+				sqlCharacter.setBackgroundColor(backgroundColor);
+			}
 		}
 	}
 
-    public void markWarn() {
-        setCategory(Category.WARN);
-        setBackgroundColor(BackgroundColorProvider.WARN);
-    }
+	public void markWarn() {
+		setCategory(Category.WARN);
+		setBackgroundColor(BackgroundColorProvider.WARN);
+	}
 
-    public void markError() {
-        setCategory(Category.ERROR);
-        setBackgroundColor(BackgroundColorProvider.ERROR);
-    }
+	public void markError() {
+		setCategory(Category.ERROR);
+		setBackgroundColor(BackgroundColorProvider.ERROR);
+	}
 
 	@Override
 	public String toString() {
@@ -132,20 +135,20 @@ public class SqlString {
 		return sb.toString();
 	}
 
-    public int size() {
-        return sqlCharacters.size();
-    }
+	public int size() {
+		return sqlCharacters.size();
+	}
 
-    public boolean endsWithIgnoreCase(String s) {
-        int size=sqlCharacters.size();
-        if(s.length()>size()) {
-            return false;
-        }
-        for(int i=0;i<s.length();i++) {
-            if(s.charAt(i)!=sqlCharacters.get(size-s.length()+i).getChar()) {
-                return false;
-            }
-        }
-        return true;
-    }
+	public boolean endsWithIgnoreCase(String s) {
+		int size=sqlCharacters.size();
+		if(s.length()>size()) {
+			return false;
+		}
+		for(int i=0;i<s.length();i++) {
+			if(s.charAt(i)!=sqlCharacters.get(size-s.length()+i).getChar()) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

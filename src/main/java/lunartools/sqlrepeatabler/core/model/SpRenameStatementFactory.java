@@ -10,10 +10,10 @@ public class SpRenameStatementFactory extends StatementFactory{
 
 	@Override
 	public Statement createStatement(StatementTokenizer statementTokenizer) throws SqlParserException{
-	    if(!statementTokenizer.startsWithIgnoreCase(SpRenameStatement.COMMAND)) {
+		if(!statementTokenizer.startsWithIgnoreCase(SpRenameStatement.COMMAND)) {
 			return null;
 		}
-	    logger.debug("Statement: "+statementTokenizer.toString());
+		logger.debug("Statement: "+statementTokenizer.toString());
 
 		statementTokenizer.setBackgroundColor(null);
 
@@ -25,6 +25,7 @@ public class SpRenameStatementFactory extends StatementFactory{
 		objName.removeEnclosing('\'');
 		Token newName=statementTokenizer.nextToken();//@newname of stored procedure 'sp_rename'
 		newName.setCategory(Category.COLUMN);
+		verifyColumnName(newName);
 		Token objtype=statementTokenizer.nextToken();//@objtype of stored procedure 'sp_rename'
 		objtype.setCategory(Category.PARAMETER);
 		objtype=objtype.cloneWithoutDelimiters();
@@ -43,6 +44,7 @@ public class SpRenameStatementFactory extends StatementFactory{
 				throw new SqlParserException("Error parsing object name",objName.getLocation());
 			}
 			oldName.setCategory(Category.COLUMN);
+			verifyColumnName(oldName);
 			return new SpRenameStatement(tokenStatement,tableName,oldName,newName,objtype);
 		}else {
 			throw new SqlParserException(String.format("Type not supported yet: %s", objtype), objtype.getLocation());
