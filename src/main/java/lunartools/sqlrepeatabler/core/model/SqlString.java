@@ -107,6 +107,10 @@ public class SqlString {
 		sqlCharacters.addAll(sqlString.getCharacters());
 	}
 
+    public void append(String s) {
+        append(createSqlStringFromString(s,Category.INSERTED));
+    }
+
 	public void setBackgroundColor(String backgroundColor) {
 		for(SqlCharacter sqlCharacter:sqlCharacters) {
 			String currentColor=sqlCharacter.getBackgroundColor();
