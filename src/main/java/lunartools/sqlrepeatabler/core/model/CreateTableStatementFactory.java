@@ -33,7 +33,12 @@ public class CreateTableStatementFactory extends StatementFactory{
 
 		TableName tableName=TableName.createInstanceByConsuming(statementTokenizer);
 		logger.debug("Table: "+tableName.toString());
-
+		Token tokenSchema=tableName.getSchemaNameWithoutDelimiter();
+		if(tableName.getSchemaNameWithoutDelimiter()!=null && !tableName.getSchemaNameWithoutDelimiter().toString().toLowerCase().equals("dbo")) {
+		    tableName.getSchemaName().markWarn();
+            logger.warn(String.format("Unexpected database schema: %s, expected: dbo.",tokenSchema.toString(),tokenSchema.getLocation()));
+		}
+		
 		ArrayList<Token> tokens=new ArrayList<>();
 
 		Token allCollumnsToken=statementTokenizer.nextToken('(',')');
@@ -55,7 +60,7 @@ public class CreateTableStatementFactory extends StatementFactory{
 		            p2++;
 		            columns[i].subString(p1, p2).setCategory(Category.IGNORED);
 		            columns[i].remove(p1, p2);
-		            logger.warn(String.format("It smells like MySql! In T-SQL, DATETIME does not support parameters. Parameters were removed. %s",columns[i].getLocation()) );
+		            logger.warn(String.format("It smells like MySql! In T-SQL, DATETIME does not support parameters. Ignoring parameters. %s",columns[i].getLocation()));
 		        }
 		    }
 
