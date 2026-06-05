@@ -155,4 +155,20 @@ public class SqlString {
 		}
 		return true;
 	}
+	
+	public SqlString subString(int beginIndex, int endIndex) {
+	    ArrayList<SqlCharacter> subCharacters=new ArrayList<>();
+
+	    for(int i=beginIndex;i<endIndex && i<sqlCharacters.size();i++) {
+	        subCharacters.add(sqlCharacters.get(i));
+	    }
+	    return new SqlString(subCharacters);
+	}
+
+	public void remove(int beginIndex, int endIndex) {
+	    for(int i=Math.min(endIndex, sqlCharacters.size())-1;i>=beginIndex;i--) {
+	        sqlCharacters.remove(i);
+	    }
+	}
+
 }

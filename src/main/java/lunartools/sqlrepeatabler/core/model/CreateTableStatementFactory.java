@@ -40,12 +40,26 @@ public class CreateTableStatementFactory extends StatementFactory{
 		allCollumnsToken.removeEnclosing('(',')');
 		Token[] columns=allCollumnsToken.split(',');
 		for(int i=0;i<columns.length;i++) {
-			columns[i].fixMySql();
-			Token[] columnTokens=columns[i].split(' ');
-			if(!CONSTRAINTS.contains(columnTokens[0].toString().toUpperCase())) {
-				verifyColumnName(columnTokens[0]);
-			}
-			tokens.add(columns[i]);
+		    columns[i].fixMySql();
+		    Token[] columnTokens=columns[i].split(' ');
+		    if(!CONSTRAINTS.contains(columnTokens[0].toString().toUpperCase())) {
+		        verifyColumnName(columnTokens[0]);
+		    }
+
+		    String columnsString=columns[i].toString().toLowerCase();
+		    int p1=columnsString.indexOf("datetime(");
+		    if(p1!=-1) {
+		        p1+="datetime".length();
+		        int p2=columnsString.indexOf(")",p1);
+		        if(p2!=-1) {
+		            p2++;
+		            columns[i].subString(p1, p2).setCategory(Category.IGNORED);
+		            columns[i].remove(p1, p2);
+		            logger.warn(String.format("It smells like MySql! In T-SQL, DATETIME does not support parameters. Parameters were removed. %s",columns[i].getLocation()) );
+		        }
+		    }
+
+		    tokens.add(columns[i]);
 		}
 
 		Token tokenEngineParameters=statementTokenizer.nextTokenUntil(';');
